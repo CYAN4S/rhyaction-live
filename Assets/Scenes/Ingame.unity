@@ -159,6 +159,8 @@ MonoBehaviour:
   - -60
   - 60
   - 180
+  judgeStandard: []
+  scrollSpeed: 5.49
   notes: []
 --- !u!4 &219790239
 Transform:
@@ -251,7 +253,7 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
