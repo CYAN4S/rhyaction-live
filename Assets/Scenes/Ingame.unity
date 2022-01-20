@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 219790239}
   - component: {fileID: 219790238}
+  - component: {fileID: 219790240}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -161,7 +162,6 @@ MonoBehaviour:
   - 180
   judgeStandard: []
   scrollSpeed: 5.49
-  notes: []
 --- !u!4 &219790239
 Transform:
   m_ObjectHideFlags: 0
@@ -177,6 +177,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &219790240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219790236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ad33efca4bf294980eeb0de3e12321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  keys4B: 13000000200000001e0000000b000000
+  onButtonPressed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &318290864
 GameObject:
   m_ObjectHideFlags: 0

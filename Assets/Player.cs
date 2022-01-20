@@ -11,12 +11,15 @@ namespace CYAN4S
     {
         [SerializeField] private NoteSystem notePrefab;
         [SerializeField] private RectTransform notesParent;
+        private InputHandler _inputHandler;
 
         [SerializeField] private float[] xPos;
+        
         [SerializeField] private float[] judgeStandard;
         [SerializeField] [Range(1.0f, 9.9f)] private float scrollSpeed;
 
-        public List<NoteData> notes = new List<NoteData>();
+        private int button = 4;
+        private List<NoteData> notes = new List<NoteData>();
 
         public static float CurrentTime { get; private set; }
         public static double CurrentBeat { get; private set; }
@@ -26,14 +29,16 @@ namespace CYAN4S
 
         private void Awake()
         {
+            _inputHandler = GetComponent<InputHandler>();
+            
             // TODO DATA
             for (int i = 0; i < 1000; i++)
             {
-                notes.Add(new NoteData(new Fraction(i, 4), i % 4, null));
+                notes.Add(new NoteData(new Fraction(i, button), i % button, null));
             }
 
             // TODO DATA
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < button; i++)
             {
                 _noteQueue.Add(new Queue<NoteSystem>());
             }
@@ -45,36 +50,34 @@ namespace CYAN4S
             {
                 var noteSystem = Instantiate(notePrefab, notesParent);
                 // TODO MATH
-                noteSystem.InstanceInitialize(note, (float)note.beat * 0.5f);
-                
+                noteSystem.InstanceInitialize(note, (float) note.beat * 0.5f);
+
                 _noteQueue[note.line].Enqueue(noteSystem);
             }
 
             // Value Initialize
-            CurrentTime = 0f;
+            CurrentTime = -5f;
+            
+            _inputHandler.onButtonPressed.AddListener(OnButtonPressed);
+        }
+
+        private void OnButtonPressed(int btn)
+        {
+            var target = _noteQueue[btn].Dequeue();
+            
+            Debug.Log(target.Time - CurrentTime);
+            target.gameObject.SetActive(false);
         }
 
         private void Update()
         {
             CurrentTime += Time.deltaTime;
             CurrentBeat = CurrentTime / 60d * 120d;
+        }
 
-            if (Keyboard.current.eKey.wasPressedThisFrame)
-            {
-                _noteQueue[0].Dequeue().gameObject.SetActive(false);
-            }
-            if (Keyboard.current.rKey.wasPressedThisFrame)
-            {
-                _noteQueue[1].Dequeue().gameObject.SetActive(false);
-            }
-            if (Keyboard.current.pKey.wasPressedThisFrame)
-            {
-                _noteQueue[2].Dequeue().gameObject.SetActive(false);
-            }
-            if (Keyboard.current.leftBracketKey.wasPressedThisFrame)
-            {
-                _noteQueue[3].Dequeue().gameObject.SetActive(false);
-            }
+        private void OnDestroy()
+        {
+            _inputHandler.onButtonPressed.RemoveListener(OnButtonPressed);
         }
     }
 }
