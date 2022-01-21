@@ -160,8 +160,10 @@ MonoBehaviour:
   - -60
   - 60
   - 180
-  judgeStandard: []
   scrollSpeed: 5.49
+  rushToBreak: 0.1
+  ignorable: 0.15
+  missed: -0.1
 --- !u!4 &219790239
 Transform:
   m_ObjectHideFlags: 0
