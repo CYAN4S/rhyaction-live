@@ -16,11 +16,15 @@ namespace CYAN4S
         [SerializeField] private float[] xPos;
         [SerializeField] [Range(1.0f, 9.9f)] private float scrollSpeed;
 
+        // TODO DATA
         private int button = 4;
         private List<NoteData> _notes;
+        private List<LongNoteData> _longNotes;
 
-        public static float CurrentTime { get; private set; }
-        public static double CurrentBeat { get; private set; }
+        private List<List<NoteSystem>> _noteTemp;
+
+        public float CurrentTime { get; private set; }
+        public double CurrentBeat { get; private set; }
 
         private List<Queue<NoteSystem>> _noteQueue;
 
@@ -32,36 +36,55 @@ namespace CYAN4S
         private bool RushToBreak(float delta) => delta > rushToBreak && delta <= ignorable;
         private bool IsOk(float delta) => delta <= rushToBreak && delta >= missed;
         private bool Missed(float delta) => delta < missed;
-        
+
         private void Awake()
         {
             _inputHandler = GetComponent<InputHandler>();
 
             _notes = new List<NoteData>();
+            _longNotes = new List<LongNoteData>();
             _noteQueue = new List<Queue<NoteSystem>>();
+            _noteTemp = new List<List<NoteSystem>>();
 
             // TODO DATA
-            for (var i = 0; i < 1000; i++)
-            {
-                _notes.Add(new NoteData(new Fraction(i, button), i % button, null));
-            }
+            for (var i = 0; i < 10; i++)
+                _notes.Add(new NoteData(new Fraction(i, 4), i % 3 + 1, null));
+            for (var i = 0; i < 10; i += 4)
+                _longNotes.Add(new LongNoteData(new Fraction(i, 4), 0, null, new Fraction(1, 2)));
 
             // TODO DATA
             for (var i = 0; i < button; i++)
             {
+                _noteTemp.Add(new List<NoteSystem>());
                 _noteQueue.Add(new Queue<NoteSystem>());
             }
 
             // TODO MATH
             NoteSystem.StaticInitialize(xPos, beat => (float) (beat - CurrentBeat) * 100f * scrollSpeed);
-
+            
             foreach (var note in _notes)
             {
                 var noteSystem = Instantiate(notePrefab, notesParent);
                 // TODO MATH
                 noteSystem.InstanceInitialize(note, (float) note.beat * 0.5f);
 
-                _noteQueue[note.line].Enqueue(noteSystem);
+                // _noteQueue[note.line].Enqueue(noteSystem);
+                _noteTemp[note.line].Add(noteSystem);
+            }
+            foreach (var note in _longNotes)
+            {
+                Debug.Log("Long Note!");
+                var noteSystem = Instantiate(notePrefab, notesParent);
+                // TODO MATH
+                noteSystem.InstanceInitialize(note, (float) note.beat * 0.5f);
+                _noteTemp[note.line].Add(noteSystem);
+            }
+
+            for (var i = 0; i < _noteTemp.Count; i++)
+            {
+                var temp = _noteTemp[i];
+                temp.Sort(((a, b) => a.Time.CompareTo(b.Time)));
+                _noteQueue[i] = new Queue<NoteSystem>(temp);
             }
 
             // Value Initialize
@@ -73,7 +96,7 @@ namespace CYAN4S
         {
             if (_noteQueue[btn].Count == 0)
                 return;
-            
+
             var target = _noteQueue[btn].Peek();
 
             var delta = Delta(target.Time);
@@ -107,10 +130,11 @@ namespace CYAN4S
         {
             foreach (var queue in _noteQueue)
             {
+                if (queue.Count == 0) continue;
                 var target = queue.Peek();
 
                 if (!Missed(Delta(target.Time))) continue;
-                
+
                 Debug.Log("Break");
                 target.gameObject.SetActive(false);
                 queue.Dequeue();
