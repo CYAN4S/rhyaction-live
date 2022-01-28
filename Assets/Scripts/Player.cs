@@ -27,10 +27,11 @@ namespace CYAN4S
         public double CurrentBeat { get; private set; }
 
         private List<Queue<NoteSystem>> _noteQueue;
+        private List<NoteSystem> _currentLongNotes;
 
-        public float rushToBreak = 0.1f;
-        public float ignorable = 0.15f;
-        public float missed = -0.1f;
+        public float rushToBreak;
+        public float ignorable;
+        public float missed;
 
         private float Delta(float time) => time - CurrentTime;
         private bool RushToBreak(float delta) => delta > rushToBreak && delta <= ignorable;
@@ -45,6 +46,7 @@ namespace CYAN4S
             _longNotes = new List<LongNoteData>();
             _noteQueue = new List<Queue<NoteSystem>>();
             _noteTemp = new List<List<NoteSystem>>();
+            _currentLongNotes = new List<NoteSystem>();
 
             // TODO DATA
             for (var i = 0; i < 10; i++)
@@ -57,11 +59,15 @@ namespace CYAN4S
             {
                 _noteTemp.Add(new List<NoteSystem>());
                 _noteQueue.Add(new Queue<NoteSystem>());
+                _currentLongNotes.Add(null);
             }
 
             // TODO MATH
-            NoteSystem.StaticInitialize(xPos, beat => (float) (beat - CurrentBeat) * 100f * scrollSpeed);
-            
+            NoteSystem.StaticInitialize(xPos,
+                beat => (float) (beat - CurrentBeat) * 100f * scrollSpeed,
+                beat => (float) beat * 100f * scrollSpeed,
+                endBeat => (float) (endBeat - CurrentBeat) * 100f * scrollSpeed);
+
             foreach (var note in _notes)
             {
                 var noteSystem = Instantiate(notePrefab, notesParent);
@@ -71,9 +77,9 @@ namespace CYAN4S
                 // _noteQueue[note.line].Enqueue(noteSystem);
                 _noteTemp[note.line].Add(noteSystem);
             }
+
             foreach (var note in _longNotes)
             {
-                Debug.Log("Long Note!");
                 var noteSystem = Instantiate(notePrefab, notesParent);
                 // TODO MATH
                 noteSystem.InstanceInitialize(note, (float) note.beat * 0.5f);
@@ -90,6 +96,8 @@ namespace CYAN4S
             // Value Initialize
             CurrentTime = -5f;
             _inputHandler.onButtonPressed.AddListener(OnButtonPressed);
+            _inputHandler.onButtonPressed.AddListener(OnButtonIsPressed);
+            _inputHandler.onButtonPressed.AddListener(OnButtonReleased);
         }
 
         private void OnButtonPressed(int btn)
@@ -98,25 +106,54 @@ namespace CYAN4S
                 return;
 
             var target = _noteQueue[btn].Peek();
-
             var delta = Delta(target.Time);
 
             if (IsOk(delta))
             {
                 Debug.Log("OK");
-                target.gameObject.SetActive(false);
                 _noteQueue[btn].Dequeue();
+
+                if (target.IsLongNote)
+                {
+                    Debug.Log("Long");
+                    target.State = NoteState.LongCurrent;
+                    _currentLongNotes[btn] = target;
+                }
+                else
+                {
+                    target.gameObject.SetActive(false);
+                }
             }
             else if (RushToBreak(delta))
             {
                 Debug.Log("Too Early");
-                target.gameObject.SetActive(false);
                 _noteQueue[btn].Dequeue();
+
+                target.gameObject.SetActive(false);
             }
             else
             {
                 // Debug.Log("Ignored");
             }
+        }
+
+        private void OnButtonIsPressed(int btn)
+        {
+            if (!_currentLongNotes[btn])
+            {
+                return;
+            }
+        }
+
+        private void OnButtonReleased(int btn)
+        {
+            if (!_currentLongNotes[btn])
+            {
+                return;
+            }
+
+            _currentLongNotes[btn].gameObject.SetActive(false);
+            _currentLongNotes[btn] = null;
         }
 
         private void Update()
@@ -144,6 +181,8 @@ namespace CYAN4S
         private void OnDestroy()
         {
             _inputHandler.onButtonPressed.RemoveListener(OnButtonPressed);
+            _inputHandler.onButtonPressed.RemoveListener(OnButtonIsPressed);
+            _inputHandler.onButtonPressed.RemoveListener(OnButtonReleased);
         }
     }
 }
