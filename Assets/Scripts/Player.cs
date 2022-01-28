@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -96,8 +97,8 @@ namespace CYAN4S
             // Value Initialize
             CurrentTime = -5f;
             _inputHandler.onButtonPressed.AddListener(OnButtonPressed);
-            _inputHandler.onButtonPressed.AddListener(OnButtonIsPressed);
-            _inputHandler.onButtonPressed.AddListener(OnButtonReleased);
+            _inputHandler.onButtonIsPressed.AddListener(OnButtonIsPressed);
+            _inputHandler.onButtonReleased.AddListener(OnButtonReleased);
         }
 
         private void OnButtonPressed(int btn)
@@ -115,8 +116,7 @@ namespace CYAN4S
 
                 if (target.IsLongNote)
                 {
-                    Debug.Log("Long");
-                    target.State = NoteState.LongCurrent;
+                    Debug.Log("Long!");
                     _currentLongNotes[btn] = target;
                 }
                 else
@@ -151,6 +151,8 @@ namespace CYAN4S
             {
                 return;
             }
+
+            Debug.Log("Released!");
 
             _currentLongNotes[btn].gameObject.SetActive(false);
             _currentLongNotes[btn] = null;
