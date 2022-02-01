@@ -118,6 +118,7 @@ namespace CYAN4S
                 {
                     Debug.Log("Long!");
                     _currentLongNotes[btn] = target;
+                    target.AlertInProgress();
                 }
                 else
                 {
