@@ -50,10 +50,10 @@ namespace CYAN4S
             _currentLongNotes = new List<NoteSystem>();
 
             // TODO DATA
-            for (var i = 0; i < 10; i++)
-                _notes.Add(new NoteData(new Fraction(i, 4), i % 3 + 1, null));
-            for (var i = 0; i < 10; i += 4)
-                _longNotes.Add(new LongNoteData(new Fraction(i, 4), 0, null, new Fraction(1, 2)));
+            for (var i = 20; i < 30; i++)
+                _notes.Add(new NoteData(new Fraction(i, 4), i % 4, null));
+            for (var i = 0; i < 20; i += 4)
+                _longNotes.Add(new LongNoteData(new Fraction(i, 4), i / 4  % 4, null, new Fraction(1, 2)));
 
             // TODO DATA
             for (var i = 0; i < button; i++)
@@ -64,10 +64,7 @@ namespace CYAN4S
             }
 
             // TODO MATH
-            NoteSystem.StaticInitialize(xPos,
-                beat => (float) (beat - CurrentBeat) * 100f * scrollSpeed,
-                beat => (float) beat * 100f * scrollSpeed,
-                endBeat => (float) (endBeat - CurrentBeat) * 100f * scrollSpeed);
+            NoteSystem.StaticInitialize(() => CurrentBeat, () => scrollSpeed);
 
             foreach (var note in _notes)
             {
