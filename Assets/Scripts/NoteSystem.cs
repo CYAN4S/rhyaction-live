@@ -35,7 +35,7 @@ namespace CYAN4S
 
         public void AlertInProgress()
         {
-            _nt.SetLongNoteState(LongNoteState.Active);
+            _nt.SetLongNoteState(LongNoteState.Progress);
         }
 
         public float Time { get; private set; }
@@ -74,10 +74,10 @@ namespace CYAN4S
 
     public enum LongNoteState
     {
-        Idle, // -> Active, Missed
-        Active, // -> Cut, Missed, DESTROY
+        Idle, // -> Progress, Missed
+        Progress, // -> Cut, Missed, DESTROY
         Missed, // -> DESTROY
-        Cut // -> Active, Missed
+        Cut // -> Progress, Missed
     }
 
     public class NoteTranslator
@@ -121,7 +121,7 @@ namespace CYAN4S
             {
                 case LongNoteState.Idle:
                     throw new Exception("No defined state translation to Idle.");
-                case LongNoteState.Active:
+                case LongNoteState.Progress:
                     if (_state == LongNoteState.Idle)
                     {
                         _onUpdate -= UpdateLong;

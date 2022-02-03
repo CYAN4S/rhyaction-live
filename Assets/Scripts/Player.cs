@@ -185,4 +185,9 @@ namespace CYAN4S
             _inputHandler.onButtonPressed.RemoveListener(OnButtonReleased);
         }
     }
+
+    public class NoteFactory
+    {
+        
+    }
 }
