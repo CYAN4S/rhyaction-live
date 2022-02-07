@@ -17,17 +17,18 @@ namespace CYAN4S
         [SerializeField] private float[] xPos;
         [SerializeField] [Range(1.0f, 9.9f)] private float scrollSpeed;
 
+        [SerializeField] private DoubleSO currentBeatSO;
+        [SerializeField] private FloatSO scrollSpeedSO;
+
         // TODO DATA
         private int button = 4;
         private List<NoteData> _notes;
         private List<LongNoteData> _longNotes;
 
-        private List<List<NoteSystem>> _noteTemp;
-
         public float CurrentTime { get; private set; }
         public double CurrentBeat { get; private set; }
 
-        private List<Queue<NoteSystem>> _noteQueue;
+
         private List<NoteSystem> _currentLongNotes;
 
         public float rushToBreak;
@@ -39,56 +40,28 @@ namespace CYAN4S
         private bool IsOk(float delta) => delta <= rushToBreak && delta >= missed;
         private bool Missed(float delta) => delta < missed;
 
+        private NoteFactory _factory;
+
         private void Awake()
         {
             _inputHandler = GetComponent<InputHandler>();
 
             _notes = new List<NoteData>();
             _longNotes = new List<LongNoteData>();
-            _noteQueue = new List<Queue<NoteSystem>>();
-            _noteTemp = new List<List<NoteSystem>>();
             _currentLongNotes = new List<NoteSystem>();
 
             // TODO DATA
             for (var i = 20; i < 30; i++)
                 _notes.Add(new NoteData(new Fraction(i, 4), i % 4, null));
             for (var i = 0; i < 20; i += 4)
-                _longNotes.Add(new LongNoteData(new Fraction(i, 4), i / 4  % 4, null, new Fraction(1, 2)));
+                _longNotes.Add(new LongNoteData(new Fraction(i, 4), i / 4 % 4, null, new Fraction(1, 2)));
+
+            _factory = new NoteFactory(button, _notes, _longNotes, () => Instantiate(notePrefab, notesParent));
 
             // TODO DATA
             for (var i = 0; i < button; i++)
             {
-                _noteTemp.Add(new List<NoteSystem>());
-                _noteQueue.Add(new Queue<NoteSystem>());
                 _currentLongNotes.Add(null);
-            }
-
-            // TODO MATH
-            NoteSystem.StaticInitialize(() => CurrentBeat, () => scrollSpeed);
-
-            foreach (var note in _notes)
-            {
-                var noteSystem = Instantiate(notePrefab, notesParent);
-                // TODO MATH
-                noteSystem.InstanceInitialize(note, (float) note.beat * 0.5f);
-
-                // _noteQueue[note.line].Enqueue(noteSystem);
-                _noteTemp[note.line].Add(noteSystem);
-            }
-
-            foreach (var note in _longNotes)
-            {
-                var noteSystem = Instantiate(notePrefab, notesParent);
-                // TODO MATH
-                noteSystem.InstanceInitialize(note, (float) note.beat * 0.5f);
-                _noteTemp[note.line].Add(noteSystem);
-            }
-
-            for (var i = 0; i < _noteTemp.Count; i++)
-            {
-                var temp = _noteTemp[i];
-                temp.Sort(((a, b) => a.Time.CompareTo(b.Time)));
-                _noteQueue[i] = new Queue<NoteSystem>(temp);
             }
 
             // Value Initialize
@@ -100,16 +73,15 @@ namespace CYAN4S
 
         private void OnButtonPressed(int btn)
         {
-            if (_noteQueue[btn].Count == 0)
-                return;
-
-            var target = _noteQueue[btn].Peek();
+            var target = _factory.GetTarget(btn);
+            if (target == null) return;
+            
             var delta = Delta(target.Time);
 
             if (IsOk(delta))
             {
                 Debug.Log("OK");
-                _noteQueue[btn].Dequeue();
+                _factory.DequeueTarget(btn);
 
                 if (target.IsLongNote)
                 {
@@ -125,13 +97,13 @@ namespace CYAN4S
             else if (RushToBreak(delta))
             {
                 Debug.Log("Too Early");
-                _noteQueue[btn].Dequeue();
+                _factory.DequeueTarget(btn);
 
                 target.gameObject.SetActive(false);
             }
             else
             {
-                // Debug.Log("Ignored");
+                Debug.Log("Ignored");
             }
         }
 
@@ -139,6 +111,7 @@ namespace CYAN4S
         {
             if (!_currentLongNotes[btn])
             {
+                // TODO
                 return;
             }
         }
@@ -161,20 +134,24 @@ namespace CYAN4S
             CurrentTime += Time.deltaTime;
             // TODO MATH
             CurrentBeat = CurrentTime / 60d * 120d;
+            currentBeatSO.Value = CurrentBeat;
+
+            scrollSpeedSO.Value = scrollSpeed;
         }
+
 
         private void LateUpdate()
         {
-            foreach (var queue in _noteQueue)
+            for (int i = 0; i < button; i++)
             {
-                if (queue.Count == 0) continue;
-                var target = queue.Peek();
-
+                var target = _factory.GetTarget(i);
+                
+                if (target == null) continue;
                 if (!Missed(Delta(target.Time))) continue;
-
+                
                 Debug.Log("Break");
                 target.gameObject.SetActive(false);
-                queue.Dequeue();
+                _factory.DequeueTarget(i);
             }
         }
 
@@ -188,6 +165,53 @@ namespace CYAN4S
 
     public class NoteFactory
     {
-        
+        private List<List<NoteSystem>> _noteTemp;
+        private List<Queue<NoteSystem>> _noteQueue;
+
+        public NoteFactory(int button, List<NoteData> notes, List<LongNoteData> longNotes, Func<NoteSystem> instantiate)
+        {
+            _noteQueue = new List<Queue<NoteSystem>>();
+            _noteTemp = new List<List<NoteSystem>>();
+
+            for (var i = 0; i < button; i++)
+            {
+                _noteTemp.Add(new List<NoteSystem>());
+                _noteQueue.Add(new Queue<NoteSystem>());
+            }
+
+            foreach (var note in notes)
+            {
+                var noteSystem = instantiate();
+                // TODO MATH
+                noteSystem.InstanceInitialize(note, (float) note.beat * 0.5f);
+
+                _noteTemp[note.line].Add(noteSystem);
+            }
+
+            foreach (var note in longNotes)
+            {
+                var noteSystem = instantiate();
+                // TODO MATH
+                noteSystem.InstanceInitialize(note, (float) note.beat * 0.5f);
+                _noteTemp[note.line].Add(noteSystem);
+            }
+
+            for (var i = 0; i < _noteTemp.Count; i++)
+            {
+                var temp = _noteTemp[i];
+                temp.Sort(((a, b) => a.Time.CompareTo(b.Time)));
+                _noteQueue[i] = new Queue<NoteSystem>(temp);
+            }
+        }
+
+        public NoteSystem GetTarget(int value)
+        {
+            return _noteQueue[value].Count == 0 ? null : _noteQueue[value].Peek();
+        }
+
+        public NoteSystem DequeueTarget(int value)
+        {
+            return _noteQueue[value].Count == 0 ? null : _noteQueue[value].Dequeue();
+        }
     }
 }

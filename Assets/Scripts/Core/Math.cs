@@ -1,4 +1,5 @@
 using System;
+using UnityEditor;
 
 namespace Core
 {
@@ -24,7 +25,7 @@ namespace Core
         }
 
         public static Fraction operator +(Fraction a) => a;
-        public static Fraction operator -(Fraction a) => new Fraction(-a._num, a._den);
+        public static Fraction operator -(Fraction a) => new(-a._num, a._den);
 
         public static Fraction operator +(Fraction a, Fraction b)
             => new Fraction(a._num * b._den + b._num * a._den, a._den * b._den);

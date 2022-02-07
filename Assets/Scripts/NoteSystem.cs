@@ -24,8 +24,11 @@ namespace CYAN4S
     /// 
     public class NoteSystem : MonoBehaviour
     {
-        private static Func<double> _currentBeat;
-        private static Func<float> _scrollSpeed;
+        // private static Func<double> _currentBeat;
+        // private static Func<float> _scrollSpeed;
+
+        [SerializeField] private FloatSO scrollSpeedSO;
+        [SerializeField] private DoubleSO currentBeatSO;
 
         private RectTransform _rectTransform;
         private NoteData _noteData;
@@ -45,12 +48,6 @@ namespace CYAN4S
             _rectTransform = GetComponent<RectTransform>();
         }
 
-        public static void StaticInitialize(Func<double> currentBeat, Func<float> scrollSpeed)
-        {
-            _currentBeat = currentBeat;
-            _scrollSpeed = scrollSpeed;
-        }
-
         public void InstanceInitialize(NoteData noteData, float time)
         {
             _noteData = noteData;
@@ -62,7 +59,7 @@ namespace CYAN4S
 
         private void Update()
         {
-            _nt?.Update(_currentBeat(), _scrollSpeed());
+            _nt?.Update(currentBeatSO.Value, scrollSpeedSO.Value);
         }
     }
 

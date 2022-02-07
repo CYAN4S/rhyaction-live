@@ -161,6 +161,8 @@ MonoBehaviour:
   - 60
   - 180
   scrollSpeed: 5.49
+  currentBeatSO: {fileID: 11400000, guid: fee16431867d38a4c8cb245b086770a4, type: 2}
+  scrollSpeedSO: {fileID: 11400000, guid: 998e27c4807b94a4fa13615535094de3, type: 2}
   rushToBreak: 0.15
   ignorable: 0.2
   missed: -0.15
@@ -193,6 +195,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keys4B: 13000000200000001e0000000b000000
   onButtonPressed:
+    m_PersistentCalls:
+      m_Calls: []
+  onButtonIsPressed:
+    m_PersistentCalls:
+      m_Calls: []
+  onButtonReleased:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &318290864
