@@ -1,6 +1,7 @@
 using System;
 using Core;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace CYAN4S
 {
@@ -24,9 +25,6 @@ namespace CYAN4S
     /// 
     public class NoteSystem : MonoBehaviour
     {
-        // private static Func<double> _currentBeat;
-        // private static Func<float> _scrollSpeed;
-
         [SerializeField] private FloatSO scrollSpeedSO;
         [SerializeField] private DoubleSO currentBeatSO;
 
@@ -35,11 +33,7 @@ namespace CYAN4S
         public bool IsLongNote => _noteData is LongNoteData;
 
         private NoteTranslator _nt;
-
-        public void AlertInProgress()
-        {
-            _nt.SetLongNoteState(LongNoteState.Progress);
-        }
+        private NoteAppearance _na;
 
         public float Time { get; private set; }
 
@@ -55,6 +49,11 @@ namespace CYAN4S
 
             _nt = new NoteTranslator(_noteData, _rectTransform,
                 noteData is LongNoteData ? NoteType.Long : NoteType.Normal);
+        }
+        
+        public void OnProgress()
+        {
+            _nt.SetLongNoteState(LongNoteState.Progress);
         }
 
         private void Update()
@@ -72,9 +71,22 @@ namespace CYAN4S
     public enum LongNoteState
     {
         Idle, // -> Progress, Missed
-        Progress, // -> Cut, Missed, DESTROY
-        Missed, // -> DESTROY
+        Progress, // -> Cut, Missed, DEACTIVATE
+        Missed, // -> DEACTIVATE
         Cut // -> Progress, Missed
+    }
+
+    public class NoteAppearance
+    {
+        private GameObject _o;
+        private readonly NoteType _type;
+
+        public UnityEvent OnDeactivate;
+
+        public void Deactivate()
+        {
+            
+        }
     }
 
     public class NoteTranslator

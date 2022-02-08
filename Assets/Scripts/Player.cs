@@ -14,10 +14,11 @@ namespace CYAN4S
         [SerializeField] private RectTransform notesParent;
         private InputHandler _inputHandler;
 
-        [SerializeField] private float[] xPos;
         [SerializeField] [Range(1.0f, 9.9f)] private float scrollSpeed;
 
+        [SerializeField] private JudgeStandardSO judgeStandard;
         [SerializeField] private DoubleSO currentBeatSO;
+        [SerializeField] private FloatSO currentTimeSO;
         [SerializeField] private FloatSO scrollSpeedSO;
 
         // TODO DATA
@@ -28,17 +29,12 @@ namespace CYAN4S
         public float CurrentTime { get; private set; }
         public double CurrentBeat { get; private set; }
 
-
         private List<NoteSystem> _currentLongNotes;
 
-        public float rushToBreak;
-        public float ignorable;
-        public float missed;
-
         private float Delta(float time) => time - CurrentTime;
-        private bool RushToBreak(float delta) => delta > rushToBreak && delta <= ignorable;
-        private bool IsOk(float delta) => delta <= rushToBreak && delta >= missed;
-        private bool Missed(float delta) => delta < missed;
+        private bool RushToBreak(float delta) => delta > judgeStandard.rushToBreak && delta <= judgeStandard.ignorable;
+        private bool IsOk(float delta) => delta <= judgeStandard.rushToBreak && delta >= judgeStandard.missed;
+        private bool Missed(float delta) => delta < judgeStandard.missed;
 
         private NoteFactory _factory;
 
@@ -65,7 +61,8 @@ namespace CYAN4S
             }
 
             // Value Initialize
-            CurrentTime = -5f;
+            CurrentTime = currentTimeSO.initialValue;
+            
             _inputHandler.onButtonPressed.AddListener(OnButtonPressed);
             _inputHandler.onButtonIsPressed.AddListener(OnButtonIsPressed);
             _inputHandler.onButtonReleased.AddListener(OnButtonReleased);
@@ -75,7 +72,7 @@ namespace CYAN4S
         {
             var target = _factory.GetTarget(btn);
             if (target == null) return;
-            
+
             var delta = Delta(target.Time);
 
             if (IsOk(delta))
@@ -87,7 +84,7 @@ namespace CYAN4S
                 {
                     Debug.Log("Long!");
                     _currentLongNotes[btn] = target;
-                    target.AlertInProgress();
+                    target.OnProgress();
                 }
                 else
                 {
@@ -142,13 +139,13 @@ namespace CYAN4S
 
         private void LateUpdate()
         {
-            for (int i = 0; i < button; i++)
+            for (var i = 0; i < button; i++)
             {
                 var target = _factory.GetTarget(i);
-                
+
                 if (target == null) continue;
                 if (!Missed(Delta(target.Time))) continue;
-                
+
                 Debug.Log("Break");
                 target.gameObject.SetActive(false);
                 _factory.DequeueTarget(i);
@@ -213,5 +210,10 @@ namespace CYAN4S
         {
             return _noteQueue[value].Count == 0 ? null : _noteQueue[value].Dequeue();
         }
+    }
+
+    public class ChartReader
+    {
+        
     }
 }
