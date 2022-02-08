@@ -29,7 +29,7 @@ namespace CYAN4S
         public float CurrentTime { get; private set; }
         public double CurrentBeat { get; private set; }
 
-        private List<NoteSystem> _currentLongNotes;
+        private List<NoteSystem> _cachedNotes;
 
         private float Delta(float time) => time - CurrentTime;
         private bool RushToBreak(float delta) => delta > judgeStandard.rushToBreak && delta <= judgeStandard.ignorable;
@@ -44,7 +44,7 @@ namespace CYAN4S
 
             _notes = new List<NoteData>();
             _longNotes = new List<LongNoteData>();
-            _currentLongNotes = new List<NoteSystem>();
+            _cachedNotes = new List<NoteSystem>(button);
 
             // TODO DATA
             for (var i = 20; i < 30; i++)
@@ -57,12 +57,13 @@ namespace CYAN4S
             // TODO DATA
             for (var i = 0; i < button; i++)
             {
-                _currentLongNotes.Add(null);
+                _cachedNotes.Add(_factory.Get(i));
             }
 
             // Value Initialize
             CurrentTime = currentTimeSO.initialValue;
-            
+            scrollSpeed = scrollSpeedSO.initialValue;
+
             _inputHandler.onButtonPressed.AddListener(OnButtonPressed);
             _inputHandler.onButtonIsPressed.AddListener(OnButtonIsPressed);
             _inputHandler.onButtonReleased.AddListener(OnButtonReleased);
@@ -70,7 +71,7 @@ namespace CYAN4S
 
         private void OnButtonPressed(int btn)
         {
-            var target = _factory.GetTarget(btn);
+            var target = _cachedNotes[btn];
             if (target == null) return;
 
             var delta = Delta(target.Time);
@@ -78,25 +79,25 @@ namespace CYAN4S
             if (IsOk(delta))
             {
                 Debug.Log("OK");
-                _factory.DequeueTarget(btn);
-
+                
                 if (target.IsLongNote)
                 {
                     Debug.Log("Long!");
-                    _currentLongNotes[btn] = target;
                     target.OnProgress();
                 }
                 else
                 {
                     target.gameObject.SetActive(false);
+                    _cachedNotes[btn] = _factory.Get(btn);
                 }
             }
             else if (RushToBreak(delta))
             {
                 Debug.Log("Too Early");
-                _factory.DequeueTarget(btn);
+                // _factory.DequeueTarget(btn);
 
                 target.gameObject.SetActive(false);
+                _cachedNotes[btn] = _factory.Get(btn);
             }
             else
             {
@@ -106,49 +107,45 @@ namespace CYAN4S
 
         private void OnButtonIsPressed(int btn)
         {
-            if (!_currentLongNotes[btn])
-            {
-                // TODO
-                return;
-            }
+            if (!_cachedNotes[btn]) return;
+            // TODO
         }
 
         private void OnButtonReleased(int btn)
         {
-            if (!_currentLongNotes[btn])
-            {
-                return;
-            }
+            if (!_cachedNotes[btn]) return;
+            if (!_cachedNotes[btn].IsLongNote) return;
+            if (!_cachedNotes[btn].IsProgress) return;
 
             Debug.Log("Released!");
 
-            _currentLongNotes[btn].gameObject.SetActive(false);
-            _currentLongNotes[btn] = null;
+            _cachedNotes[btn].gameObject.SetActive(false);
+            _cachedNotes[btn] = _factory.Get(btn);
         }
 
         private void Update()
         {
             CurrentTime += Time.deltaTime;
-            // TODO MATH
-            CurrentBeat = CurrentTime / 60d * 120d;
+            CurrentBeat = CurrentTime / 60d * 120d; // TODO MATH
+            
+            currentTimeSO.Value = CurrentTime;
             currentBeatSO.Value = CurrentBeat;
-
             scrollSpeedSO.Value = scrollSpeed;
         }
-
 
         private void LateUpdate()
         {
             for (var i = 0; i < button; i++)
             {
-                var target = _factory.GetTarget(i);
+                var target = _cachedNotes[i];
 
                 if (target == null) continue;
+                if (target.IsLongNote && target.IsProgress) continue;
                 if (!Missed(Delta(target.Time))) continue;
 
                 Debug.Log("Break");
                 target.gameObject.SetActive(false);
-                _factory.DequeueTarget(i);
+                _cachedNotes[i] = _factory.Get(i);
             }
         }
 
@@ -201,19 +198,18 @@ namespace CYAN4S
             }
         }
 
-        public NoteSystem GetTarget(int value)
-        {
-            return _noteQueue[value].Count == 0 ? null : _noteQueue[value].Peek();
-        }
-
-        public NoteSystem DequeueTarget(int value)
+        public NoteSystem Get(int value)
         {
             return _noteQueue[value].Count == 0 ? null : _noteQueue[value].Dequeue();
+        }
+
+        public void Release(NoteSystem target)
+        {
         }
     }
 
     public class ChartReader
     {
-        
+        // TODO
     }
 }

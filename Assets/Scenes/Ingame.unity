@@ -155,10 +155,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notePrefab: {fileID: 1127457483665874784, guid: d55e770f19017c54ea46514e9696ae4f, type: 3}
   notesParent: {fileID: 1910495641}
-  scrollSpeed: 5.49
+  scrollSpeed: 1
   judgeStandard: {fileID: 11400000, guid: 93bf5d1ade8913842b9e59812c073e3e, type: 2}
   currentBeatSO: {fileID: 11400000, guid: fee16431867d38a4c8cb245b086770a4, type: 2}
-  currentTimeSO: {fileID: 0}
+  currentTimeSO: {fileID: 11400000, guid: 72de76beac1c4654ea3142663b4ebae7, type: 2}
   scrollSpeedSO: {fileID: 11400000, guid: 998e27c4807b94a4fa13615535094de3, type: 2}
 --- !u!4 &219790239
 Transform:

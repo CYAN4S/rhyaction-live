@@ -36,6 +36,7 @@ namespace CYAN4S
         private NoteAppearance _na;
 
         public float Time { get; private set; }
+        public bool IsProgress => _nt._state == LongNoteState.Progress;
 
         private void Awake()
         {
@@ -99,7 +100,7 @@ namespace CYAN4S
 
         private float[] _xPos = {-150f, -50f, 50f, 150f};
 
-        private LongNoteState _state;
+        public LongNoteState _state;
 
         public NoteTranslator(NoteData noteData, RectTransform rt, NoteType noteType)
         {
