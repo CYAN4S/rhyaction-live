@@ -12,31 +12,30 @@ namespace CYAN4S
     {
         [SerializeField] private NoteSystem notePrefab;
         [SerializeField] private RectTransform notesParent;
-        private InputHandler _inputHandler;
-
-        [SerializeField] [Range(1.0f, 9.9f)] private float scrollSpeed;
-
+        
         [SerializeField] private JudgeStandardSO judgeStandard;
         [SerializeField] private DoubleSO currentBeatSO;
         [SerializeField] private FloatSO currentTimeSO;
         [SerializeField] private FloatSO scrollSpeedSO;
+        
+        [SerializeField] [Range(1.0f, 9.9f)] private float scrollSpeed;
 
-        // TODO DATA
-        private int button = 4;
-        private List<NoteData> _notes;
-        private List<LongNoteData> _longNotes;
-
-        public float CurrentTime { get; private set; }
-        public double CurrentBeat { get; private set; }
-
+        [field: SerializeField] public float CurrentTime { get; private set; }
+        [field: SerializeField] public double CurrentBeat { get; private set; }
+        
+        private InputHandler _inputHandler;
         private List<NoteSystem> _cachedNotes;
+        private NoteFactory _factory;
 
         private float Delta(float time) => time - CurrentTime;
         private bool RushToBreak(float delta) => delta > judgeStandard.rushToBreak && delta <= judgeStandard.ignorable;
         private bool IsOk(float delta) => delta <= judgeStandard.rushToBreak && delta >= judgeStandard.missed;
         private bool Missed(float delta) => delta < judgeStandard.missed;
-
-        private NoteFactory _factory;
+        
+        // TODO DATA
+        private int button = 4;
+        private List<NoteData> _notes;
+        private List<LongNoteData> _longNotes;
 
         private void Awake()
         {
@@ -65,8 +64,13 @@ namespace CYAN4S
             scrollSpeed = scrollSpeedSO.initialValue;
 
             _inputHandler.onButtonPressed.AddListener(OnButtonPressed);
-            _inputHandler.onButtonIsPressed.AddListener(OnButtonIsPressed);
             _inputHandler.onButtonReleased.AddListener(OnButtonReleased);
+        }
+        
+        private void OnDestroy()
+        {
+            _inputHandler.onButtonPressed.RemoveListener(OnButtonPressed);
+            _inputHandler.onButtonPressed.RemoveListener(OnButtonReleased);
         }
 
         private void OnButtonPressed(int btn)
@@ -87,28 +91,21 @@ namespace CYAN4S
                 }
                 else
                 {
-                    target.gameObject.SetActive(false);
+                    _factory.Release(target);
                     _cachedNotes[btn] = _factory.Get(btn);
                 }
             }
             else if (RushToBreak(delta))
             {
                 Debug.Log("Too Early");
-                // _factory.DequeueTarget(btn);
 
-                target.gameObject.SetActive(false);
+                _factory.Release(target);
                 _cachedNotes[btn] = _factory.Get(btn);
             }
             else
             {
                 Debug.Log("Ignored");
             }
-        }
-
-        private void OnButtonIsPressed(int btn)
-        {
-            if (!_cachedNotes[btn]) return;
-            // TODO
         }
 
         private void OnButtonReleased(int btn)
@@ -119,7 +116,7 @@ namespace CYAN4S
 
             Debug.Log("Released!");
 
-            _cachedNotes[btn].gameObject.SetActive(false);
+            _factory.Release(_cachedNotes[btn]);
             _cachedNotes[btn] = _factory.Get(btn);
         }
 
@@ -144,16 +141,9 @@ namespace CYAN4S
                 if (!Missed(Delta(target.Time))) continue;
 
                 Debug.Log("Break");
-                target.gameObject.SetActive(false);
+                _factory.Release(target);
                 _cachedNotes[i] = _factory.Get(i);
             }
-        }
-
-        private void OnDestroy()
-        {
-            _inputHandler.onButtonPressed.RemoveListener(OnButtonPressed);
-            _inputHandler.onButtonPressed.RemoveListener(OnButtonIsPressed);
-            _inputHandler.onButtonPressed.RemoveListener(OnButtonReleased);
         }
     }
 
@@ -205,6 +195,7 @@ namespace CYAN4S
 
         public void Release(NoteSystem target)
         {
+            target.gameObject.SetActive(false);
         }
     }
 

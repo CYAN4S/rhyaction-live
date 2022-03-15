@@ -15,7 +15,12 @@ namespace CYAN4S
         public UnityEvent<int> onButtonIsPressed;
         public UnityEvent<int> onButtonReleased;
 
-        private void Update()
+        private void Awake()
+        {
+            Physics.autoSimulation = false;
+        }
+
+        private void FixedUpdate()
         {
             for (var i = 0; i < keys4B.Length; i++)
             {
