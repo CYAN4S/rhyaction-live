@@ -1,10 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using Core;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace CYAN4S
 {
@@ -12,103 +8,120 @@ namespace CYAN4S
     {
         [SerializeField] private NoteSystem notePrefab;
         [SerializeField] private RectTransform notesParent;
-        
+
         [SerializeField] private JudgeStandardSO judgeStandard;
         [SerializeField] private DoubleSO currentBeatSO;
-        [SerializeField] private FloatSO currentTimeSO;
+        [SerializeField] private DoubleSO currentTimeSO;
         [SerializeField] private FloatSO scrollSpeedSO;
-        
+
         [SerializeField] [Range(1.0f, 9.9f)] private float scrollSpeed;
 
-        [field: SerializeField] public float CurrentTime { get; private set; }
+        [field: SerializeField] public double CurrentTime { get; private set; }
         [field: SerializeField] public double CurrentBeat { get; private set; }
-        
-        private InputHandler _inputHandler;
-        private List<NoteSystem> _cachedNotes;
-        private NoteFactory _factory;
 
-        private float Delta(float time) => time - CurrentTime;
-        private bool RushToBreak(float delta) => delta > judgeStandard.rushToBreak && delta <= judgeStandard.ignorable;
-        private bool IsOk(float delta) => delta <= judgeStandard.rushToBreak && delta >= judgeStandard.missed;
-        private bool Missed(float delta) => delta < judgeStandard.missed;
-        
-        // TODO DATA
-        private int button = 4;
-        private List<NoteData> _notes;
-        private List<LongNoteData> _longNotes;
+        private InputHandler _ih;
+        private NoteFactory _f;
+        private List<NoteSystem> _cachedNotes;
+
+        private double Delta(double time)
+        {
+            return time - CurrentTime;
+        }
+
+        private bool RushToBreak(double delta)
+        {
+            return delta > judgeStandard.rushToBreak && delta <= judgeStandard.ignorable;
+        }
+
+        private bool IsOk(double delta)
+        {
+            return delta <= judgeStandard.rushToBreak && delta >= judgeStandard.missed;
+        }
+
+        private bool Missed(double delta)
+        {
+            return delta < judgeStandard.missed;
+        }
+
+        private double TimeFromRaw(double rawTime)
+        {
+            return rawTime + currentTimeSO.initialValue;
+        }
+
+        // private readonly Queue<Tuple<int, double, bool>> _tasks = new();
+        private readonly Queue<Action> _tasks = new();
+
+        private Chart _chart;
+
+        private void ButtonPressListener(int btn, double time)
+        {
+            _tasks.Enqueue(() => OnButtonPressed(btn, time));
+        }
+
+        private void ButtonReleaseListener(int btn, double time)
+        {
+            _tasks.Enqueue(() => OnButtonReleased(btn, time));
+        }
 
         private void Awake()
         {
-            _inputHandler = GetComponent<InputHandler>();
+            //TODO
+            _chart = Chart.GetTestChart();
 
-            _notes = new List<NoteData>();
-            _longNotes = new List<LongNoteData>();
-            _cachedNotes = new List<NoteSystem>(button);
+            _ih = GetComponent<InputHandler>();
+            _cachedNotes = new List<NoteSystem>(_chart.button);
 
-            // TODO DATA
-            for (var i = 20; i < 30; i++)
-                _notes.Add(new NoteData(new Fraction(i, 4), i % 4, null));
-            for (var i = 0; i < 20; i += 4)
-                _longNotes.Add(new LongNoteData(new Fraction(i, 4), i / 4 % 4, null, new Fraction(1, 2)));
+            _f = new NoteFactory(_chart,
+                () => Instantiate(notePrefab, notesParent),
+                target => target.gameObject.SetActive(false)
+            );
 
-            _factory = new NoteFactory(button, _notes, _longNotes, () => Instantiate(notePrefab, notesParent));
-
-            // TODO DATA
-            for (var i = 0; i < button; i++)
-            {
-                _cachedNotes.Add(_factory.Get(i));
-            }
+            for (var i = 0; i < _chart.button; i++)
+                _cachedNotes.Add(_f.Get(i));
 
             // Value Initialize
             CurrentTime = currentTimeSO.initialValue;
             scrollSpeed = scrollSpeedSO.initialValue;
 
-            _inputHandler.onButtonPressed.AddListener(OnButtonPressed);
-            _inputHandler.onButtonReleased.AddListener(OnButtonReleased);
-        }
-        
-        private void OnDestroy()
-        {
-            _inputHandler.onButtonPressed.RemoveListener(OnButtonPressed);
-            _inputHandler.onButtonPressed.RemoveListener(OnButtonReleased);
+            _ih.onButtonPressed.AddListener(ButtonPressListener);
+            _ih.onButtonReleased.AddListener(ButtonReleaseListener);
         }
 
-        private void OnButtonPressed(int btn)
+        private void OnDestroy()
+        {
+            _ih.onButtonPressed.RemoveListener(ButtonPressListener);
+            _ih.onButtonPressed.RemoveListener(ButtonReleaseListener);
+        }
+
+        private void OnButtonPressed(int btn, double time)
         {
             var target = _cachedNotes[btn];
             if (target == null) return;
 
-            var delta = Delta(target.Time);
+            var delta = target.Time - TimeFromRaw(time);
 
             if (IsOk(delta))
             {
-                Debug.Log("OK");
-                
+                Debug.Log($"OK: {delta}");
                 if (target.IsLongNote)
                 {
-                    Debug.Log("Long!");
                     target.OnProgress();
                 }
                 else
                 {
-                    _factory.Release(target);
-                    _cachedNotes[btn] = _factory.Get(btn);
+                    _f.Release(target);
+                    _cachedNotes[btn] = _f.Get(btn);
                 }
             }
             else if (RushToBreak(delta))
             {
-                Debug.Log("Too Early");
-
-                _factory.Release(target);
-                _cachedNotes[btn] = _factory.Get(btn);
-            }
-            else
-            {
-                Debug.Log("Ignored");
+                _f.Release(target);
+                _cachedNotes[btn] = _f.Get(btn);
+                Debug.Log($"TOO EARLY: {delta}");
             }
         }
 
-        private void OnButtonReleased(int btn)
+        private void OnButtonReleased(int btn, double time)
         {
             if (!_cachedNotes[btn]) return;
             if (!_cachedNotes[btn].IsLongNote) return;
@@ -116,23 +129,26 @@ namespace CYAN4S
 
             Debug.Log("Released!");
 
-            _factory.Release(_cachedNotes[btn]);
-            _cachedNotes[btn] = _factory.Get(btn);
+            _f.Release(_cachedNotes[btn]);
+            _cachedNotes[btn] = _f.Get(btn);
         }
 
         private void Update()
         {
-            CurrentTime += Time.deltaTime;
+            CurrentTime = currentTimeSO.initialValue + Time.timeAsDouble;
             CurrentBeat = CurrentTime / 60d * 120d; // TODO MATH
-            
+
             currentTimeSO.Value = CurrentTime;
             currentBeatSO.Value = CurrentBeat;
             scrollSpeedSO.Value = scrollSpeed;
+
+            while (_tasks.Count != 0)
+                _tasks.Dequeue().Invoke();
         }
 
         private void LateUpdate()
         {
-            for (var i = 0; i < button; i++)
+            for (var i = 0; i < _chart.button; i++)
             {
                 var target = _cachedNotes[i];
 
@@ -140,26 +156,32 @@ namespace CYAN4S
                 if (target.IsLongNote && target.IsProgress) continue;
                 if (!Missed(Delta(target.Time))) continue;
 
-                Debug.Log("Break");
-                _factory.Release(target);
-                _cachedNotes[i] = _factory.Get(i);
+                Debug.Log("BREAK");
+                _f.Release(target);
+                _cachedNotes[i] = _f.Get(i);
             }
         }
     }
 
     public class NoteFactory
     {
-        private List<List<NoteSystem>> _noteTemp;
-        private List<Queue<NoteSystem>> _noteQueue;
+        private readonly List<Queue<NoteSystem>> _noteQueue;
+        private readonly Action<NoteSystem> _destroy;
 
-        public NoteFactory(int button, List<NoteData> notes, List<LongNoteData> longNotes, Func<NoteSystem> instantiate)
+        public NoteFactory(Chart chart, Func<NoteSystem> instantiate, Action<NoteSystem> destroy)
         {
+            var button = chart.button;
+            var notes = chart.notes;
+            var longNotes = chart.longNotes;
+
             _noteQueue = new List<Queue<NoteSystem>>();
-            _noteTemp = new List<List<NoteSystem>>();
+            var noteTemp = new List<List<NoteSystem>>();
+
+            _destroy = destroy;
 
             for (var i = 0; i < button; i++)
             {
-                _noteTemp.Add(new List<NoteSystem>());
+                noteTemp.Add(new List<NoteSystem>());
                 _noteQueue.Add(new Queue<NoteSystem>());
             }
 
@@ -169,7 +191,7 @@ namespace CYAN4S
                 // TODO MATH
                 noteSystem.InstanceInitialize(note, (float) note.beat * 0.5f);
 
-                _noteTemp[note.line].Add(noteSystem);
+                noteTemp[note.line].Add(noteSystem);
             }
 
             foreach (var note in longNotes)
@@ -177,13 +199,13 @@ namespace CYAN4S
                 var noteSystem = instantiate();
                 // TODO MATH
                 noteSystem.InstanceInitialize(note, (float) note.beat * 0.5f);
-                _noteTemp[note.line].Add(noteSystem);
+                noteTemp[note.line].Add(noteSystem);
             }
 
-            for (var i = 0; i < _noteTemp.Count; i++)
+            for (var i = 0; i < noteTemp.Count; i++)
             {
-                var temp = _noteTemp[i];
-                temp.Sort(((a, b) => a.Time.CompareTo(b.Time)));
+                var temp = noteTemp[i];
+                temp.Sort((a, b) => a.Time.CompareTo(b.Time));
                 _noteQueue[i] = new Queue<NoteSystem>(temp);
             }
         }
@@ -195,12 +217,7 @@ namespace CYAN4S
 
         public void Release(NoteSystem target)
         {
-            target.gameObject.SetActive(false);
+            _destroy(target);
         }
-    }
-
-    public class ChartReader
-    {
-        // TODO
     }
 }

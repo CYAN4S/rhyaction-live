@@ -11,9 +11,9 @@ namespace CYAN4S
     {
         // TODO MODE
         [SerializeField] private Key[] keys4B;
-        public UnityEvent<int> onButtonPressed;
+        public UnityEvent<int, double> onButtonPressed;
         public UnityEvent<int> onButtonIsPressed;
-        public UnityEvent<int> onButtonReleased;
+        public UnityEvent<int, double> onButtonReleased;
 
         private void Awake()
         {
@@ -28,7 +28,7 @@ namespace CYAN4S
                 
                 if (Keyboard.current[key].wasPressedThisFrame)
                 {
-                    onButtonPressed?.Invoke(i);
+                    onButtonPressed?.Invoke(i, Time.fixedTimeAsDouble);
                 }
 
                 if (Keyboard.current[key].isPressed)
@@ -38,7 +38,7 @@ namespace CYAN4S
 
                 if (Keyboard.current[key].wasReleasedThisFrame)
                 {
-                    onButtonReleased?.Invoke(i);
+                    onButtonReleased?.Invoke(i, Time.fixedTimeAsDouble);
                 }
             }
         }
