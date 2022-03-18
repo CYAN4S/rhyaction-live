@@ -21,6 +21,7 @@ namespace CYAN4S
 
         private InputHandler _ih;
         private NoteFactory _f;
+        private AudioManager _a;
         private List<NoteSystem> _cachedNotes;
 
         private double Delta(double time)
@@ -48,7 +49,6 @@ namespace CYAN4S
             return rawTime + currentTimeSO.initialValue;
         }
 
-        // private readonly Queue<Tuple<int, double, bool>> _tasks = new();
         private readonly Queue<Action> _tasks = new();
 
         private Chart _chart;
@@ -56,6 +56,7 @@ namespace CYAN4S
         private void ButtonPressListener(int btn, double time)
         {
             _tasks.Enqueue(() => OnButtonPressed(btn, time));
+            _a.PlaySoundAsio();
         }
 
         private void ButtonReleaseListener(int btn, double time)
@@ -69,6 +70,7 @@ namespace CYAN4S
             _chart = Chart.GetTestChart();
 
             _ih = GetComponent<InputHandler>();
+            _a = GetComponent<AudioManager>();
             _cachedNotes = new List<NoteSystem>(_chart.button);
 
             _f = new NoteFactory(_chart,
@@ -160,64 +162,6 @@ namespace CYAN4S
                 _f.Release(target);
                 _cachedNotes[i] = _f.Get(i);
             }
-        }
-    }
-
-    public class NoteFactory
-    {
-        private readonly List<Queue<NoteSystem>> _noteQueue;
-        private readonly Action<NoteSystem> _destroy;
-
-        public NoteFactory(Chart chart, Func<NoteSystem> instantiate, Action<NoteSystem> destroy)
-        {
-            var button = chart.button;
-            var notes = chart.notes;
-            var longNotes = chart.longNotes;
-
-            _noteQueue = new List<Queue<NoteSystem>>();
-            var noteTemp = new List<List<NoteSystem>>();
-
-            _destroy = destroy;
-
-            for (var i = 0; i < button; i++)
-            {
-                noteTemp.Add(new List<NoteSystem>());
-                _noteQueue.Add(new Queue<NoteSystem>());
-            }
-
-            foreach (var note in notes)
-            {
-                var noteSystem = instantiate();
-                // TODO MATH
-                noteSystem.InstanceInitialize(note, (float) note.beat * 0.5f);
-
-                noteTemp[note.line].Add(noteSystem);
-            }
-
-            foreach (var note in longNotes)
-            {
-                var noteSystem = instantiate();
-                // TODO MATH
-                noteSystem.InstanceInitialize(note, (float) note.beat * 0.5f);
-                noteTemp[note.line].Add(noteSystem);
-            }
-
-            for (var i = 0; i < noteTemp.Count; i++)
-            {
-                var temp = noteTemp[i];
-                temp.Sort((a, b) => a.Time.CompareTo(b.Time));
-                _noteQueue[i] = new Queue<NoteSystem>(temp);
-            }
-        }
-
-        public NoteSystem Get(int value)
-        {
-            return _noteQueue[value].Count == 0 ? null : _noteQueue[value].Dequeue();
-        }
-
-        public void Release(NoteSystem target)
-        {
-            _destroy(target);
         }
     }
 }

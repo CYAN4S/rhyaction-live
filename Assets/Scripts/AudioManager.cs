@@ -14,24 +14,24 @@ namespace CYAN4S
         private AudioFileReader audioFileAsio;
         private WaveOutEvent outputDevice;
 
-        private AudioSource _audioSource;
+        // private AudioSource _audioSource;
         private AudioClip _audioClip;
         private AsioOut _asioOut;
 
         private void Awake()
         {
-            _audioSource = GetComponent<AudioSource>();
+            // _audioSource = GetComponent<AudioSource>();
         
             outputDevice = new WaveOutEvent();
             audioFile = new AudioFileReader(@"C:/Temp/clap.wav");
-            audioFileAsio = new AudioFileReader(@"C:/Temp/clap.wav");
+            audioFileAsio = new AudioFileReader(@"C:/Temp/hihat.wav");
             outputDevice.Init(audioFile);
 
-            StartCoroutine(GetAudioClip(@"C:/Temp/clap.wav", arg0 =>
-            {
-                _audioClip = arg0;
-                _audioSource.clip = _audioClip;
-            }));
+            // StartCoroutine(GetAudioClip(@"C:/Temp/clap.wav", arg0 =>
+            // {
+            //     _audioClip = arg0;
+            //     _audioSource.clip = _audioClip;
+            // }));
 
             foreach (var driver in AsioOut.GetDriverNames())
             {
@@ -62,7 +62,12 @@ namespace CYAN4S
 
         public void PlaySound()
         {
-            _audioSource.Play();
+            // _audioSource.Play();
+        }
+
+        public void PlaySoundAsio(string path)
+        {
+            PlaySoundAsio();
         }
 
         private void OnPlaybackStopped(object sender, StoppedEventArgs args)
@@ -75,20 +80,20 @@ namespace CYAN4S
 
         private void Update()
         {
-            if (Keyboard.current.fKey.wasPressedThisFrame)
-            {
-                PlaySoundNAudio();
-            }
-
-            if (Keyboard.current.jKey.wasPressedThisFrame)
-            {
-                PlaySound();
-            }
-
-            if (Keyboard.current.spaceKey.wasPressedThisFrame)
-            {
-                PlaySoundAsio();
-            }
+            // if (Keyboard.current.fKey.wasPressedThisFrame)
+            // {
+            //     PlaySoundNAudio();
+            // }
+            //
+            // if (Keyboard.current.jKey.wasPressedThisFrame)
+            // {
+            //     PlaySound();
+            // }
+            //
+            // if (Keyboard.current.spaceKey.wasPressedThisFrame)
+            // {
+            //     PlaySoundAsio();
+            // }
         }
 
         public static IEnumerator GetAudioClip(string audioPath, UnityAction<AudioClip> callback)

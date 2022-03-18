@@ -32,9 +32,9 @@ namespace CYAN4S
             };
 
             for (var i = 20; i < 30; i++)
-                target.notes.Add(new NoteData(new Fraction(i, 4), i % 4, null));
+                target.notes.Add(new NoteData(new Fraction(i, 4), i % 4, @"C:/Temp/clap.wav"));
             for (var i = 0; i < 20; i += 4)
-                target.longNotes.Add(new LongNoteData(new Fraction(i, 4), i / 4 % 4, null, new Fraction(1, 2)));
+                target.longNotes.Add(new LongNoteData(new Fraction(i, 4), i / 4 % 4, @"C:/Temp/clap.wav", new Fraction(1, 2)));
 
             return target;
         }
