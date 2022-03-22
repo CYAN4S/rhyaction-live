@@ -25,8 +25,8 @@ namespace CYAN4S
     /// 
     public class NoteSystem : MonoBehaviour
     {
-        [SerializeField] private FloatSO scrollSpeedSO;
-        [SerializeField] private DoubleSO currentBeatSO;
+        [SerializeField] private ReadonlyFloatChannelSO scrollSpeedSO;
+        [SerializeField] private ReadonlyDoubleChannelSO currentBeatChannelSO;
 
         private RectTransform _rectTransform;
         private NoteData _noteData;
@@ -59,7 +59,7 @@ namespace CYAN4S
 
         private void Update()
         {
-            _nt?.Update(currentBeatSO.Value, scrollSpeedSO.Value);
+            _nt?.Update(currentBeatChannelSO.Value, scrollSpeedSO.Value);
         }
     }
 

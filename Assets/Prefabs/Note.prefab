@@ -167,8 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7a14bfa26f71e249a3edd4e5ec81f30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scrollSpeedSO: {fileID: 11400000, guid: 998e27c4807b94a4fa13615535094de3, type: 2}
-  currentBeatSO: {fileID: 11400000, guid: fee16431867d38a4c8cb245b086770a4, type: 2}
+  scrollSpeedSO: {fileID: 11400000, guid: b7f05db0b6e670e42be3c8a7bc044d66, type: 2}
+  currentBeatChannelSO: {fileID: 11400000, guid: 66458c533369793429f4413ea910731d, type: 2}
 --- !u!1 &9214386931962295658
 GameObject:
   m_ObjectHideFlags: 0

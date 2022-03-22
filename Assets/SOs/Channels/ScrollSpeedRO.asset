@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9277cad1bbc34082adde7817811c3aae, type: 3}
-  m_Name: CurrentBeat
+  m_Script: {fileID: 11500000, guid: 912f3aadbba3422ebbbdb4e99decc885, type: 3}
+  m_Name: ScrollSpeedRO
   m_EditorClassIdentifier: 
-  initialValue: 0
+  channel: {fileID: 11400000, guid: 45338c2a40e794f4ebe334369ace9c3d, type: 2}

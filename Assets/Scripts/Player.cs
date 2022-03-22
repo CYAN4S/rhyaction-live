@@ -10,9 +10,9 @@ namespace CYAN4S
         [SerializeField] private RectTransform notesParent;
 
         [SerializeField] private JudgeStandardSO judgeStandard;
-        [SerializeField] private DoubleSO currentBeatSO;
-        [SerializeField] private DoubleSO currentTimeSO;
-        [SerializeField] private FloatSO scrollSpeedSO;
+        [SerializeField] private DoubleChannelSO currentBeatChannelSO;
+        [SerializeField] private DoubleChannelSO currentTimeChannelSO;
+        [SerializeField] private FloatChannelSO scrollSpeedSO;
 
         [SerializeField] [Range(1.0f, 9.9f)] private float scrollSpeed;
 
@@ -24,30 +24,11 @@ namespace CYAN4S
         private AudioManager _a;
         private List<NoteSystem> _cachedNotes;
 
-        private double Delta(double time)
-        {
-            return time - CurrentTime;
-        }
-
-        private bool RushToBreak(double delta)
-        {
-            return delta > judgeStandard.rushToBreak && delta <= judgeStandard.ignorable;
-        }
-
-        private bool IsOk(double delta)
-        {
-            return delta <= judgeStandard.rushToBreak && delta >= judgeStandard.missed;
-        }
-
-        private bool Missed(double delta)
-        {
-            return delta < judgeStandard.missed;
-        }
-
-        private double TimeFromRaw(double rawTime)
-        {
-            return rawTime + currentTimeSO.initialValue;
-        }
+        private double Delta(double time) => time - CurrentTime;
+        private bool RushToBreak(double delta) => delta > judgeStandard.rushToBreak && delta <= judgeStandard.ignorable;
+        private bool IsOk(double delta) => delta <= judgeStandard.rushToBreak && delta >= judgeStandard.missed;
+        private bool Missed(double delta) => delta < judgeStandard.missed;
+        private double TimeFromRaw(double rawTime) => rawTime + currentTimeChannelSO.initialValue;
 
         private readonly Queue<Action> _tasks = new();
 
@@ -56,7 +37,7 @@ namespace CYAN4S
         private void ButtonPressListener(int btn, double time)
         {
             _tasks.Enqueue(() => OnButtonPressed(btn, time));
-            _a.PlaySoundAsio();
+            _a.PlaySoundNAudio();
         }
 
         private void ButtonReleaseListener(int btn, double time)
@@ -82,7 +63,7 @@ namespace CYAN4S
                 _cachedNotes.Add(_f.Get(i));
 
             // Value Initialize
-            CurrentTime = currentTimeSO.initialValue;
+            CurrentTime = currentTimeChannelSO.initialValue;
             scrollSpeed = scrollSpeedSO.initialValue;
 
             _ih.onButtonPressed.AddListener(ButtonPressListener);
@@ -137,12 +118,12 @@ namespace CYAN4S
 
         private void Update()
         {
-            CurrentTime = currentTimeSO.initialValue + Time.timeAsDouble;
+            CurrentTime = currentTimeChannelSO.initialValue + Time.timeAsDouble;
             CurrentBeat = CurrentTime / 60d * 120d; // TODO MATH
 
-            currentTimeSO.Value = CurrentTime;
-            currentBeatSO.Value = CurrentBeat;
-            scrollSpeedSO.Value = scrollSpeed;
+            currentTimeChannelSO.value = CurrentTime;
+            currentBeatChannelSO.value = CurrentBeat;
+            scrollSpeedSO.value = scrollSpeed;
 
             while (_tasks.Count != 0)
                 _tasks.Dequeue().Invoke();

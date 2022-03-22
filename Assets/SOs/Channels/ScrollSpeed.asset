@@ -9,7 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9277cad1bbc34082adde7817811c3aae, type: 3}
-  m_Name: CurrentTime
+  m_Script: {fileID: 11500000, guid: c5795723f5fb78b45a2a1d28fcaf88b2, type: 3}
+  m_Name: ScrollSpeed
   m_EditorClassIdentifier: 
-  initialValue: -5
+  initialValue: 5
+  value: 5
