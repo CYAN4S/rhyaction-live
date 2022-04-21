@@ -16,15 +16,13 @@ namespace CYAN4S
 
         [SerializeField] [Range(1.0f, 9.9f)] private float scrollSpeed;
 
-        [field: SerializeField] public double CurrentTime { get; private set; }
-        [field: SerializeField] public double CurrentBeat { get; private set; }
-
         private InputHandler _ih;
         private NoteFactory _f;
         private AudioManager _a;
+        private TimeManager _t;
         private List<NoteSystem> _cachedNotes;
 
-        private double Delta(double time) => time - CurrentTime;
+        private double Delta(double time) => time - currentTimeChannelSO.value;
         private bool RushToBreak(double delta) => delta > judgeStandard.rushToBreak && delta <= judgeStandard.ignorable;
         private bool IsOk(double delta) => delta <= judgeStandard.rushToBreak && delta >= judgeStandard.missed;
         private bool Missed(double delta) => delta < judgeStandard.missed;
@@ -49,6 +47,7 @@ namespace CYAN4S
         {
             //TODO
             _chart = Chart.GetTestChart();
+            Debug.Log(JsonUtility.ToJson(_chart, true));
 
             _ih = GetComponent<InputHandler>();
             _a = GetComponent<AudioManager>();
@@ -59,11 +58,12 @@ namespace CYAN4S
                 target => target.gameObject.SetActive(false)
             );
 
+            _t = new TimeManager(_chart.bpms, currentTimeChannelSO, currentBeatChannelSO);
+
             for (var i = 0; i < _chart.button; i++)
                 _cachedNotes.Add(_f.Get(i));
 
             // Value Initialize
-            CurrentTime = currentTimeChannelSO.initialValue;
             scrollSpeed = scrollSpeedSO.initialValue;
 
             _ih.onButtonPressed.AddListener(ButtonPressListener);
@@ -118,11 +118,8 @@ namespace CYAN4S
 
         private void Update()
         {
-            CurrentTime = currentTimeChannelSO.initialValue + Time.timeAsDouble;
-            CurrentBeat = CurrentTime / 60d * 120d; // TODO MATH
-
-            currentTimeChannelSO.value = CurrentTime;
-            currentBeatChannelSO.value = CurrentBeat;
+            _t.Update();
+            
             scrollSpeedSO.value = scrollSpeed;
 
             while (_tasks.Count != 0)

@@ -1,5 +1,6 @@
 using System;
 using UnityEditor;
+using UnityEngine;
 
 namespace Core
 {
@@ -8,10 +9,10 @@ namespace Core
     /// TODO
     /// </summary>
     [Serializable]
-    public readonly struct Fraction
+    public class Fraction
     {
-        private readonly int _num;
-        private readonly int _den;
+        [SerializeField] private int num;
+        [SerializeField] private int den;
 
         public Fraction(int numerator, int denominator = 1)
         {
@@ -20,35 +21,35 @@ namespace Core
                 throw new ArgumentException("Denominator cannot be zero.", nameof(denominator));
             }
 
-            _num = numerator;
-            _den = denominator;
+            num = numerator;
+            den = denominator;
         }
 
         public static Fraction operator +(Fraction a) => a;
-        public static Fraction operator -(Fraction a) => new(-a._num, a._den);
+        public static Fraction operator -(Fraction a) => new(-a.num, a.den);
 
         public static Fraction operator +(Fraction a, Fraction b)
-            => new Fraction(a._num * b._den + b._num * a._den, a._den * b._den);
+            => new Fraction(a.num * b.den + b.num * a.den, a.den * b.den);
 
         public static Fraction operator -(Fraction a, Fraction b)
             => a + (-b);
 
         public static Fraction operator *(Fraction a, Fraction b)
-            => new Fraction(a._num * b._num, a._den * b._den);
+            => new Fraction(a.num * b.num, a.den * b.den);
 
         public static Fraction operator /(Fraction a, Fraction b)
         {
-            if (b._num == 0)
+            if (b.num == 0)
             {
                 throw new DivideByZeroException();
             }
 
-            return new Fraction(a._num * b._den, a._den * b._num);
+            return new Fraction(a.num * b.den, a.den * b.num);
         }
 
-        public override string ToString() => $"{_num} / {_den}";
+        public override string ToString() => $"{num} / {den}";
 
-        public static explicit operator float(Fraction x) => (float)x._num / x._den;
-        public static implicit operator double(Fraction x) => (double)x._num / x._den;
+        public static explicit operator float(Fraction x) => (float) x.num / x.den;
+        public static implicit operator double(Fraction x) => (double) x.num / x.den;
     }
 }
