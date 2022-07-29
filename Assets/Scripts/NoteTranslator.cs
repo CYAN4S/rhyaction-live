@@ -19,9 +19,7 @@ namespace CYAN4S
         public NoteTranslator(NoteData noteData, RectTransform rt, NoteType noteType)
         {
             if (noteType == NoteType.Long && noteData is not LongNoteData)
-            {
                 throw new Exception("noteData can convert into LongNoteType");
-            }
 
             _d = noteData;
             _rt = rt;

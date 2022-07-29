@@ -1,21 +1,24 @@
 using System.Collections;
 using System.IO;
-using NAudio.Wave;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 using UnityEngine.Networking;
+
+using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 
 namespace CYAN4S
 {
     public class AudioManager : MonoBehaviour
     {
+        
+        
         public void PlaySoundNAudio()
         {
-            var outputDevice = new WaveOutEvent();
-            var audioFile = new AudioFileReader(@"C:/Temp/clap.wav");
-            outputDevice.Init(audioFile);
-            outputDevice.Play();
+            var output = new WaveOutEvent();
+            var file = new AudioFileReader(@"C:/Temp/clap.wav");
+            output.Init(file);
+            output.Play();
         }
 
         public static IEnumerator GetAudioClip(string audioPath, UnityAction<AudioClip> callback)

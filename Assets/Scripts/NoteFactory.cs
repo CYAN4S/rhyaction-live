@@ -29,7 +29,7 @@ namespace CYAN4S
             {
                 var noteSystem = instantiate();
                 // TODO MATH
-                noteSystem.InstanceInitialize(note, (float) note.beat * 0.5f);
+                noteSystem.InstanceInitialize(note,  note.beat * 0.5f, NoteType.Normal);
 
                 noteTemp[note.line].Add(noteSystem);
             }
@@ -38,7 +38,7 @@ namespace CYAN4S
             {
                 var noteSystem = instantiate();
                 // TODO MATH
-                noteSystem.InstanceInitialize(note, (float) note.beat * 0.5f);
+                noteSystem.InstanceInitialize(note, note.beat * 0.5f, NoteType.Long);
                 noteTemp[note.line].Add(noteSystem);
             }
 

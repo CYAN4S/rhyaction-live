@@ -14,8 +14,6 @@ namespace CYAN4S
         [SerializeField] private DoubleChannelSO currentTimeChannelSO;
         [SerializeField] private FloatChannelSO scrollSpeedSO;
 
-        [SerializeField] [Range(1.0f, 9.9f)] private float scrollSpeed;
-
         private InputHandler _ih;
         private NoteFactory _f;
         private AudioManager _a;
@@ -62,9 +60,6 @@ namespace CYAN4S
 
             for (var i = 0; i < _chart.button; i++)
                 _cachedNotes.Add(_f.Get(i));
-
-            // Value Initialize
-            scrollSpeed = scrollSpeedSO.initialValue;
 
             _ih.onButtonPressed.AddListener(ButtonPressListener);
             _ih.onButtonReleased.AddListener(ButtonReleaseListener);
@@ -120,7 +115,6 @@ namespace CYAN4S
         {
             _t.Update();
             
-            scrollSpeedSO.value = scrollSpeed;
 
             while (_tasks.Count != 0)
                 _tasks.Dequeue().Invoke();
