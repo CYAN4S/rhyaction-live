@@ -11,6 +11,7 @@ namespace CYAN4S
     {
         // TODO MODE
         [SerializeField] private Key[] keys4B;
+        
         public UnityEvent<int, double> onButtonPressed;
         public UnityEvent<int> onButtonIsPressed;
         public UnityEvent<int, double> onButtonReleased;

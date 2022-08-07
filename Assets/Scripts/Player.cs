@@ -9,10 +9,13 @@ namespace CYAN4S
         [SerializeField] private NoteSystem notePrefab;
         [SerializeField] private RectTransform notesParent;
 
-        [SerializeField] private JudgeStandardSO judgeStandard;
         [SerializeField] private DoubleChannelSO currentBeatChannelSO;
         [SerializeField] private DoubleChannelSO currentTimeChannelSO;
         [SerializeField] private FloatChannelSO scrollSpeedSO;
+        
+        public float rushToBreak = 0.15f;
+        public float ignorable = 0.2f;
+        public float missed = -0.15f;
 
         private InputHandler _ih;
         private NoteFactory _f;
@@ -21,9 +24,9 @@ namespace CYAN4S
         private List<NoteSystem> _cachedNotes;
 
         private double Delta(double time) => time - currentTimeChannelSO.value;
-        private bool RushToBreak(double delta) => delta > judgeStandard.rushToBreak && delta <= judgeStandard.ignorable;
-        private bool IsOk(double delta) => delta <= judgeStandard.rushToBreak && delta >= judgeStandard.missed;
-        private bool Missed(double delta) => delta < judgeStandard.missed;
+        private bool RushToBreak(double delta) => delta > rushToBreak && delta <= ignorable;
+        private bool IsOk(double delta) => delta <= rushToBreak && delta >= missed;
+        private bool Missed(double delta) => delta < missed;
         private double TimeFromRaw(double rawTime) => rawTime + currentTimeChannelSO.initialValue;
 
         private readonly Queue<Action> _tasks = new();
@@ -45,7 +48,6 @@ namespace CYAN4S
         {
             //TODO
             _chart = Chart.GetTestChart();
-            Debug.Log(JsonUtility.ToJson(_chart, true));
 
             _ih = GetComponent<InputHandler>();
             _a = GetComponent<AudioManager>();
@@ -126,7 +128,7 @@ namespace CYAN4S
             {
                 var target = _cachedNotes[i];
 
-                if (target == null) continue;
+                if (target is null) continue;
                 if (target.IsLongNote && target.IsProgress) continue;
                 if (!Missed(Delta(target.Time))) continue;
 
