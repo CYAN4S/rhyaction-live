@@ -5,40 +5,39 @@ namespace CYAN4S
 {
     public class NoteFactory
     {
-        private readonly List<Queue<NoteSystem>> _noteQueue;
+        private readonly List<Queue<NoteSystem>> _noteQueue = new();
         private readonly Action<NoteSystem> _destroy;
 
-        public NoteFactory(Chart chart, Func<NoteSystem> instantiate, Action<NoteSystem> destroy)
+        public NoteFactory(Chart chart, Func<NoteSystem> instantiate, Action<NoteSystem> destroy, Func<double> beat)
         {
-            var button = chart.button;
-            var notes = chart.notes;
-            var longNotes = chart.longNotes;
-
-            _noteQueue = new List<Queue<NoteSystem>>();
+            // Initialize
+            _destroy = destroy;
+            
+            // Get essential info from chart.
+            var bpm = chart.bpm;
+            var buttonCount = chart.button;
+            var noteDataList = chart.notes;
+            var longNoteDataList = chart.longNotes;
+            
             var noteTemp = new List<List<NoteSystem>>();
 
-            _destroy = destroy;
-
-            for (var i = 0; i < button; i++)
+            for (var i = 0; i < buttonCount; i++)
             {
                 noteTemp.Add(new List<NoteSystem>());
                 _noteQueue.Add(new Queue<NoteSystem>());
             }
 
-            foreach (var note in notes)
+            foreach (var note in noteDataList)
             {
                 var noteSystem = instantiate();
-                // TODO MATH
-                noteSystem.InstanceInitialize(note,  note.beat * 0.5f, NoteType.Normal);
-
+                noteSystem.InstanceInitialize(note,  note.beat / 60d * (double)bpm, NoteType.Normal, beat);
                 noteTemp[note.line].Add(noteSystem);
             }
 
-            foreach (var note in longNotes)
+            foreach (var note in longNoteDataList)
             {
                 var noteSystem = instantiate();
-                // TODO MATH
-                noteSystem.InstanceInitialize(note, note.beat * 0.5f, NoteType.Long);
+                noteSystem.InstanceInitialize(note, note.beat / 60d * (double)bpm, NoteType.Long, beat);
                 noteTemp[note.line].Add(noteSystem);
             }
 
@@ -46,6 +45,7 @@ namespace CYAN4S
             {
                 var temp = noteTemp[i];
                 temp.Sort((a, b) => a.Time.CompareTo(b.Time));
+                
                 _noteQueue[i] = new Queue<NoteSystem>(temp);
             }
         }

@@ -8,10 +8,6 @@ namespace CYAN4S
     {
         [SerializeField] private NoteSystem notePrefab;
         [SerializeField] private RectTransform notesParent;
-
-        [SerializeField] private DoubleChannelSO currentBeatChannelSO;
-        [SerializeField] private DoubleChannelSO currentTimeChannelSO;
-        [SerializeField] private FloatChannelSO scrollSpeedSO;
         
         public float rushToBreak = 0.15f;
         public float ignorable = 0.2f;
@@ -23,11 +19,10 @@ namespace CYAN4S
         private TimeManager _t;
         private List<NoteSystem> _cachedNotes;
 
-        private double Delta(double time) => time - currentTimeChannelSO.value;
+        private double Delta(double time) => time - _t.Time;
         private bool RushToBreak(double delta) => delta > rushToBreak && delta <= ignorable;
         private bool IsOk(double delta) => delta <= rushToBreak && delta >= missed;
         private bool Missed(double delta) => delta < missed;
-        private double TimeFromRaw(double rawTime) => rawTime + currentTimeChannelSO.initialValue;
 
         private readonly Queue<Action> _tasks = new();
 
@@ -35,13 +30,13 @@ namespace CYAN4S
 
         private void ButtonPressListener(int btn, double time)
         {
-            _tasks.Enqueue(() => OnButtonPressed(btn, time));
+            _tasks.Enqueue(() => OnButtonPressed(btn, time - 5));
             _a.PlaySoundNAudio();
         }
 
         private void ButtonReleaseListener(int btn, double time)
         {
-            _tasks.Enqueue(() => OnButtonReleased(btn, time));
+            _tasks.Enqueue(() => OnButtonReleased(btn, time - 5));
         }
 
         private void Awake()
@@ -55,10 +50,11 @@ namespace CYAN4S
 
             _f = new NoteFactory(_chart,
                 () => Instantiate(notePrefab, notesParent),
-                target => target.gameObject.SetActive(false)
+                target => target.gameObject.SetActive(false),
+                () => _t.Beat
             );
 
-            _t = new TimeManager(_chart.bpms, currentTimeChannelSO, currentBeatChannelSO);
+            _t = new TimeManager(_chart.bpm);
 
             for (var i = 0; i < _chart.button; i++)
                 _cachedNotes.Add(_f.Get(i));
@@ -75,10 +71,12 @@ namespace CYAN4S
 
         private void OnButtonPressed(int btn, double time)
         {
+            Debug.Log(time);
+            
             var target = _cachedNotes[btn];
             if (target == null) return;
 
-            var delta = target.Time - TimeFromRaw(time);
+            var delta = target.Time - time;
 
             if (IsOk(delta))
             {
@@ -117,7 +115,6 @@ namespace CYAN4S
         {
             _t.Update();
             
-
             while (_tasks.Count != 0)
                 _tasks.Dequeue().Invoke();
         }

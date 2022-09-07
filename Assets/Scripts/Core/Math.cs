@@ -17,34 +17,63 @@ namespace Core
         public Fraction(int numerator, int denominator = 1)
         {
             if (denominator == 0)
-            {
                 throw new ArgumentException("Denominator cannot be zero.", nameof(denominator));
+
+            var gcd = Gcd(numerator, denominator);
+
+            num = numerator / gcd;
+            den = denominator / gcd;
+        }
+
+        public Fraction(decimal number)
+        {
+            
+        }
+
+        public static int Gcd(int a, int b)
+        {
+            while (a != 0 && b != 0)
+            {
+                if (a > b) a %= b;
+                else b %= a;
             }
 
-            num = numerator;
-            den = denominator;
+            return a | b;
         }
 
         public static Fraction operator +(Fraction a) => a;
         public static Fraction operator -(Fraction a) => new(-a.num, a.den);
 
         public static Fraction operator +(Fraction a, Fraction b)
-            => new Fraction(a.num * b.den + b.num * a.den, a.den * b.den);
+        {
+            var newNum = a.num * b.den + b.num * a.den;
+            var newDen = a.den * b.den;
+            var gcd = Gcd(newNum, newDen);
+            
+            return new Fraction(newNum / gcd, newDen / gcd);
+        }
 
         public static Fraction operator -(Fraction a, Fraction b)
             => a + (-b);
 
         public static Fraction operator *(Fraction a, Fraction b)
-            => new Fraction(a.num * b.num, a.den * b.den);
+        {
+            var newNum = a.num * b.num;
+            var newDen = a.den * b.den;
+            var gcd = Gcd(newNum, newDen);
+            
+            return new Fraction(newNum / gcd, newDen / gcd);
+        }
 
         public static Fraction operator /(Fraction a, Fraction b)
         {
-            if (b.num == 0)
-            {
-                throw new DivideByZeroException();
-            }
-
-            return new Fraction(a.num * b.den, a.den * b.num);
+            if (b.num == 0) throw new DivideByZeroException();
+            
+            var newNum = a.num * b.den;
+            var newDen = a.den * b.num;
+            var gcd = Gcd(newNum, newDen);
+            
+            return new Fraction(newNum / gcd, newDen / gcd);
         }
 
         public override string ToString() => $"{num} / {den}";

@@ -10,20 +10,10 @@ namespace CYAN4S
         public string title;
         public int button;
         public decimal level;
+        public decimal bpm;
 
         public List<NoteData> notes;
         public List<LongNoteData> longNotes;
-        public List<BpmData> bpms;
-
-        public Chart(ChartData chartData, TrackData trackData)
-        {
-            title = trackData.title;
-            button = chartData.button;
-            notes = chartData.notes;
-            longNotes = chartData.longNotes;
-            level = chartData.level;
-            bpms = chartData.bpms;
-        }
 
         private Chart()
         {
@@ -37,12 +27,12 @@ namespace CYAN4S
                 notes = new List<NoteData>(),
                 longNotes = new List<LongNoteData>(),
                 button = 4,
-                bpms = new List<BpmData> {new() {beat = new Fraction(0), bpm = 120}}
+                bpm = 120
             };
 
-            for (var i = 20; i < 30; i++)
+            for (var i = 0; i < 20; i++)
                 target.notes.Add(new NoteData(new Fraction(i, 4), i % 4, @"C:/Temp/clap.wav"));
-            for (var i = 0; i < 20; i += 4)
+            for (var i = 20; i < 30; i += 4)
                 target.longNotes.Add(new LongNoteData(new Fraction(i, 4), i / 4 % 4, @"C:/Temp/clap.wav",
                     new Fraction(1, 2)));
 

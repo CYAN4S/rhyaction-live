@@ -156,10 +156,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notePrefab: {fileID: 1127457483665874784, guid: d55e770f19017c54ea46514e9696ae4f, type: 3}
   notesParent: {fileID: 1910495641}
-  judgeStandard: {fileID: 11400000, guid: 93bf5d1ade8913842b9e59812c073e3e, type: 2}
-  currentBeatChannelSO: {fileID: 11400000, guid: 157ef986a386a9242909220c5246428f, type: 2}
-  currentTimeChannelSO: {fileID: 11400000, guid: fe0fe1c90056a8c409d561f35883ea7e, type: 2}
-  scrollSpeedSO: {fileID: 11400000, guid: 45338c2a40e794f4ebe334369ace9c3d, type: 2}
+  rushToBreak: 0.15
+  ignorable: 0.2
+  missed: -0.15
 --- !u!4 &219790239
 Transform:
   m_ObjectHideFlags: 0
@@ -187,7 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97ad33efca4bf294980eeb0de3e12321, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keys4B: 13000000200000001e0000000b000000
+  keys4B: 25000000130000001e0000000b000000
   onButtonPressed:
     m_PersistentCalls:
       m_Calls: []
@@ -424,6 +423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
@@ -440,6 +440,7 @@ MonoBehaviour:
   m_TrackedDeviceOrientationAction: {fileID: 7970375526676320489, guid: ca9f5fa95ffab41fb9a615ab714db018, type: 3}
   m_DeselectOnBackgroundClick: 1
   m_PointerBehavior: 0
+  m_CursorLockBehavior: 0
 --- !u!114 &1049721462
 MonoBehaviour:
   m_ObjectHideFlags: 0
