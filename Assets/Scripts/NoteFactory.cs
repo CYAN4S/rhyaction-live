@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace CYAN4S
 {
+    [Serializable]
     public class NoteFactory
     {
         private readonly List<Queue<NoteSystem>> _noteQueue = new();
@@ -30,14 +31,14 @@ namespace CYAN4S
             foreach (var note in noteDataList)
             {
                 var noteSystem = instantiate();
-                noteSystem.InstanceInitialize(note,  note.beat / 60d * (double)bpm, NoteType.Normal, beat);
+                noteSystem.InstanceInitialize(note,  note.beat * 60d / (double)bpm, NoteType.Normal, beat);
                 noteTemp[note.line].Add(noteSystem);
             }
 
             foreach (var note in longNoteDataList)
             {
                 var noteSystem = instantiate();
-                noteSystem.InstanceInitialize(note, note.beat / 60d * (double)bpm, NoteType.Long, beat);
+                noteSystem.InstanceInitialize(note, note.beat * 60d / (double)bpm, NoteType.Long, beat);
                 noteTemp[note.line].Add(noteSystem);
             }
 

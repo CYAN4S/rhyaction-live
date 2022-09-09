@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace CYAN4S
 {
+    [Serializable]
     public class TimeManager
     {
         private decimal _bpm;
@@ -13,17 +14,24 @@ namespace CYAN4S
         public double Time { get; private set; }
         public double Beat { get; private set; }
 
+        private const double PrepareTime = 5d;
+
         public TimeManager(decimal bpm)
         {
             _bpm = bpm;
-            Time = -5;
-            Beat = -5d / 60d * (double)bpm;
+            Time = -PrepareTime;
+            Beat = -PrepareTime / 60d * (double)bpm;
         }
 
         public void Update()
         {
-            Time = UnityEngine.Time.timeAsDouble - 5d;
+            Time = UnityEngine.Time.timeAsDouble - PrepareTime;
             Beat = Time / 60d * (double)_bpm;
+        }
+
+        public double GetGameTime(double rawTime)
+        {
+            return rawTime - PrepareTime;
         }
     }
 }

@@ -28,15 +28,15 @@ namespace CYAN4S
 
         private Chart _chart;
 
-        private void ButtonPressListener(int btn, double time)
+        private void ButtonPressListener(int btn, double rawTime)
         {
-            _tasks.Enqueue(() => OnButtonPressed(btn, time - 5));
+            _tasks.Enqueue(() => OnButtonPressed(btn, _t.GetGameTime(rawTime)));
             _a.PlaySoundNAudio();
         }
 
-        private void ButtonReleaseListener(int btn, double time)
+        private void ButtonReleaseListener(int btn, double rawTime)
         {
-            _tasks.Enqueue(() => OnButtonReleased(btn, time - 5));
+            _tasks.Enqueue(() => OnButtonReleased(btn, _t.GetGameTime(rawTime)));
         }
 
         private void Awake()
@@ -46,6 +46,7 @@ namespace CYAN4S
 
             _ih = GetComponent<InputHandler>();
             _a = GetComponent<AudioManager>();
+            
             _cachedNotes = new List<NoteSystem>(_chart.button);
 
             _f = new NoteFactory(_chart,
@@ -59,24 +60,24 @@ namespace CYAN4S
             for (var i = 0; i < _chart.button; i++)
                 _cachedNotes.Add(_f.Get(i));
 
+            // Add listener
             _ih.onButtonPressed.AddListener(ButtonPressListener);
             _ih.onButtonReleased.AddListener(ButtonReleaseListener);
         }
 
         private void OnDestroy()
         {
+            // Remove listener
             _ih.onButtonPressed.RemoveListener(ButtonPressListener);
             _ih.onButtonPressed.RemoveListener(ButtonReleaseListener);
         }
 
         private void OnButtonPressed(int btn, double time)
         {
-            Debug.Log(time);
-            
             var target = _cachedNotes[btn];
             if (target == null) return;
 
-            var delta = target.Time - time;
+            var delta = Delta(time);
 
             if (IsOk(delta))
             {
@@ -84,9 +85,11 @@ namespace CYAN4S
                 if (target.IsLongNote)
                 {
                     target.OnProgress();
+                    Debug.Log("On progress");
                 }
                 else
                 {
+                    // Note hit.
                     _f.Release(target);
                     _cachedNotes[btn] = _f.Get(btn);
                 }
@@ -96,6 +99,10 @@ namespace CYAN4S
                 _f.Release(target);
                 _cachedNotes[btn] = _f.Get(btn);
                 Debug.Log($"TOO EARLY: {delta}");
+            }
+            else
+            {
+                Debug.Log($"Ignored. {delta}");
             }
         }
 
@@ -129,7 +136,7 @@ namespace CYAN4S
                 if (target.IsLongNote && target.IsProgress) continue;
                 if (!Missed(Delta(target.Time))) continue;
 
-                Debug.Log("BREAK");
+                Debug.Log($"BREAK {target.Time} {_t.Time}");
                 _f.Release(target);
                 _cachedNotes[i] = _f.Get(i);
             }
