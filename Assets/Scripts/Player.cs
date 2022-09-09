@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace CYAN4S
 {
@@ -20,12 +21,25 @@ namespace CYAN4S
         private readonly Queue<Action> _tasks = new();
         private AudioManager _a;
         private List<NoteSystem> _cachedNotes;
-
         private Chart _chart;
         private NoteFactory _f;
-
         private InputHandler _ih;
         private TimeManager _t;
+
+        private int _noteCount;
+
+        [SerializeField] public UnityEvent<int> onScoreChanged;
+        private int _score = 0;
+        public int Score
+        {
+            get => _score;
+            private set
+            {
+                _score = value;
+                onScoreChanged?.Invoke(_score);
+            }
+        }
+
 
         private void Awake()
         {
@@ -35,6 +49,7 @@ namespace CYAN4S
             // Create using info from chart
             _cachedNotes = new List<NoteSystem>(_chart.button);
             _t = new TimeManager(_chart.bpm);
+            _noteCount = _chart.notes.Count + _chart.longNotes.Count;
 
             // Get component
             _ih = GetComponent<InputHandler>();
@@ -86,6 +101,7 @@ namespace CYAN4S
                     Debug.Log($"1% {system.EndTime} {_t.Time}");
                     _f.Release(target);
                     _cachedNotes[i] = _f.Get(i);
+                    Score += 1;
 
                     continue;
                 }
@@ -104,11 +120,6 @@ namespace CYAN4S
             // Remove listener
             _ih.onButtonPressed.RemoveListener(ButtonPressListener);
             _ih.onButtonPressed.RemoveListener(ButtonReleaseListener);
-        }
-
-        private double Delta(double time)
-        {
-            return time - _t.Time;
         }
 
         // Delta == 'time of NOTE' - 'time of GAME'
@@ -164,6 +175,7 @@ namespace CYAN4S
                     // Note hit.
                     _f.Release(target);
                     _cachedNotes[btn] = _f.Get(btn);
+                    Score += 100;
                 }
 
                 return;
@@ -191,6 +203,7 @@ namespace CYAN4S
 
             _f.Release(_cachedNotes[btn]);
             _cachedNotes[btn] = _f.Get(btn);
+            Score += 100;
         }
     }
 }
