@@ -1,12 +1,11 @@
 using System;
-using UnityEditor;
 using UnityEngine;
 
 namespace Core
 {
     /// <summary>
-    /// Fraction.
-    /// TODO
+    ///     Fraction.
+    ///     TODO
     /// </summary>
     [Serializable]
     public class Fraction
@@ -27,58 +26,74 @@ namespace Core
 
         public Fraction(decimal number)
         {
-            
         }
 
         public static int Gcd(int a, int b)
         {
             while (a != 0 && b != 0)
-            {
                 if (a > b) a %= b;
                 else b %= a;
-            }
 
             return a | b;
         }
 
-        public static Fraction operator +(Fraction a) => a;
-        public static Fraction operator -(Fraction a) => new(-a.num, a.den);
+        public static Fraction operator +(Fraction a)
+        {
+            return a;
+        }
+
+        public static Fraction operator -(Fraction a)
+        {
+            return new Fraction(-a.num, a.den);
+        }
 
         public static Fraction operator +(Fraction a, Fraction b)
         {
             var newNum = a.num * b.den + b.num * a.den;
             var newDen = a.den * b.den;
             var gcd = Gcd(newNum, newDen);
-            
+
             return new Fraction(newNum / gcd, newDen / gcd);
         }
 
         public static Fraction operator -(Fraction a, Fraction b)
-            => a + (-b);
+        {
+            return a + -b;
+        }
 
         public static Fraction operator *(Fraction a, Fraction b)
         {
             var newNum = a.num * b.num;
             var newDen = a.den * b.den;
             var gcd = Gcd(newNum, newDen);
-            
+
             return new Fraction(newNum / gcd, newDen / gcd);
         }
 
         public static Fraction operator /(Fraction a, Fraction b)
         {
             if (b.num == 0) throw new DivideByZeroException();
-            
+
             var newNum = a.num * b.den;
             var newDen = a.den * b.num;
             var gcd = Gcd(newNum, newDen);
-            
+
             return new Fraction(newNum / gcd, newDen / gcd);
         }
 
-        public override string ToString() => $"{num} / {den}";
+        public override string ToString()
+        {
+            return $"{num} / {den}";
+        }
 
-        public static explicit operator float(Fraction x) => (float) x.num / x.den;
-        public static implicit operator double(Fraction x) => (double) x.num / x.den;
+        public static explicit operator float(Fraction x)
+        {
+            return (float) x.num / x.den;
+        }
+
+        public static implicit operator double(Fraction x)
+        {
+            return (double) x.num / x.den;
+        }
     }
 }

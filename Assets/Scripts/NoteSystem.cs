@@ -6,54 +6,34 @@ namespace CYAN4S
 {
     public class NoteSystem : MonoBehaviour
     {
-        // Awake
-        private RectTransform _rectTransform;
-        
-        // From init
-        private NoteData _noteData;
-        public double Time { get; private set; }
         private NoteTranslator _nt;
-        private Func<double> _beat;
+        protected Func<double> getBeat;
 
-        // Public
-        public bool IsLongNote => _noteData is LongNoteData;
-        public bool IsProgress => (_nt as LongNoteTranslator)?.State == LongNoteState.Progress;
+        // From init
+        protected NoteData noteData;
+
+        // Awake
+        protected RectTransform rectTransform;
+        public double Time { get; protected set; }
 
         private void Awake()
         {
-            _rectTransform = GetComponent<RectTransform>();
+            rectTransform = GetComponent<RectTransform>();
         }
 
-        public void InstanceInitialize(NoteData noteData, double time, NoteType noteType, Func<double> beat)
+        protected virtual void Update()
         {
-            _noteData = noteData;
+            _nt.Update(getBeat(), 4);
+        }
+
+        public void InstanceInitialize(NoteData data, double time, Func<double> beat)
+        {
+            noteData = data;
             Time = time;
+            getBeat = beat;
 
-            _nt = noteType switch
-            {
-                NoteType.Normal => new NoteTranslator(_noteData, _rectTransform),
-                NoteType.Long => new LongNoteTranslator(_noteData, _rectTransform),
-                _ => throw new ArgumentOutOfRangeException(nameof(noteType), noteType, null)
-            };
-            
-            _beat = beat;
+            _nt = new NoteTranslator(noteData, rectTransform);
         }
-
-        public void OnProgress()
-        {
-            (_nt as LongNoteTranslator)?.SetLongNoteState(LongNoteState.Progress);
-        }
-
-        private void Update()
-        {
-            _nt.Update(_beat(), 4);
-        }
-    }
-
-    public enum NoteType
-    {
-        Normal,
-        Long
     }
 
     public enum LongNoteState

@@ -6,18 +6,16 @@ namespace CYAN4S
 {
     public interface ITransformByTime
     {
-        
     }
 
     public interface IHasState
     {
-        
     }
-    
+
     public class NoteTranslator
     {
-        protected readonly RectTransform rt;
         protected readonly NoteData d;
+        protected readonly RectTransform rt;
 
         protected readonly float[] xPos = {-150f, -50f, 50f, 150f};
 
@@ -36,13 +34,14 @@ namespace CYAN4S
     public class LongNoteTranslator : NoteTranslator
     {
         private Action<double, float> _onUpdate;
-        public LongNoteState State { get; private set; }
 
         public LongNoteTranslator(NoteData noteData, RectTransform rt) : base(noteData, rt)
         {
             State = LongNoteState.Idle;
             _onUpdate += UpdateLong;
         }
+
+        public LongNoteState State { get; private set; }
 
         public override void Update(double currentBeat, float scrollSpeed)
         {
@@ -56,7 +55,7 @@ namespace CYAN4S
                 case LongNoteState.Idle:
                     throw new Exception("No defined state translation to Idle.");
                 case LongNoteState.Progress:
-                    if (this.State == LongNoteState.Idle)
+                    if (State == LongNoteState.Idle)
                     {
                         _onUpdate -= UpdateLong;
                         _onUpdate += UpdateActiveLong;
@@ -71,9 +70,9 @@ namespace CYAN4S
                     throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }
 
-            this.State = state;
+            State = state;
         }
-        
+
         private void UpdateLong(double currentBeat, float scrollSpeed)
         {
             rt.localPosition = new Vector3(xPos[d.line], (float) (d.beat - currentBeat) * 100f * scrollSpeed);

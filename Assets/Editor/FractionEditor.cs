@@ -9,9 +9,6 @@ namespace CYAN4S.Editor
         public override void OnInspectorGUI()
         {
             base.OnInspectorGUI();
-
-
-
         }
     }
 }

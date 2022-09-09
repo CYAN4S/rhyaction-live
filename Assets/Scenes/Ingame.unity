@@ -155,10 +155,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notePrefab: {fileID: 1127457483665874784, guid: d55e770f19017c54ea46514e9696ae4f, type: 3}
+  longNotePrefab: {fileID: 6021690725684380341, guid: 0bd2208216abebb44a105d3d1235b899, type: 3}
   notesParent: {fileID: 1910495641}
-  rushToBreak: 0.15
-  ignorable: 0.2
-  missed: -0.15
+  rushToBreak: 0.2
+  ignorable: 0.25
+  missed: -0.2
 --- !u!4 &219790239
 Transform:
   m_ObjectHideFlags: 0

@@ -1,11 +1,5 @@
-using System.Collections;
-using System.IO;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Networking;
-
 using NAudio.Wave;
-using NAudio.Wave.SampleProviders;
+using UnityEngine;
 
 namespace CYAN4S
 {
