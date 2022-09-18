@@ -30,14 +30,20 @@ namespace CYAN4S
 
         [SerializeField] public UnityEvent<int> onScoreChanged;
         private int _score = 0;
-        public int Score
+
+        [SerializeField] public UnityEvent<int> onComboChanged;
+        private int _combo = 0;
+
+        private void AddScore(int add)
         {
-            get => _score;
-            private set
-            {
-                _score = value;
-                onScoreChanged?.Invoke(_score);
-            }
+            _score += add;
+            onScoreChanged?.Invoke(_score);
+        }
+
+        private void AddCombo(int add)
+        {
+            _combo += add;
+            onComboChanged?.Invoke(_combo);
         }
 
 
@@ -101,7 +107,7 @@ namespace CYAN4S
                     Debug.Log($"1% {system.EndTime} {_t.Time}");
                     _f.Release(target);
                     _cachedNotes[i] = _f.Get(i);
-                    Score += 1;
+                    AddScore(1);
 
                     continue;
                 }
@@ -175,7 +181,8 @@ namespace CYAN4S
                     // Note hit.
                     _f.Release(target);
                     _cachedNotes[btn] = _f.Get(btn);
-                    Score += 100;
+                    AddScore(100);
+                    AddCombo(1);
                 }
 
                 return;
@@ -203,7 +210,8 @@ namespace CYAN4S
 
             _f.Release(_cachedNotes[btn]);
             _cachedNotes[btn] = _f.Get(btn);
-            Score += 100;
+            AddScore(100);
+            AddCombo(1);
         }
     }
 }
