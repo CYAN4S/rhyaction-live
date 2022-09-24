@@ -104,7 +104,7 @@ namespace CYAN4S
                 {
                     if (!Missed(system.EndTime - _t.Time)) continue;
 
-                    Debug.Log($"1% {system.EndTime} {_t.Time}");
+                    // Debug.Log($"1% {system.EndTime} {_t.Time}");
                     _f.Release(target);
                     _cachedNotes[i] = _f.Get(i);
                     AddScore(1);
@@ -115,7 +115,7 @@ namespace CYAN4S
                 // Check missed notes.
                 if (!Missed(target.Time - _t.Time)) continue;
 
-                Debug.Log($"BREAK {target.Time} {_t.Time}");
+                // Debug.Log($"BREAK {target.Time} {_t.Time}");
                 _f.Release(target);
                 _cachedNotes[i] = _f.Get(i);
             }
@@ -174,7 +174,9 @@ namespace CYAN4S
                 if (target is LongNoteSystem system)
                 {
                     system.OnProgress();
-                    Debug.Log("On progress");
+                    system.SetTicks(time, OnTick);
+                    
+                    // Debug.Log("On progress");
                 }
                 else
                 {
@@ -192,11 +194,11 @@ namespace CYAN4S
             {
                 _f.Release(target);
                 _cachedNotes[btn] = _f.Get(btn);
-                Debug.Log($"TOO EARLY: {delta}");
+                // Debug.Log($"TOO EARLY: {delta}");
                 return;
             }
 
-            Debug.Log($"Ignored. {delta}");
+            // Debug.Log($"Ignored. {delta}");
         }
 
         private void OnButtonReleased(int btn, double time)
@@ -212,6 +214,12 @@ namespace CYAN4S
             _cachedNotes[btn] = _f.Get(btn);
             AddScore(100);
             AddCombo(1);
+        }
+
+        private void OnTick()
+        {
+            AddCombo(1);
+            Debug.Log("tick");
         }
     }
 }

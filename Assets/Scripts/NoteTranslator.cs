@@ -4,14 +4,6 @@ using UnityEngine;
 
 namespace CYAN4S
 {
-    public interface ITransformByTime
-    {
-    }
-
-    public interface IHasState
-    {
-    }
-
     public class NoteTranslator
     {
         protected readonly NoteData d;
