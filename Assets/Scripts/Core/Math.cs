@@ -3,10 +3,6 @@ using UnityEngine;
 
 namespace Core
 {
-    /// <summary>
-    ///     Fraction.
-    ///     TODO
-    /// </summary>
     [Serializable]
     public class Fraction
     {

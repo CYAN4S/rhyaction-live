@@ -29,11 +29,8 @@ namespace CYAN4S
 
         public LongNoteTranslator(NoteData noteData, RectTransform rt) : base(noteData, rt)
         {
-            State = LongNoteState.Idle;
             _onUpdate += UpdateLong;
         }
-
-        public LongNoteState State { get; private set; }
 
         public override void Update(double currentBeat, float scrollSpeed)
         {
@@ -46,13 +43,9 @@ namespace CYAN4S
             {
                 case LongNoteState.Idle:
                     throw new Exception("No defined state translation to Idle.");
-                case LongNoteState.Progress:
-                    if (State == LongNoteState.Idle)
-                    {
-                        _onUpdate -= UpdateLong;
-                        _onUpdate += UpdateActiveLong;
-                    }
-
+                case LongNoteState.InProgress:
+                    _onUpdate -= UpdateLong;
+                    _onUpdate += UpdateActiveLong;
                     break;
                 case LongNoteState.Missed:
                     break;
@@ -61,8 +54,6 @@ namespace CYAN4S
                 default:
                     throw new ArgumentOutOfRangeException(nameof(state), state, null);
             }
-
-            State = state;
         }
 
         private void UpdateLong(double currentBeat, float scrollSpeed)

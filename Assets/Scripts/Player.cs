@@ -46,6 +46,12 @@ namespace CYAN4S
             onComboChanged?.Invoke(_combo);
         }
 
+        private void ResetCombo()
+        {
+            _combo = 0;
+            onComboChanged?.Invoke(_combo);
+        }
+
 
         private void Awake()
         {
@@ -100,11 +106,10 @@ namespace CYAN4S
                 if (target is null) continue;
 
                 // Check unreleased long notes.
-                if (target is LongNoteSystem system && system.IsProgress)
+                if (target is LongNoteSystem {IsInProgress: true} system)
                 {
                     if (!Missed(system.EndTime - _t.Time)) continue;
 
-                    // Debug.Log($"1% {system.EndTime} {_t.Time}");
                     _f.Release(target);
                     _cachedNotes[i] = _f.Get(i);
                     AddScore(1);
@@ -163,10 +168,6 @@ namespace CYAN4S
 
             var delta = target.Time - time;
 
-            // JUST FOR BENCHMARKING
-            // var delay = time - _t.Time;
-            // Debug.Log(delay);
-
             if (IsOk(delta))
             {
                 Debug.Log($"OK: {delta}");
@@ -175,8 +176,6 @@ namespace CYAN4S
                 {
                     system.OnProgress();
                     system.SetTicks(time, OnTick);
-                    
-                    // Debug.Log("On progress");
                 }
                 else
                 {
@@ -194,7 +193,6 @@ namespace CYAN4S
             {
                 _f.Release(target);
                 _cachedNotes[btn] = _f.Get(btn);
-                // Debug.Log($"TOO EARLY: {delta}");
                 return;
             }
 
@@ -204,16 +202,28 @@ namespace CYAN4S
         private void OnButtonReleased(int btn, double time)
         {
             // Check only if note is long note, and is in progress.
-            if (!_cachedNotes[btn]) return;
-            if (_cachedNotes[btn] is not LongNoteSystem) return;
-            if (!((LongNoteSystem) _cachedNotes[btn]).IsProgress) return;
-
-            Debug.Log("Released!");
+            var target = _cachedNotes[btn] as LongNoteSystem;
+            
+            // if (!_cachedNotes[btn]) return;
+            
+            if (!target) return;
+            if (!target.IsInProgress) return;
+            
+            // Released so early.
+            if (target.EndTime - time > rushToBreak)
+            {
+                ResetCombo();
+                Debug.Log("Released too early.");
+            }
+            else
+            {
+                AddScore(100);
+                AddCombo(1);
+                Debug.Log("Released!");
+            }
 
             _f.Release(_cachedNotes[btn]);
             _cachedNotes[btn] = _f.Get(btn);
-            AddScore(100);
-            AddCombo(1);
         }
 
         private void OnTick()
