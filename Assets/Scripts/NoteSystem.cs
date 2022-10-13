@@ -39,8 +39,7 @@ namespace CYAN4S
     public enum LongNoteState
     {
         Idle, // -> Progress, Missed
-        InProgress, // -> Cut, Missed, DEACTIVATE
+        InProgress, // -> Missed, DEACTIVATE
         Missed, // -> DEACTIVATE
-        Cut // -> Progress, Missed
     }
 }

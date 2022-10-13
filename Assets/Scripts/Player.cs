@@ -18,20 +18,31 @@ namespace CYAN4S
         // Always lower than 0.
         public float missed;
 
+        // Transaction between FixedUpdate and Update.
         private readonly Queue<Action> _tasks = new();
-        private AudioManager _a;
+        
         private List<NoteSystem> _cachedNotes;
+        
+        // MonoBehaviour components.
+        private InputHandler _ih;
+        private AudioManager _a;
+        
+        // Pure C# classes.
         private Chart _chart;
         private NoteFactory _f;
-        private InputHandler _ih;
         private TimeManager _t;
 
+        // In-game data.
         private int _noteCount;
 
-        [SerializeField] public UnityEvent<int> onScoreChanged;
+        [SerializeField]
+        public UnityEvent<int> onScoreChanged;
         private int _score = 0;
 
-        [SerializeField] public UnityEvent<int> onComboChanged;
+        [SerializeField]
+        public UnityEvent<int> onComboIncreased;
+        [SerializeField] 
+        public UnityEvent onBreak;
         private int _combo = 0;
 
         private void AddScore(int add)
@@ -43,15 +54,19 @@ namespace CYAN4S
         private void AddCombo(int add)
         {
             _combo += add;
-            onComboChanged?.Invoke(_combo);
+            onComboIncreased?.Invoke(_combo);
         }
 
         private void ResetCombo()
         {
             _combo = 0;
-            onComboChanged?.Invoke(_combo);
+            onBreak?.Invoke();
         }
 
+        private void PerformBreak()
+        {
+            ResetCombo();
+        }
 
         private void Awake()
         {
@@ -60,8 +75,8 @@ namespace CYAN4S
 
             // Create using info from chart
             _cachedNotes = new List<NoteSystem>(_chart.button);
-            _t = new TimeManager(_chart.bpm);
             _noteCount = _chart.notes.Count + _chart.longNotes.Count;
+            _t = new TimeManager(_chart.bpm);
 
             // Get component
             _ih = GetComponent<InputHandler>();
@@ -120,7 +135,6 @@ namespace CYAN4S
                 // Check missed notes.
                 if (!Missed(target.Time - _t.Time)) continue;
 
-                // Debug.Log($"BREAK {target.Time} {_t.Time}");
                 _f.Release(target);
                 _cachedNotes[i] = _f.Get(i);
             }
@@ -134,20 +148,9 @@ namespace CYAN4S
         }
 
         // Delta == 'time of NOTE' - 'time of GAME'
-        private bool RushToBreak(double delta)
-        {
-            return delta > rushToBreak && delta <= ignorable;
-        }
-
-        private bool IsOk(double delta)
-        {
-            return delta <= rushToBreak && delta >= missed;
-        }
-
-        private bool Missed(double delta)
-        {
-            return delta < missed;
-        }
+        private bool RushToBreak(double delta) => delta > rushToBreak && delta <= ignorable;
+        private bool IsOk(double delta) => delta <= rushToBreak && delta >= missed;
+        private bool Missed(double delta) => delta < missed;
 
         private void ButtonPressListener(int btn, double rawTime)
         {
@@ -193,10 +196,10 @@ namespace CYAN4S
             {
                 _f.Release(target);
                 _cachedNotes[btn] = _f.Get(btn);
+                
+                PerformBreak();
                 return;
             }
-
-            // Debug.Log($"Ignored. {delta}");
         }
 
         private void OnButtonReleased(int btn, double time)
@@ -204,16 +207,13 @@ namespace CYAN4S
             // Check only if note is long note, and is in progress.
             var target = _cachedNotes[btn] as LongNoteSystem;
             
-            // if (!_cachedNotes[btn]) return;
-            
             if (!target) return;
             if (!target.IsInProgress) return;
             
             // Released so early.
             if (target.EndTime - time > rushToBreak)
             {
-                ResetCombo();
-                Debug.Log("Released too early.");
+                PerformBreak();
             }
             else
             {
@@ -231,5 +231,10 @@ namespace CYAN4S
             AddCombo(1);
             Debug.Log("tick");
         }
+    }
+
+    public enum Judgement
+    {
+        Precise = 0, Nice, Fair, Break = -1
     }
 }
