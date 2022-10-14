@@ -160,10 +160,19 @@ MonoBehaviour:
   rushToBreak: 0.2
   ignorable: 0.25
   missed: -0.2
-  onScoreChanged:
+  cachedNotes: []
+  chart:
+    title: 
+    button: 0
+    notes: []
+    longNotes: []
+  noteCount: 0
+  score: 0
+  combo: 0
+  scoreChanged:
     m_PersistentCalls:
       m_Calls: []
-  onComboIncreased:
+  comboIncreased:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1442551753}
@@ -178,7 +187,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  onBreak:
+  broken:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &219790239

@@ -21,62 +21,68 @@ namespace CYAN4S
         // Transaction between FixedUpdate and Update.
         private readonly Queue<Action> _tasks = new();
         
-        private List<NoteSystem> _cachedNotes;
+        [SerializeField] private List<NoteSystem> cachedNotes;
         
         // MonoBehaviour components.
         private InputHandler _ih;
         private AudioManager _a;
         
         // Pure C# classes.
-        private Chart _chart;
-        private NoteFactory _f;
-        private TimeManager _t;
+        [SerializeField]
+        private Chart chart;
+        private NoteFactory f;
+        private TimeManager t;
 
-        // In-game data.
-        private int _noteCount;
+        [Header("In-game data")]
+        [SerializeField]
+        private int noteCount;
+        [SerializeField]
+        private int score = 0;
+        [SerializeField]
+        private int combo = 0;
 
         [SerializeField]
-        public UnityEvent<int> onScoreChanged;
-        private int _score = 0;
-
+        public UnityEvent<int> scoreChanged;
         [SerializeField]
-        public UnityEvent<int> onComboIncreased;
+        public UnityEvent<int> comboIncreased;
         [SerializeField] 
-        public UnityEvent onBreak;
-        private int _combo = 0;
+        public UnityEvent broken;
+        
 
-        private void AddScore(int add)
+        private void OnAddScore(int add)
         {
-            _score += add;
-            onScoreChanged?.Invoke(_score);
+            score += add;
+            scoreChanged?.Invoke(score);
         }
 
-        private void AddCombo(int add)
+        private void OnAddCombo(int add)
         {
-            _combo += add;
-            onComboIncreased?.Invoke(_combo);
+            combo += add;
+            comboIncreased?.Invoke(combo);
         }
-
-        private void ResetCombo()
-        {
-            _combo = 0;
-            onBreak?.Invoke();
-        }
-
-        private void PerformBreak()
+        
+        private void OnBreak()
         {
             ResetCombo();
+            broken?.Invoke();
         }
+        
+        private void ResetCombo()
+        {
+            combo = 0;
+        }
+
+
 
         private void Awake()
         {
             //TODO
-            _chart = Chart.GetTestChart();
+            chart = Chart.GetTestChart();
 
             // Create using info from chart
-            _cachedNotes = new List<NoteSystem>(_chart.button);
-            _noteCount = _chart.notes.Count + _chart.longNotes.Count;
-            _t = new TimeManager(_chart.bpm);
+            cachedNotes = new List<NoteSystem>(chart.button);
+            noteCount = chart.notes.Count + chart.longNotes.Count;
+            t = new TimeManager(chart.bpm);
 
             // Get component
             _ih = GetComponent<InputHandler>();
@@ -89,23 +95,23 @@ namespace CYAN4S
             ////
 
             // Create factory
-            _f = new NoteFactory(_chart,
+            f = new NoteFactory(chart,
                 () => Instantiate(notePrefab, notesParent),
                 () => Instantiate(longNotePrefab, notesParent),
                 target => target.gameObject.SetActive(false),
-                () => _t.Beat
+                () => t.Beat
             );
 
             ////
 
             // Cache from factory
-            for (var i = 0; i < _chart.button; i++)
-                _cachedNotes.Add(_f.Get(i));
+            for (var i = 0; i < chart.button; i++)
+                cachedNotes.Add(f.Get(i));
         }
 
         private void Update()
         {
-            _t.Update();
+            t.Update();
 
             while (_tasks.Count != 0)
                 _tasks.Dequeue().Invoke();
@@ -114,29 +120,29 @@ namespace CYAN4S
         private void LateUpdate()
         {
             // Check for missed notes and unreleased long notes.
-            for (var i = 0; i < _chart.button; i++)
+            for (var i = 0; i < chart.button; i++)
             {
-                var target = _cachedNotes[i];
+                var target = cachedNotes[i];
 
                 if (target is null) continue;
 
                 // Check unreleased long notes.
                 if (target is LongNoteSystem {IsInProgress: true} system)
                 {
-                    if (!Missed(system.EndTime - _t.Time)) continue;
+                    if (!Missed(system.EndTime - t.Time)) continue;
 
-                    _f.Release(target);
-                    _cachedNotes[i] = _f.Get(i);
-                    AddScore(1);
+                    f.Release(target);
+                    cachedNotes[i] = f.Get(i);
+                    OnAddScore(1);
 
                     continue;
                 }
 
                 // Check missed notes.
-                if (!Missed(target.Time - _t.Time)) continue;
+                if (!Missed(target.Time - t.Time)) continue;
 
-                _f.Release(target);
-                _cachedNotes[i] = _f.Get(i);
+                f.Release(target);
+                cachedNotes[i] = f.Get(i);
             }
         }
 
@@ -154,19 +160,19 @@ namespace CYAN4S
 
         private void ButtonPressListener(int btn, double rawTime)
         {
-            _tasks.Enqueue(() => OnButtonPressed(btn, _t.GetGameTime(rawTime)));
+            _tasks.Enqueue(() => JudgeButtonPressed(btn, t.GetGameTime(rawTime)));
             _a.PlaySoundNAudio();
         }
 
         private void ButtonReleaseListener(int btn, double rawTime)
         {
-            _tasks.Enqueue(() => OnButtonReleased(btn, _t.GetGameTime(rawTime)));
+            _tasks.Enqueue(() => JudgeButtonReleased(btn, t.GetGameTime(rawTime)));
         }
 
         // Instead of using _t.Time, using time param is ideal.
-        private void OnButtonPressed(int btn, double time)
+        private void JudgeButtonPressed(int btn, double time)
         {
-            var target = _cachedNotes[btn];
+            var target = cachedNotes[btn];
             if (target == null) return;
 
             var delta = target.Time - time;
@@ -178,15 +184,15 @@ namespace CYAN4S
                 if (target is LongNoteSystem system)
                 {
                     system.OnProgress();
-                    system.SetTicks(time, OnTick);
+                    system.SetTicks(time, OnTicked);
                 }
                 else
                 {
                     // Note hit.
-                    _f.Release(target);
-                    _cachedNotes[btn] = _f.Get(btn);
-                    AddScore(100);
-                    AddCombo(1);
+                    f.Release(target);
+                    cachedNotes[btn] = f.Get(btn);
+                    OnAddScore(100);
+                    OnAddCombo(1);
                 }
 
                 return;
@@ -194,18 +200,18 @@ namespace CYAN4S
 
             if (RushToBreak(delta))
             {
-                _f.Release(target);
-                _cachedNotes[btn] = _f.Get(btn);
+                f.Release(target);
+                cachedNotes[btn] = f.Get(btn);
                 
-                PerformBreak();
+                OnBreak();
                 return;
             }
         }
 
-        private void OnButtonReleased(int btn, double time)
+        private void JudgeButtonReleased(int btn, double time)
         {
             // Check only if note is long note, and is in progress.
-            var target = _cachedNotes[btn] as LongNoteSystem;
+            var target = cachedNotes[btn] as LongNoteSystem;
             
             if (!target) return;
             if (!target.IsInProgress) return;
@@ -213,22 +219,22 @@ namespace CYAN4S
             // Released so early.
             if (target.EndTime - time > rushToBreak)
             {
-                PerformBreak();
+                OnBreak();
             }
             else
             {
-                AddScore(100);
-                AddCombo(1);
+                OnAddScore(100);
+                OnAddCombo(1);
                 Debug.Log("Released!");
             }
 
-            _f.Release(_cachedNotes[btn]);
-            _cachedNotes[btn] = _f.Get(btn);
+            f.Release(cachedNotes[btn]);
+            cachedNotes[btn] = f.Get(btn);
         }
 
-        private void OnTick()
+        private void OnTicked()
         {
-            AddCombo(1);
+            OnAddCombo(1);
             Debug.Log("tick");
         }
     }
