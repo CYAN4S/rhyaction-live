@@ -72,8 +72,6 @@ namespace CYAN4S
             combo = 0;
         }
 
-
-
         private void Awake()
         {
             //TODO

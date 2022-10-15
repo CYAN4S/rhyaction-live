@@ -62,10 +62,15 @@ namespace CYAN4S
 
         public void SetTicks(double startTime, Action onTick)
         {
-            var length = ((LongNoteData) noteData).length;
-            var count = (int) (length * new Fraction(4));
+            const int ticksPerBeat = 4;
             
-            _ticks = new Queue<double>(Enumerable.Range(1, count - 1).Select(x => startTime + x * 0.25));
+            var length = ((LongNoteData) noteData).length;
+            var count = (int) (length * new Fraction(ticksPerBeat));
+            
+            _ticks = new Queue<double>(Enumerable.Range(1, count - 1).Select(x => startTime + (double)x / ticksPerBeat));
+
+            Debug.Log(_ticks);
+            
             _onTick = onTick;
         }
     }

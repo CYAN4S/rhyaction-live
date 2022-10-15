@@ -10,7 +10,7 @@ namespace CYAN4S
         
         protected readonly RectTransform rt;
 
-        protected readonly float[] xPos = {-150f, -50f, 50f, 150f};
+        protected readonly float[] xPos = {-300f, -100f, 100f, 300f};
 
         protected readonly int line;
         protected readonly double beat;

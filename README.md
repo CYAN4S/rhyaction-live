@@ -1,3 +1,3 @@
 # RHYACTION LIVE
 
-> TextMeshPro Shaders are not included. Download them int the Unity Editor manually.
+> TextMeshPro Shaders are not included. Download them in the Unity Editor manually.

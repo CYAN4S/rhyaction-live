@@ -30,13 +30,14 @@ namespace CYAN4S
                 bpm = 120
             };
 
-            // for (var i = 0; i < 20; i++)
-            //     target.notes.Add(new NoteData(new Fraction(i, 4), i % 4, @"C:/Temp/clap.wav"));
-            // for (var i = 20; i < 36; i += 4)
-            //     target.longNotes.Add(new LongNoteData(new Fraction(i, 4), i / 4 % 4, @"C:/Temp/clap.wav",
-            //         new Fraction(1, 2)));
-                target.longNotes.Add(new LongNoteData(new Fraction(0), 1, @"C:/Temp/clap.wav",
-                    new Fraction(2)));
+            for (var i = 0; i < 20; i++)
+                target.notes.Add(new NoteData(new Fraction(i, 4), i % 4, @"C:/Temp/clap.wav"));
+            for (var i = 20; i < 36; i += 4)
+                target.longNotes.Add(new LongNoteData(new Fraction(i, 4), i % 4, @"C:/Temp/clap.wav",
+                    new Fraction(1, 2)));
+            
+            target.longNotes.Add(new LongNoteData(new Fraction(36, 4), 0, @"C:/Temp/clap.wav",
+                new Fraction(4)));
 
             return target;
         }
