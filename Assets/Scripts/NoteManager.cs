@@ -1,25 +1,38 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace CYAN4S
 {
     [Serializable]
-    public class NoteFactory
+    public class NoteManager : MonoBehaviour
     {
+        [Header("Note Prefab")] 
+        [SerializeField] private NoteSystem notePrefab;
+        [SerializeField] private LongNoteSystem longNotePrefab;
+
+        [Header("Transform")] 
+        [SerializeField] private RectTransform notesParent;
+        
         private readonly Action<NoteSystem> _destroy;
         private readonly List<Queue<NoteSystem>> _noteQueue = new();
 
-        public NoteFactory(Chart chart, Func<NoteSystem> makeNote, Func<LongNoteSystem> makeLongNote,
-            Action<NoteSystem> destroy, Func<double> beat)
-        {
-            // Initialize
-            _destroy = destroy;
+        private Chart chart;
 
+        private void Awake()
+        {
+            chart = Chart.GetTestChart();
+        }
+
+        public void Initialize()
+        {
             // Get essential info from chart.
             var bpm = chart.bpm;
             var buttonCount = chart.button;
             var noteDataList = chart.notes;
             var longNoteDataList = chart.longNotes;
+
+            var beat = Player.getBeat;
 
             var noteTemp = new List<List<NoteSystem>>();
 
@@ -31,7 +44,7 @@ namespace CYAN4S
 
             foreach (var note in noteDataList)
             {
-                var system = makeNote();
+                var system = Instantiate(notePrefab, notesParent);
                 var time = note.beat * 60d / (double) bpm;
 
                 system.InstanceInitialize(note, time, beat);
@@ -40,7 +53,7 @@ namespace CYAN4S
 
             foreach (var note in longNoteDataList)
             {
-                var system = makeLongNote();
+                var system = Instantiate(longNotePrefab, notesParent);
                 var start = note.beat * 60d / (double) bpm;
                 var end = (note.beat + note.length) * 60d / (double) bpm;
 
@@ -64,7 +77,7 @@ namespace CYAN4S
 
         public void Release(NoteSystem target)
         {
-            _destroy(target);
+            target.gameObject.SetActive(false);
         }
     }
 }

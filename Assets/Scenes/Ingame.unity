@@ -209,10 +209,11 @@ GameObject:
   m_Component:
   - component: {fileID: 219790239}
   - component: {fileID: 219790238}
+  - component: {fileID: 219790242}
   - component: {fileID: 219790240}
   - component: {fileID: 219790241}
   m_Layer: 0
-  m_Name: Managers
+  m_Name: Game Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -230,9 +231,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cddb938c919779458737c99dbd967b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notePrefab: {fileID: 1127457483665874784, guid: d55e770f19017c54ea46514e9696ae4f, type: 3}
-  longNotePrefab: {fileID: 6021690725684380341, guid: 0bd2208216abebb44a105d3d1235b899, type: 3}
-  notesParent: {fileID: 1910495641}
   rushToBreak: 0.2
   ignorable: 0.25
   missed: -0.2
@@ -242,7 +240,7 @@ MonoBehaviour:
     button: 0
     notes: []
     longNotes: []
-  t:
+  timeManager:
     <Time>k__BackingField: 0
     <Beat>k__BackingField: 0
   noteCount: 0
@@ -318,6 +316,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7654e5c8672e59a4dbda19c7494bb520, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &219790242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 219790236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827d4dffdc0e4cd683ebef87eac379ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  notePrefab: {fileID: 1127457483665874784, guid: d55e770f19017c54ea46514e9696ae4f, type: 3}
+  longNotePrefab: {fileID: 6021690725684380341, guid: 0bd2208216abebb44a105d3d1235b899, type: 3}
+  notesParent: {fileID: 1910495641}
 --- !u!1 &304293712
 GameObject:
   m_ObjectHideFlags: 0
@@ -1490,7 +1503,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1910495641}
   m_Layer: 5
-  m_Name: Notes
+  m_Name: Notes Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

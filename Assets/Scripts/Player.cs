@@ -7,49 +7,34 @@ namespace CYAN4S
 {
     public class Player : MonoBehaviour
     {
-        [SerializeField] private NoteSystem notePrefab;
-        [SerializeField] private LongNoteSystem longNotePrefab;
-        [SerializeField] private RectTransform notesParent;
+        [Header("Judgement")]
+        public float rushToBreak;   // Always higher than 0.
+        public float ignorable;     // Always higher than 0.
+        public float missed;        // Always lower than 0.
 
-        // Always higher than 0.
-        public float rushToBreak;
-        public float ignorable;
+        [Header("Debug")]
+        [SerializeField] private List<NoteSystem> cachedNotes;
+        [SerializeField] private Chart chart;
+        [SerializeField] private TimeManager timeManager;
+        [SerializeField] private int noteCount;
+        [SerializeField] private int score = 0;
+        [SerializeField] private int combo = 0;
 
-        // Always lower than 0.
-        public float missed;
+        [Header("Observer Setup")]
+        [SerializeField] public UnityEvent<int> scoreChanged;
+        [SerializeField] public UnityEvent<int> comboIncreased;
+        [SerializeField] public UnityEvent broken;
 
         // Transaction between FixedUpdate and Update.
         private readonly Queue<Action> _tasks = new();
-        
-        [SerializeField] private List<NoteSystem> cachedNotes;
-        
+
         // MonoBehaviour components.
         private InputHandler _ih;
         private AudioManager _a;
+        private NoteManager _n;
         
-        // Pure C# classes.
-        [SerializeField]
-        private Chart chart;
-        [SerializeField]
-        private NoteFactory f;
-        [SerializeField]
-        private TimeManager t;
-
-        [Header("In-game data")]
-        [SerializeField]
-        private int noteCount;
-        [SerializeField]
-        private int score = 0;
-        [SerializeField]
-        private int combo = 0;
-
-        [SerializeField]
-        public UnityEvent<int> scoreChanged;
-        [SerializeField]
-        public UnityEvent<int> comboIncreased;
-        [SerializeField] 
-        public UnityEvent broken;
-        
+        // TODO
+        public static Func<double> getBeat;
 
         private void OnAddScore(int add)
         {
@@ -62,13 +47,13 @@ namespace CYAN4S
             combo += add;
             comboIncreased?.Invoke(combo);
         }
-        
+
         private void OnBreak()
         {
             ResetCombo();
             broken?.Invoke();
         }
-        
+
         private void ResetCombo()
         {
             combo = 0;
@@ -82,11 +67,13 @@ namespace CYAN4S
             // Create using info from chart
             cachedNotes = new List<NoteSystem>(chart.button);
             noteCount = chart.notes.Count + chart.longNotes.Count;
-            t = new TimeManager(chart.bpm);
+            timeManager = new TimeManager(chart.bpm);
+            getBeat = () => timeManager.Beat;
 
             // Get component
             _ih = GetComponent<InputHandler>();
             _a = GetComponent<AudioManager>();
+            _n = GetComponent<NoteManager>();
 
             // Add listener
             _ih.onButtonPressed.AddListener(ButtonPressListener);
@@ -94,24 +81,19 @@ namespace CYAN4S
 
             ////
 
-            // Create factory
-            f = new NoteFactory(chart,
-                () => Instantiate(notePrefab, notesParent),
-                () => Instantiate(longNotePrefab, notesParent),
-                target => target.gameObject.SetActive(false),
-                () => t.Beat
-            );
+            // Set NoteManager
+            _n.Initialize();
 
             ////
 
             // Cache from factory
             for (var i = 0; i < chart.button; i++)
-                cachedNotes.Add(f.Get(i));
+                cachedNotes.Add(_n.Get(i));
         }
 
         private void Update()
         {
-            t.Update();
+            timeManager.Update();
 
             while (_tasks.Count != 0)
                 _tasks.Dequeue().Invoke();
@@ -129,20 +111,20 @@ namespace CYAN4S
                 // Check unreleased long notes.
                 if (target is LongNoteSystem {IsInProgress: true} system)
                 {
-                    if (!Missed(system.EndTime - t.Time)) continue;
+                    if (!Missed(system.EndTime - timeManager.Time)) continue;
 
-                    f.Release(target);
-                    cachedNotes[i] = f.Get(i);
+                    _n.Release(target);
+                    cachedNotes[i] = _n.Get(i);
                     OnAddScore(1);
 
                     continue;
                 }
 
                 // Check missed notes.
-                if (!Missed(target.Time - t.Time)) continue;
+                if (!Missed(target.Time - timeManager.Time)) continue;
 
-                f.Release(target);
-                cachedNotes[i] = f.Get(i);
+                _n.Release(target);
+                cachedNotes[i] = _n.Get(i);
             }
         }
 
@@ -160,13 +142,13 @@ namespace CYAN4S
 
         private void ButtonPressListener(int btn, double rawTime)
         {
-            _tasks.Enqueue(() => JudgeButtonPressed(btn, t.GetGameTime(rawTime)));
+            _tasks.Enqueue(() => JudgeButtonPressed(btn, timeManager.GetGameTime(rawTime)));
             _a.PlaySoundNAudio();
         }
 
         private void ButtonReleaseListener(int btn, double rawTime)
         {
-            _tasks.Enqueue(() => JudgeButtonReleased(btn, t.GetGameTime(rawTime)));
+            _tasks.Enqueue(() => JudgeButtonReleased(btn, timeManager.GetGameTime(rawTime)));
         }
 
         // Instead of using _t.Time, using time param is ideal.
@@ -189,8 +171,8 @@ namespace CYAN4S
                 else
                 {
                     // Note hit.
-                    f.Release(target);
-                    cachedNotes[btn] = f.Get(btn);
+                    _n.Release(target);
+                    cachedNotes[btn] = _n.Get(btn);
                     OnAddScore(100);
                     OnAddCombo(1);
                 }
@@ -200,9 +182,9 @@ namespace CYAN4S
 
             if (RushToBreak(delta))
             {
-                f.Release(target);
-                cachedNotes[btn] = f.Get(btn);
-                
+                _n.Release(target);
+                cachedNotes[btn] = _n.Get(btn);
+
                 OnBreak();
                 return;
             }
@@ -212,10 +194,10 @@ namespace CYAN4S
         {
             // Check only if note is long note, and is in progress.
             var target = cachedNotes[btn] as LongNoteSystem;
-            
+
             if (!target) return;
             if (!target.IsInProgress) return;
-            
+
             // Released so early.
             if (target.EndTime - time > rushToBreak)
             {
@@ -228,8 +210,8 @@ namespace CYAN4S
                 Debug.Log("Released!");
             }
 
-            f.Release(cachedNotes[btn]);
-            cachedNotes[btn] = f.Get(btn);
+            _n.Release(cachedNotes[btn]);
+            cachedNotes[btn] = _n.Get(btn);
         }
 
         private void OnTicked()
@@ -241,6 +223,9 @@ namespace CYAN4S
 
     public enum Judgement
     {
-        Precise = 0, Nice, Fair, Break = -1
+        Precise = 0,
+        Nice,
+        Fair,
+        Break = -1
     }
 }
