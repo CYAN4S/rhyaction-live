@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace CYAN4S
 {
@@ -15,7 +16,10 @@ namespace CYAN4S
             Beat = -PrepareTime / 60d * (double) bpm;
         }
 
+        [field: SerializeField]
         public double Time { get; private set; }
+        
+        [field: SerializeField]
         public double Beat { get; private set; }
 
         public void Update()

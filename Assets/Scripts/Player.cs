@@ -30,7 +30,9 @@ namespace CYAN4S
         // Pure C# classes.
         [SerializeField]
         private Chart chart;
+        [SerializeField]
         private NoteFactory f;
+        [SerializeField]
         private TimeManager t;
 
         [Header("In-game data")]
