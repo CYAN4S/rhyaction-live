@@ -60,17 +60,15 @@ namespace CYAN4S
             _nt.SetLongNoteState(State);
         }
 
-        public void SetTicks(double startTime, Action onTick)
+        public void SetTicks(double startBeat, Action onTick)
         {
             const int ticksPerBeat = 4;
             
             var length = ((LongNoteData) noteData).length;
             var count = (int) (length * new Fraction(ticksPerBeat));
             
-            _ticks = new Queue<double>(Enumerable.Range(1, count - 1).Select(x => startTime + (double)x / ticksPerBeat));
+            _ticks = new Queue<double>(Enumerable.Range(1, count - 1).Select(x => startBeat + (double)x / ticksPerBeat));
 
-            Debug.Log(_ticks);
-            
             _onTick = onTick;
         }
     }

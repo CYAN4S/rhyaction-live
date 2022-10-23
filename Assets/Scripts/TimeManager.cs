@@ -1,36 +1,55 @@
 using System;
+using Core;
 using UnityEngine;
 
 namespace CYAN4S
 {
-    [Serializable]
-    public class TimeManager
+    public class TimeManager : MonoBehaviour
     {
-        private const double PrepareTime = 5d;
+        [SerializeField] private double initialTime = -5d;
+        
+        [Header("Debug")]
+        [SerializeField] private bool isRunning;
+
         private decimal _bpm;
 
-        public TimeManager(decimal bpm)
+        private void Awake()
         {
-            _bpm = bpm;
-            Time = -PrepareTime;
-            Beat = -PrepareTime / 60d * (double) bpm;
+            isRunning = false;
+            Time = initialTime;
         }
 
-        [field: SerializeField]
-        public double Time { get; private set; }
-        
-        [field: SerializeField]
-        public double Beat { get; private set; }
+        public void SetBpm(decimal bpm)
+        {
+            _bpm = bpm;
+            Beat = initialTime / 60d * (double) bpm;
+            isRunning = true;
+        }
+
+        [field: SerializeField] public double Time { get; private set; }
+        [field: SerializeField] public double Beat { get; private set; }
 
         public void Update()
         {
-            Time = UnityEngine.Time.timeAsDouble - PrepareTime;
+            if (!isRunning) return;
+            
+            Time = UnityEngine.Time.timeAsDouble + initialTime;
             Beat = Time / 60d * (double) _bpm;
         }
 
         public double GetGameTime(double rawTime)
         {
-            return rawTime - PrepareTime;
+            return rawTime + initialTime;
+        }
+
+        public double TimeToBeat(double time)
+        {
+            return time / 60d * (double) _bpm;
+        }
+
+        public double BeatToTime(double beat)
+        {
+            return beat * 60d / (double) _bpm;
         }
     }
 }

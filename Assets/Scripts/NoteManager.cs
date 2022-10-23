@@ -14,18 +14,14 @@ namespace CYAN4S
         [Header("Transform")] 
         [SerializeField] private RectTransform notesParent;
         
-        private readonly Action<NoteSystem> _destroy;
         private readonly List<Queue<NoteSystem>> _noteQueue = new();
 
         private Chart chart;
 
-        private void Awake()
+        public List<Queue<NoteSystem>> Initialize()
         {
-            chart = Chart.GetTestChart();
-        }
-
-        public void Initialize()
-        {
+            chart = IngameDebugger.chart;
+            
             // Get essential info from chart.
             var bpm = chart.bpm;
             var buttonCount = chart.button;
@@ -68,16 +64,8 @@ namespace CYAN4S
 
                 _noteQueue[i] = new Queue<NoteSystem>(temp);
             }
-        }
 
-        public NoteSystem Get(int value)
-        {
-            return _noteQueue[value].Count == 0 ? null : _noteQueue[value].Dequeue();
-        }
-
-        public void Release(NoteSystem target)
-        {
-            target.gameObject.SetActive(false);
+            return _noteQueue;
         }
     }
 }
