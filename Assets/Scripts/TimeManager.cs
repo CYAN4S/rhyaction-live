@@ -15,7 +15,6 @@ namespace CYAN4S
 
         private void Awake()
         {
-            isRunning = false;
             Time = initialTime;
         }
 

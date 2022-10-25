@@ -8,25 +8,27 @@ namespace CYAN4S
     public class Player : MonoBehaviour
     {
         private Chart _chart;
-        
-        [Header("Judgement")]
-        public float ignorable;     // Always higher than 0.
-        public float rushToBreak;   // Always higher than 0.
+
+        [Header("Judgement")] public float ignorable;
+        public float tooEarly;
         public float fairEarly;
         public float greatEarly;
         public float greatLate;
         public float fairLate;
-        public float missed;        // Always lower than 0.
+        public float missed;
 
         [SerializeField] private List<NoteSystem> cachedNotes;
-        
-        [Header("In-game Data")]
-        [SerializeField] private int noteCount;
+        [SerializeField] private List<Judgement> cachedLongNoteJudges;
+
+        [Header("In-game Data")] [SerializeField]
+        private int noteCount;
+
         [SerializeField] private int score = 0;
         [SerializeField] private int combo = 0;
 
-        [Header("Observer Setup")]
-        [SerializeField] public UnityEvent<int> scoreChanged;
+        [Header("Observer Setup")] [SerializeField]
+        public UnityEvent<int> scoreChanged;
+
         [SerializeField] public UnityEvent<int> comboIncreased;
         [SerializeField] public UnityEvent broken;
         [SerializeField] public UnityEvent<Judgement, bool> judged;
@@ -39,24 +41,29 @@ namespace CYAN4S
         private AudioManager _a;
         private NoteManager _n;
         private TimeManager _t;
-        
+
         // TODO
         public static Func<double> getBeat;
         private List<Queue<NoteSystem>> _noteQueue;
 
-        private void OnAddScore(int add)
+        private bool TooEarly(double delta) => delta > tooEarly && delta <= ignorable;
+        private bool IsOk(double delta) => delta <= tooEarly && delta >= missed;
+        private bool Missed(double delta) => delta < missed;
+
+
+        private void AddScore(int add)
         {
             score += add;
             scoreChanged?.Invoke(score);
         }
 
-        private void OnAddCombo(int add)
+        private void AddCombo(int add)
         {
             combo += add;
             comboIncreased?.Invoke(combo);
         }
 
-        private void OnBreak()
+        private void Break()
         {
             ResetCombo();
             broken?.Invoke();
@@ -74,6 +81,7 @@ namespace CYAN4S
 
             // Create using info from chart
             cachedNotes = new List<NoteSystem>(_chart.button);
+            cachedLongNoteJudges = new List<Judgement>(_chart.button);
             noteCount = _chart.notes.Count + _chart.longNotes.Count;
             getBeat = () => _t.Beat;
 
@@ -97,9 +105,12 @@ namespace CYAN4S
 
             // Cache from factory
             for (var i = 0; i < _chart.button; i++)
+            {
                 cachedNotes.Add(Get(i));
+                cachedLongNoteJudges.Add(Judgement.Precise);
+            }
         }
-        
+
         private void Update()
         {
             _t.Update();
@@ -124,7 +135,7 @@ namespace CYAN4S
 
                     Release(target);
                     cachedNotes[i] = Get(i);
-                    OnAddScore(1);
+                    AddScore(1);
 
                     continue;
                 }
@@ -145,9 +156,6 @@ namespace CYAN4S
         }
 
         // Delta == 'time of NOTE' - 'time of GAME'
-        private bool RushToBreak(double delta) => delta > rushToBreak && delta <= ignorable;
-        private bool IsOk(double delta) => delta <= rushToBreak && delta >= missed;
-        private bool Missed(double delta) => delta < missed;
 
         private void ButtonPressListener(int btn, double rawTime)
         {
@@ -160,6 +168,30 @@ namespace CYAN4S
             _tasks.Enqueue(() => JudgeButtonReleased(btn, _t.GetGameTime(rawTime)));
         }
 
+        private void OnJudge(Judgement judgement, bool isEarly, JudgeTarget target)
+        {
+            switch (judgement)
+            {
+                case Judgement.Precise:
+                    break;
+                case Judgement.Great:
+                    break;
+                case Judgement.Fair:
+                    break;
+                case Judgement.Poor:
+                    break;
+                case Judgement.Break:
+                    Break();
+                    break;
+                default:
+                    break;
+            }
+            
+            
+            AddCombo(1);
+            judged.Invoke(judgement, isEarly);
+        }
+
         // Instead of using _t.Time, using time param is ideal.
         private void JudgeButtonPressed(int btn, double time)
         {
@@ -168,34 +200,40 @@ namespace CYAN4S
 
             var delta = target.Time - time;
 
-            if (IsOk(delta))
-            {
-                Debug.Log($"OK: {delta}");
-
-                if (target is LongNoteSystem system)
-                {
-                    system.OnProgress();
-                    system.SetTicks(_t.TimeToBeat(time), OnTicked);
-                }
-                else
-                {
-                    // Note hit.
-                    Release(target);
-                    cachedNotes[btn] = Get(btn);
-                    OnAddScore(100);
-                }
-                
-                OnAddCombo(1);
-
+            if (delta >= ignorable || delta < missed)
                 return;
-            }
 
-            if (RushToBreak(delta))
+            if (delta > tooEarly)
             {
                 Release(target);
                 cachedNotes[btn] = Get(btn);
+                
+                OnJudge(Judgement.Break, true, JudgeTarget.LongNoteStart);
+                
+                return;
+            }
 
-                OnBreak();
+            Judgement result;
+            if (delta > fairEarly) result = Judgement.Fair;
+            else if (delta > greatEarly) result = Judgement.Great;
+            else if (delta > greatLate) result = Judgement.Precise;
+            else if (delta > fairEarly) result = Judgement.Great;
+            else result = Judgement.Fair;
+
+            var isEarly = delta >= 0;
+
+            if (target is LongNoteSystem system)
+            {
+                system.OnProgress();
+                system.SetTicks(_t.TimeToBeat(time), OnTicked);
+                cachedLongNoteJudges[btn] = result;
+                OnJudge(result, isEarly, JudgeTarget.LongNoteStart);
+            }
+            else // target is NoteSystem
+            {
+                Release(target);
+                cachedNotes[btn] = Get(btn);
+                OnJudge(result, isEarly, JudgeTarget.Note);
             }
         }
 
@@ -207,16 +245,16 @@ namespace CYAN4S
             if (!target) return;
             if (!target.IsInProgress) return;
 
+            var delta = target.EndTime - time;
+
             // Released so early.
-            if (target.EndTime - time > rushToBreak)
+            if (delta > tooEarly)
             {
-                OnBreak();
+                OnJudge(Judgement.Break, true, JudgeTarget.LongNoteEnd);
             }
             else
             {
-                OnAddScore(100);
-                OnAddCombo(1);
-                Debug.Log("Released!");
+                OnJudge(cachedLongNoteJudges[btn], delta >= 0, JudgeTarget.LongNoteEnd);
             }
 
             Release(cachedNotes[btn]);
@@ -225,7 +263,7 @@ namespace CYAN4S
 
         private void OnTicked()
         {
-            OnAddCombo(1);
+            AddCombo(1);
         }
 
 
@@ -247,5 +285,13 @@ namespace CYAN4S
         Fair,
         Poor,
         Break = -1,
+    }
+
+    public enum JudgeTarget
+    {
+        Note,
+        LongNoteStart,
+        LongNoteTick,
+        LongNoteEnd
     }
 }
