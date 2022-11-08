@@ -19,6 +19,7 @@ namespace CYAN4S
 
         [SerializeField] private List<NoteSystem> cachedNotes;
         [SerializeField] private List<Judgement> cachedLongNoteJudges;
+        [SerializeField] private List<bool> cachedLongNoteIsEarly;
 
         [Header("In-game Data")] [SerializeField]
         private int noteCount;
@@ -92,8 +93,8 @@ namespace CYAN4S
             _t = GetComponent<TimeManager>();
 
             // Add listener
-            _ih.onButtonPressed.AddListener(ButtonPressListener);
-            _ih.onButtonReleased.AddListener(ButtonReleaseListener);
+            _ih.onButtonPressedEx.AddListener(ButtonPressListener);
+            _ih.onButtonReleasedEx.AddListener(ButtonReleaseListener);
 
             ////
 
@@ -108,6 +109,7 @@ namespace CYAN4S
             {
                 cachedNotes.Add(Get(i));
                 cachedLongNoteJudges.Add(Judgement.Precise);
+                cachedLongNoteIsEarly.Add(false);
             }
         }
 
@@ -151,8 +153,8 @@ namespace CYAN4S
         private void OnDestroy()
         {
             // Remove listener
-            _ih.onButtonPressed.RemoveListener(ButtonPressListener);
-            _ih.onButtonPressed.RemoveListener(ButtonReleaseListener);
+            _ih.onButtonPressedEx.RemoveListener(ButtonPressListener);
+            _ih.onButtonPressedEx.RemoveListener(ButtonReleaseListener);
         }
 
         // Delta == 'time of NOTE' - 'time of GAME'
@@ -187,7 +189,6 @@ namespace CYAN4S
                     break;
             }
             
-            
             AddCombo(1);
             judged.Invoke(judgement, isEarly);
         }
@@ -208,7 +209,7 @@ namespace CYAN4S
                 Release(target);
                 cachedNotes[btn] = Get(btn);
                 
-                OnJudge(Judgement.Break, true, JudgeTarget.LongNoteStart);
+                OnJudge(Judgement.Break, true, JudgeTarget.Note);
                 
                 return;
             }
@@ -225,8 +226,9 @@ namespace CYAN4S
             if (target is LongNoteSystem system)
             {
                 system.OnProgress();
-                system.SetTicks(_t.TimeToBeat(time), OnTicked);
+                system.SetTicks(_t.TimeToBeat(time), () => OnTicked(result, isEarly));
                 cachedLongNoteJudges[btn] = result;
+                cachedLongNoteIsEarly[btn] = isEarly;
                 OnJudge(result, isEarly, JudgeTarget.LongNoteStart);
             }
             else // target is NoteSystem
@@ -254,16 +256,17 @@ namespace CYAN4S
             }
             else
             {
-                OnJudge(cachedLongNoteJudges[btn], delta >= 0, JudgeTarget.LongNoteEnd);
+                OnJudge(cachedLongNoteJudges[btn], cachedLongNoteIsEarly[btn], JudgeTarget.LongNoteEnd);
             }
 
             Release(cachedNotes[btn]);
             cachedNotes[btn] = Get(btn);
         }
 
-        private void OnTicked()
+        private void OnTicked(Judgement result, bool isEarly)
         {
             AddCombo(1);
+            OnJudge(result, isEarly, JudgeTarget.LongNoteTick);
         }
 
 
