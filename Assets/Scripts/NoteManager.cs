@@ -16,17 +16,17 @@ namespace CYAN4S
         
         private readonly List<Queue<NoteSystem>> _noteQueue = new();
 
-        private Chart chart;
+        private Chart _chart;
 
-        public List<Queue<NoteSystem>> Initialize()
+        public List<Queue<NoteSystem>> Initialize(Chart chart)
         {
-            chart = IngameDebugger.chart;
+            _chart = chart;
             
             // Get essential info from chart.
-            var bpm = chart.bpm;
-            var buttonCount = chart.button;
-            var noteDataList = chart.notes;
-            var longNoteDataList = chart.longNotes;
+            var bpm = _chart.bpm;
+            var buttonCount = _chart.button;
+            var noteDataList = _chart.notes;
+            var longNoteDataList = _chart.longNotes;
 
             var beat = Player.getBeat;
 

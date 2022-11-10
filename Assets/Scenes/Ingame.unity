@@ -271,7 +271,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 219790239}
-  - component: {fileID: 219790243}
   - component: {fileID: 219790238}
   - component: {fileID: 219790242}
   - component: {fileID: 219790244}
@@ -280,7 +279,7 @@ GameObject:
   - component: {fileID: 219790245}
   m_Layer: 0
   m_Name: Game Manager
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -328,16 +327,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1229332771}
-        m_TargetAssemblyTypeName: CYAN4S.ComboLabelDisplay, Assembly-CSharp
-        m_MethodName: ComboChanged
-        m_Mode: 1
+      - m_Target: {fileID: 1229332772}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: SetTrigger
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Combo
           m_BoolArgument: 0
         m_CallState: 2
   broken:
@@ -431,18 +430,6 @@ MonoBehaviour:
   notePrefab: {fileID: 1127457483665874784, guid: d55e770f19017c54ea46514e9696ae4f, type: 3}
   longNotePrefab: {fileID: 6021690725684380341, guid: 0bd2208216abebb44a105d3d1235b899, type: 3}
   notesParent: {fileID: 1910495641}
---- !u!114 &219790243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 219790236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5998d1ab4acdfa54096559752b19b750, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &219790244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1546,7 +1533,6 @@ GameObject:
   - component: {fileID: 1229332774}
   - component: {fileID: 1229332773}
   - component: {fileID: 1229332772}
-  - component: {fileID: 1229332771}
   m_Layer: 5
   m_Name: Combo Label
   m_TagString: Untagged
@@ -1574,18 +1560,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 840}
   m_SizeDelta: {x: 192, y: 36}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1229332771
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1229332769}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 815a1c9da496a934ab281e56b58d9169, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &1229332772
 Animator:
   serializedVersion: 4
@@ -1969,6 +1943,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 141519b1575e0be4db07a8475bbd34af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
 --- !u!95 &1442551754
 Animator:
   serializedVersion: 4

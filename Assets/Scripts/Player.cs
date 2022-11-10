@@ -78,13 +78,13 @@ namespace CYAN4S
         private void Awake()
         {
             //TODO
-            _chart = IngameDebugger.chart;
+            _chart = Chart.GetTestChart();
+            getBeat = () => _t.Beat;
 
             // Create using info from chart
             cachedNotes = new List<NoteSystem>(_chart.button);
             cachedLongNoteJudges = new List<Judgement>(_chart.button);
             noteCount = _chart.notes.Count + _chart.longNotes.Count;
-            getBeat = () => _t.Beat;
 
             // Get component
             _ih = GetComponent<InputHandler>();
@@ -99,7 +99,7 @@ namespace CYAN4S
             ////
 
             // Set NoteManager
-            _noteQueue = _n.Initialize();
+            _noteQueue = _n.Initialize(_chart);
             _t.SetBpm(_chart.bpm);
 
             ////

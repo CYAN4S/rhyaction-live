@@ -21,7 +21,7 @@ namespace CYAN4S
         public UnityEvent<int, double> onButtonIsPressedEx;
         public UnityEvent<int, double> onButtonReleasedEx;
         
-        private readonly Queue<Action> _tasks = new Queue<Action>();
+        private readonly Queue<Action> _tasks = new();
 
         private void FixedUpdate()
         {

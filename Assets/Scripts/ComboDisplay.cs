@@ -8,6 +8,8 @@ namespace CYAN4S
 {
     public class ComboDisplay : MonoBehaviour
     {
+        [SerializeField] private Player player;
+        
         private TextMeshProUGUI _text;
         private Animator _animator;
         
@@ -15,6 +17,9 @@ namespace CYAN4S
 
         private void Awake()
         {
+            player ??= GameObject.FindWithTag("Player").GetComponent<Player>();
+            
+            
             _text = GetComponent<TextMeshProUGUI>();
             _animator = GetComponent<Animator>();
         }
