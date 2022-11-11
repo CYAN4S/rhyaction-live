@@ -299,10 +299,12 @@ MonoBehaviour:
   ignorable: 0.35
   tooEarly: 0.3
   fairEarly: 0.15
-  greatEarly: 0.05
-  greatLate: -0.05
+  greatEarly: 0.1
+  preciseEarly: 0.05
+  preciseLate: -0.05
+  greatLate: -0.1
   fairLate: -0.15
-  missed: -0.3
+  tooLate: -0.3
   cachedNotes: []
   cachedLongNoteJudges: 
   cachedLongNoteIsEarly: 
