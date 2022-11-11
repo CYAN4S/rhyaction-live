@@ -30,7 +30,7 @@ namespace CYAN4S
             _animator = GetComponent<Animator>();
         }
 
-        public void OnJudge(Judgement judge, bool isEarly)
+        public void OnJudge(Judgement judge, bool isEarly, int _)
         {
             _image.sprite = (judge, isEarly) switch
             {

@@ -33,11 +33,7 @@ namespace CYAN4S
         [Header("Observer Setup")] 
         [SerializeField] public UnityEvent<int> scoreChanged;
         [SerializeField] public UnityEvent<int> comboIncreased;
-        [SerializeField] public UnityEvent broken;
-        [SerializeField] public UnityEvent<Judgement, bool> judged;
-
-        // Transaction between FixedUpdate and Update.
-        // private readonly Queue<Action> _tasks = new();
+        [SerializeField] public UnityEvent<Judgement, bool, int> judged;
 
         // MonoBehaviour components.
         private InputHandler _ih;
@@ -61,12 +57,6 @@ namespace CYAN4S
         {
             combo += add;
             comboIncreased?.Invoke(combo);
-        }
-
-        private void Break()
-        {
-            ResetCombo();
-            broken?.Invoke();
         }
 
         private void ResetCombo()
@@ -131,7 +121,7 @@ namespace CYAN4S
                 {
                     if (!Missed(system.EndTime - _t.Time)) continue;
 
-                    OnJudge(Judgement.Poor, false, JudgeTarget.LongNoteEnd);
+                    OnJudge(Judgement.Poor, false, JudgeTarget.LongNoteEnd, i);
                     Release(target);
                     cachedNotes[i] = Get(i);
 
@@ -141,7 +131,7 @@ namespace CYAN4S
                 // Check missed notes.
                 if (!Missed(target.Time - _t.Time)) continue;
                 
-                OnJudge(Judgement.Break, false, JudgeTarget.Note);
+                OnJudge(Judgement.Break, false, JudgeTarget.Note, i);
                 Release(target);
                 cachedNotes[i] = Get(i);
             }
@@ -167,7 +157,7 @@ namespace CYAN4S
             JudgeButtonReleased(btn, _t.GetGameTime(rawTime));
         }
 
-        private void OnJudge(Judgement judgement, bool isEarly, JudgeTarget target)
+        private void OnJudge(Judgement judgement, bool isEarly, JudgeTarget target, int line)
         {
             if (target is JudgeTarget.Note or JudgeTarget.LongNoteEnd && judgement != Judgement.Break)
                 AddScore((int) judgement);
@@ -177,7 +167,7 @@ namespace CYAN4S
             else
                 AddCombo(1);
             
-            judged.Invoke(judgement, isEarly);
+            judged.Invoke(judgement, isEarly, line);
         }
 
         // Instead of using _t.Time, using time param is ideal.
@@ -205,7 +195,7 @@ namespace CYAN4S
 
             if (target is LongNoteSystem system)
             {
-                OnJudge(result, isEarly, JudgeTarget.LongNoteStart);
+                OnJudge(result, isEarly, JudgeTarget.LongNoteStart, btn);
                 
                 if (result == Judgement.Break)
                 {
@@ -215,13 +205,13 @@ namespace CYAN4S
                 }
                 
                 system.OnProgress();
-                system.SetTicks(_t.TimeToBeat(time), () => OnTicked(result, isEarly));
+                system.SetTicks(_t.TimeToBeat(time), () => OnTicked(result, isEarly, btn));
                 cachedLongNoteJudges[btn] = result;
                 cachedLongNoteIsEarly[btn] = isEarly;
             }
             else // target is NoteSystem
             {
-                OnJudge(result, isEarly, JudgeTarget.Note);
+                OnJudge(result, isEarly, JudgeTarget.Note, btn);
                 
                 Release(target);
                 cachedNotes[btn] = Get(btn);
@@ -241,20 +231,20 @@ namespace CYAN4S
             // Released so early.
             if (delta > tooEarly)
             {
-                OnJudge(Judgement.Break, true, JudgeTarget.LongNoteEnd);
+                OnJudge(Judgement.Break, true, JudgeTarget.LongNoteEnd, btn);
             }
             else
             {
-                OnJudge(cachedLongNoteJudges[btn], cachedLongNoteIsEarly[btn], JudgeTarget.LongNoteEnd);
+                OnJudge(cachedLongNoteJudges[btn], cachedLongNoteIsEarly[btn], JudgeTarget.LongNoteEnd, btn);
             }
 
             Release(cachedNotes[btn]);
             cachedNotes[btn] = Get(btn);
         }
 
-        private void OnTicked(Judgement result, bool isEarly)
+        private void OnTicked(Judgement result, bool isEarly, int line)
         {
-            OnJudge(result, isEarly, JudgeTarget.LongNoteTick);
+            OnJudge(result, isEarly, JudgeTarget.LongNoteTick, line);
         }
 
         private NoteSystem Get(int value)
