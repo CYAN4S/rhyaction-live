@@ -13,6 +13,9 @@ namespace CYAN4S
 
         [Header("Transform")] 
         [SerializeField] private RectTransform notesParent;
+
+        [Header("Transforms")] 
+        [SerializeField] private RectTransform[] notes4B;
         
         private readonly List<Queue<NoteSystem>> _noteQueue = new();
 

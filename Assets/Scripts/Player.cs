@@ -89,6 +89,8 @@ namespace CYAN4S
 
             // Set NoteManager
             _noteQueue = _n.Initialize(_chart);
+            
+            // Set TimeManager
             _t.SetBpm(_chart.bpm);
 
             ////
