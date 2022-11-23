@@ -29,12 +29,17 @@ namespace CYAN4S
 
         protected virtual void Update()
         {
-            rt.localPosition = new Vector3(rt.localPosition.x, GetYPos(noteData.beat, getBeat(), 4));
+            rt.localPosition = new Vector3(rt.localPosition.x, GetYPos());
         }
 
         protected static float GetYPos(double noteBeat, double currentBeat, float scrollSpeed)
         {
             return (float) (noteBeat - currentBeat) * 200f * scrollSpeed;
+        }
+        
+        protected float GetYPos()
+        {
+            return GetYPos(noteData.beat, getBeat(), 4);
         }
     }
 }

@@ -38,7 +38,7 @@ namespace CYAN4S
         private Queue<double> _ticks;
         private Action _onTick;
 
-        protected double length;
+        private double _length;
 
         public LongNoteStateMachine fsm;
 
@@ -75,7 +75,7 @@ namespace CYAN4S
             EndTime = endTime;
             getBeat = beat;
 
-            length = (noteData as LongNoteData)?.length;
+            _length = (noteData as LongNoteData)?.length;
         }
 
         public void SetActive(double startBeat, Action onTick)
@@ -99,30 +99,43 @@ namespace CYAN4S
             _onTick = onTick;
         }
 
-        public static float GetYSize(double noteLength, float scrollSpeed)
+
+        public float GetYSize()
         {
-            return (float) noteLength * 100f * scrollSpeed;
+            return GetYEndPos() - GetYPos();
         }
 
         public void UpdateLong()
         {
-            rt.localPosition = new Vector3(rt.localPosition.x, GetYPos(noteData.beat, getBeat(), 4));
-            rt.sizeDelta = new Vector2(rt.sizeDelta.x, GetYSize(length, 4));
+            rt.localPosition = new Vector3(rt.localPosition.x, GetYPos());
+            rt.sizeDelta = new Vector2(rt.sizeDelta.x, GetYSize());
         }
 
         public void UpdateActiveLong()
         {
             rt.localPosition = new Vector3(rt.localPosition.x, 0);
-            rt.sizeDelta = new Vector2(rt.sizeDelta.x,
-                Mathf.Max((float) (length + noteData.beat - getBeat()) * 4 * 100, 0f));
+            rt.sizeDelta = new Vector2(rt.sizeDelta.x,Mathf.Max(GetYEndPos(), 0f));
+        }
+
+        private float GetYEndPos()
+        {
+            return GetYPos(noteData.beat + _length, getBeat(), 4);
         }
     }
 
     public interface ILongNoteState
     {
-        public void Enter() { }
-        public void Update() { }
-        public void Exit() { }
+        public void Enter()
+        {
+        }
+
+        public void Update()
+        {
+        }
+
+        public void Exit()
+        {
+        }
     }
 
     [Serializable]
