@@ -7,7 +7,6 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 
-
 public class ChartEditor : EditorWindow
 {
     private VisualElement _root;
@@ -29,7 +28,6 @@ public class ChartEditor : EditorWindow
 
     public void CreateGUI()
     {
-        Debug.Log("Hi!");
         _root = rootVisualElement;
 
         // Import UXML

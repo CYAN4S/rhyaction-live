@@ -15,8 +15,6 @@ namespace CYAN4S
         public List<NoteData> notes;
         public List<LongNoteData> longNotes;
 
-        public Chart() { }
-
         public static Chart GetTestChart()
         {
             var target = new Chart

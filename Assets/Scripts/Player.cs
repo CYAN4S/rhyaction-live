@@ -39,13 +39,11 @@ namespace CYAN4S
         private InputHandler _ih;
         private AudioManager _a;
         private NoteManager _n;
-        private TimeManager _t;
+        private Timer _t;
 
         // TODO
         public static Func<double> getBeat;
         private List<Queue<NoteSystem>> _noteQueue;
-
-        private bool Missed(double delta) => delta < tooLate;
 
         private void AddScore(int add)
         {
@@ -79,21 +77,13 @@ namespace CYAN4S
             _ih = GetComponent<InputHandler>();
             _a = GetComponent<AudioManager>();
             _n = GetComponent<NoteManager>();
-            _t = GetComponent<TimeManager>();
-
-            // Add listener
-            _ih.onButtonPressedEx.AddListener(ButtonPressListener);
-            _ih.onButtonReleasedEx.AddListener(ButtonReleaseListener);
-
-            ////
+            _t = GetComponent<Timer>();
 
             // Set NoteManager
             _noteQueue = _n.Initialize(_chart);
             
             // Set TimeManager
             _t.SetBpm(_chart.bpm);
-
-            ////
 
             // Cache from factory
             for (var i = 0; i < _chart.button; i++)
@@ -102,11 +92,16 @@ namespace CYAN4S
                 cachedLongNoteJudges.Add(Judgement.Precise);
                 cachedLongNoteIsEarly.Add(false);
             }
+            
+            // Add listener
+            _ih.onButtonPressedEx.AddListener(ButtonPressListener);
+            _ih.onButtonReleasedEx.AddListener(ButtonReleaseListener);
         }
-
-        private void Update()
+        
+        private void OnDestroy()
         {
-            _t.Update();
+            _ih.onButtonPressedEx.RemoveListener(ButtonPressListener);
+            _ih.onButtonPressedEx.RemoveListener(ButtonReleaseListener);
         }
 
         private void LateUpdate()
@@ -121,7 +116,7 @@ namespace CYAN4S
                 // Check unreleased long notes.
                 if (target is LongNoteSystem {IsInProgress: true} system)
                 {
-                    if (!Missed(system.EndTime - _t.Time)) continue;
+                    if (system.EndTime - _t.Time >= tooLate) continue;
 
                     OnJudge(Judgement.Poor, false, JudgeTarget.LongNoteEnd, i);
                     Release(target);
@@ -131,7 +126,7 @@ namespace CYAN4S
                 }
 
                 // Check missed notes.
-                if (!Missed(target.Time - _t.Time)) continue;
+                if (target.Time - _t.Time >= tooLate) continue;
                 
                 OnJudge(Judgement.Break, false, JudgeTarget.Note, i);
                 Release(target);
@@ -139,14 +134,7 @@ namespace CYAN4S
             }
         }
 
-        private void OnDestroy()
-        {
-            // Remove listener
-            _ih.onButtonPressedEx.RemoveListener(ButtonPressListener);
-            _ih.onButtonPressedEx.RemoveListener(ButtonReleaseListener);
-        }
 
-        // Delta == 'time of NOTE' - 'time of GAME'
 
         private void ButtonPressListener(int btn, double rawTime)
         {
@@ -206,8 +194,7 @@ namespace CYAN4S
                     return;
                 }
                 
-                system.OnProgress();
-                system.SetTicks(_t.TimeToBeat(time), () => OnTicked(result, isEarly, btn));
+                system.SetActive(_t.TimeToBeat(time), () => OnTicked(result, isEarly, btn));
                 cachedLongNoteJudges[btn] = result;
                 cachedLongNoteIsEarly[btn] = isEarly;
             }

@@ -11,9 +11,6 @@ namespace CYAN4S
         [SerializeField] private NoteSystem notePrefab;
         [SerializeField] private LongNoteSystem longNotePrefab;
 
-        [Header("Transform")] 
-        [SerializeField] private RectTransform notesParent;
-
         [Header("Transforms")] 
         [SerializeField] private RectTransform[] notes4B;
         
@@ -43,7 +40,7 @@ namespace CYAN4S
 
             foreach (var note in noteDataList)
             {
-                var system = Instantiate(notePrefab, notesParent);
+                var system = Instantiate(notePrefab, notes4B[note.line]);
                 var time = note.beat * 60d / (double) bpm;
 
                 system.InstanceInitialize(note, time, beat);
@@ -52,7 +49,7 @@ namespace CYAN4S
 
             foreach (var note in longNoteDataList)
             {
-                var system = Instantiate(longNotePrefab, notesParent);
+                var system = Instantiate(longNotePrefab, notes4B[note.line]);
                 var start = note.beat * 60d / (double) bpm;
                 var end = (note.beat + note.length) * 60d / (double) bpm;
 

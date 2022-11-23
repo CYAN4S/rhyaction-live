@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace CYAN4S
 {
-    public class TimeManager : MonoBehaviour
+    public class Timer : MonoBehaviour
     {
-        [SerializeField] private double initialTime = -5d;
+        [SerializeField] private double initialTime = -3d;
         
         [Header("Debug")]
         [SerializeField] private bool isRunning;

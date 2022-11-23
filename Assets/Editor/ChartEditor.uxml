@@ -6,7 +6,11 @@
             <ui:SliderInt label="Level" high-value="15" low-value="1" value="1" name="Level" />
             <ui:TextField label="BPM" name="BPM" />
         </ui:GroupBox>
-        <ui:GroupBox style="flex-grow: 1;" />
+        <ui:GroupBox style="flex-grow: 1;">
+            <ui:ScrollView>
+                <ui:VisualElement style="background-color: rgb(255, 255, 255); height: 180px; width: 206px;" />
+            </ui:ScrollView>
+        </ui:GroupBox>
         <ui:GroupBox style="flex-direction: row; justify-content: flex-end;">
             <ui:Button text="Log Example" name="LogExample" />
             <ui:Button text="Log Serialized Result" name="LogResult" />
