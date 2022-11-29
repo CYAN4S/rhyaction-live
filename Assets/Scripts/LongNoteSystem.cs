@@ -31,7 +31,7 @@ namespace CYAN4S
 
     public class LongNoteSystem : NoteSystem
     {
-        public bool IsInProgress => fsm.CurrentState is ActiveLongNoteState;
+        public bool IsInProgress => state.CurrentState is ActiveLongNoteState;
 
         public double EndTime { get; private set; }
 
@@ -40,19 +40,19 @@ namespace CYAN4S
 
         private double _length;
 
-        public LongNoteStateMachine fsm;
+        public LongNoteStateMachine state;
 
         protected override void Awake()
         {
             base.Awake();
 
-            fsm = new LongNoteStateMachine(this);
-            fsm.Initialize(fsm.idleState);
+            state = new LongNoteStateMachine(this);
+            state.Initialize(state.idleState);
         }
 
         protected override void Update()
         {
-            fsm.Update();
+            state.Update();
         }
 
         public void CheckTick()
@@ -80,7 +80,7 @@ namespace CYAN4S
 
         public void SetActive(double startBeat, Action onTick)
         {
-            fsm.TransitionTo(fsm.activeState);
+            state.TransitionTo(state.activeState);
             SetTicks(startBeat, onTick);
         }
 
@@ -98,7 +98,6 @@ namespace CYAN4S
 
             _onTick = onTick;
         }
-
 
         public float GetYSize()
         {
@@ -123,20 +122,7 @@ namespace CYAN4S
         }
     }
 
-    public interface ILongNoteState
-    {
-        public void Enter()
-        {
-        }
-
-        public void Update()
-        {
-        }
-
-        public void Exit()
-        {
-        }
-    }
+    public interface ILongNoteState : IState { }
 
     [Serializable]
     public class LongNoteStateMachine

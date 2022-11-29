@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Core;
 
 namespace CYAN4S
@@ -15,6 +16,7 @@ namespace CYAN4S
         public List<NoteData> notes;
         public List<LongNoteData> longNotes;
 
+        // This uses only for development.
         public static Chart GetTestChart()
         {
             var target = new Chart
@@ -36,6 +38,19 @@ namespace CYAN4S
                 new Fraction(4)));
 
             return target;
+        }
+
+        public static double GetEndBeat(Chart chart)
+        {
+            var a = chart.notes.Max(note => (double)note.beat);
+            var b = chart.longNotes.Max(note => note.beat + (double)note.length);
+
+            return a > b ? a : b;
+        }
+
+        public double GetEndBeat()
+        {
+            return GetEndBeat(this);
         }
     }
 }

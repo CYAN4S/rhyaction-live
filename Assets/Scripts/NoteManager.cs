@@ -10,6 +10,7 @@ namespace CYAN4S
         [Header("Note Prefab")] 
         [SerializeField] private NoteSystem notePrefab;
         [SerializeField] private LongNoteSystem longNotePrefab;
+        [SerializeField] private GameObject dividerPrefab;
 
         [Header("Transforms")] 
         [SerializeField] private RectTransform[] notes4B;
@@ -64,6 +65,14 @@ namespace CYAN4S
 
                 _noteQueue[i] = new Queue<NoteSystem>(temp);
             }
+
+            var endDivider = Math.Ceiling(chart.GetEndBeat());
+            Debug.Log(endDivider);
+            // for (var i = 0; i <= endDivider; i++)
+            // {
+            //     var divider = Instantiate(dividerPrefab);
+            // }
+            
 
             return _noteQueue;
         }

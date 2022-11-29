@@ -21,15 +21,19 @@ namespace CYAN4S
         public float fairLate;
         public float tooLate;
 
+        [Tooltip("Current target note of its line")]
         [SerializeField] private List<NoteSystem> cachedNotes;
-        [SerializeField] private List<Judgement> cachedLongNoteJudges;
-        [SerializeField] private List<bool> cachedLongNoteIsEarly;
+        [Tooltip("Start judge of currently activated long note")]
+        [SerializeField] private List<Judgement> cachedJudges;
+        [Tooltip("Start judge of currently activated long note")]
+        [SerializeField] private List<bool> cachedIsEarly;
 
         [Header("In-game Data")] 
         [SerializeField] private int noteCount;
         [SerializeField] private int score = 0;
         [SerializeField] private int combo = 0;
-
+        [SerializeField] private Timer timer;
+        
         [Header("Observer Setup")] 
         [SerializeField] public UnityEvent<int> scoreChanged;
         [SerializeField] public UnityEvent<int> comboIncreased;
@@ -39,58 +43,44 @@ namespace CYAN4S
         private InputHandler _ih;
         private AudioManager _a;
         private NoteManager _n;
-        private Timer _t;
 
         // TODO
         public static Func<double> getBeat;
         private List<Queue<NoteSystem>> _noteQueue;
 
-        private void AddScore(int add)
-        {
-            score += add;
-            scoreChanged?.Invoke(score);
-        }
-
-        private void AddCombo(int add)
-        {
-            combo += add;
-            comboIncreased?.Invoke(combo);
-        }
-
-        private void ResetCombo()
-        {
-            combo = 0;
-        }
 
         private void Awake()
         {
             //TODO
             _chart = Chart.GetTestChart();
-            getBeat = () => _t.Beat;
+            
+            // Initialize
+            getBeat = () => timer.Beat;
 
-            // Create using info from chart
+            // Create space for cache
             cachedNotes = new List<NoteSystem>(_chart.button);
-            cachedLongNoteJudges = new List<Judgement>(_chart.button);
+            cachedJudges = new List<Judgement>(_chart.button);
+            
+            // Use info from chart
             noteCount = _chart.notes.Count + _chart.longNotes.Count;
 
             // Get component
             _ih = GetComponent<InputHandler>();
             _a = GetComponent<AudioManager>();
             _n = GetComponent<NoteManager>();
-            _t = GetComponent<Timer>();
+            
+            timer = new Timer();
+            timer.SetBpm(_chart.bpm);
 
             // Set NoteManager
             _noteQueue = _n.Initialize(_chart);
-            
-            // Set TimeManager
-            _t.SetBpm(_chart.bpm);
 
-            // Cache from factory
+            // Cache
             for (var i = 0; i < _chart.button; i++)
             {
                 cachedNotes.Add(Get(i));
-                cachedLongNoteJudges.Add(Judgement.Precise);
-                cachedLongNoteIsEarly.Add(false);
+                cachedJudges.Add(Judgement.Precise);
+                cachedIsEarly.Add(false);
             }
             
             // Add listener
@@ -102,6 +92,11 @@ namespace CYAN4S
         {
             _ih.onButtonPressedEx.RemoveListener(ButtonPressListener);
             _ih.onButtonPressedEx.RemoveListener(ButtonReleaseListener);
+        }
+        
+        private void Update()
+        {
+            timer.Update();
         }
 
         private void LateUpdate()
@@ -116,7 +111,7 @@ namespace CYAN4S
                 // Check unreleased long notes.
                 if (target is LongNoteSystem {IsInProgress: true} system)
                 {
-                    if (system.EndTime - _t.Time >= tooLate) continue;
+                    if (system.EndTime - timer.Time >= tooLate) continue;
 
                     OnJudge(Judgement.Poor, false, JudgeTarget.LongNoteEnd, i);
                     Release(target);
@@ -126,25 +121,22 @@ namespace CYAN4S
                 }
 
                 // Check missed notes.
-                if (target.Time - _t.Time >= tooLate) continue;
+                if (target.Time - timer.Time >= tooLate) continue;
                 
                 OnJudge(Judgement.Break, false, JudgeTarget.Note, i);
                 Release(target);
                 cachedNotes[i] = Get(i);
             }
         }
-
-
-
         private void ButtonPressListener(int btn, double rawTime)
         {
-            JudgeButtonPressed(btn, _t.GetGameTime(rawTime));
+            JudgeButtonPressed(btn, timer.GetGameTime(rawTime));
             _a.PlaySoundNAudio();
         }
 
         private void ButtonReleaseListener(int btn, double rawTime)
         {
-            JudgeButtonReleased(btn, _t.GetGameTime(rawTime));
+            JudgeButtonReleased(btn, timer.GetGameTime(rawTime));
         }
 
         private void OnJudge(Judgement judgement, bool isEarly, JudgeTarget target, int line)
@@ -194,9 +186,9 @@ namespace CYAN4S
                     return;
                 }
                 
-                system.SetActive(_t.TimeToBeat(time), () => OnTicked(result, isEarly, btn));
-                cachedLongNoteJudges[btn] = result;
-                cachedLongNoteIsEarly[btn] = isEarly;
+                system.SetActive(timer.TimeToBeat(time), () => OnTicked(result, isEarly, btn));
+                cachedJudges[btn] = result;
+                cachedIsEarly[btn] = isEarly;
             }
             else // target is NoteSystem
             {
@@ -224,7 +216,7 @@ namespace CYAN4S
             }
             else
             {
-                OnJudge(cachedLongNoteJudges[btn], cachedLongNoteIsEarly[btn], JudgeTarget.LongNoteEnd, btn);
+                OnJudge(cachedJudges[btn], cachedIsEarly[btn], JudgeTarget.LongNoteEnd, btn);
             }
 
             Release(cachedNotes[btn]);
@@ -244,6 +236,29 @@ namespace CYAN4S
         private void Release(NoteSystem target)
         {
             target.gameObject.SetActive(false);
+        }
+
+        private void OnPause()
+        {
+            Debug.Log("Paused");
+            timer.PauseOrResume();
+        } 
+        
+        private void AddScore(int add)
+        {
+            score += add;
+            scoreChanged?.Invoke(score);
+        }
+
+        private void AddCombo(int add)
+        {
+            combo += add;
+            comboIncreased?.Invoke(combo);
+        }
+
+        private void ResetCombo()
+        {
+            combo = 0;
         }
     }
 
