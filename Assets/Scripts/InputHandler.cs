@@ -20,6 +20,8 @@ namespace CYAN4S
         public UnityEvent<int, double> onButtonPressedEx;
         public UnityEvent<int, double> onButtonIsPressedEx;
         public UnityEvent<int, double> onButtonReleasedEx;
+
+        public UnityEvent onPausePressed;
         
         private readonly Queue<Action> _tasks = new();
 
@@ -49,6 +51,11 @@ namespace CYAN4S
                     onButtonReleasedEx?.Invoke(i, Time.fixedTimeAsDouble);
                     _tasks.Enqueue(() => onButtonReleased?.Invoke(i1, time));
                 }
+            }
+
+            if (Keyboard.current[Key.Escape].wasPressedThisFrame)
+            {
+                _tasks.Enqueue(() => onPausePressed?.Invoke());
             }
         }
 

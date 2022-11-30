@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Core;
 using UnityEngine;
 
@@ -8,9 +9,10 @@ namespace CYAN4S
     public class Timer
     {
         [SerializeField] public double initialTime = -3d;
+        [SerializeField] public double revertTime = 3d;
 
         [Header("Debug")]
-        [SerializeField] private TimerStateMachine state;
+        [SerializeField] public TimerStateMachine state;
 
         public decimal _bpm;
 
@@ -67,23 +69,24 @@ namespace CYAN4S
 
         public void Resume()
         {
-            state.TransitionTo(state.running);
+            state.TransitionTo(state.resuming);
         }
     }
 
     public interface ITimerState : IState { }
 
+    [Serializable]
     public class BeforeStart : ITimerState { }
 
+    [Serializable]
     public class Running : ITimerState
     {
         private readonly Timer _timer;
-
         public Running(Timer timer) => _timer = timer;
 
         public void Enter()
         {
-            // Time.timeScale = 1f;
+            Debug.Log("Running");
         }
 
         public void Update()
@@ -93,17 +96,40 @@ namespace CYAN4S
         }
     }
 
+    [Serializable]
     public class Paused : ITimerState
     {
         public void Enter()
         {
-            // Time.timeScale = 0;
+            Debug.Log("Paused");
         }
     }
 
+    [Serializable]
     public class Resuming : ITimerState
     {
+        private readonly Timer _timer;
+        public Resuming(Timer timer) => _timer = timer;
+
+        private double _target;
         
+        public void Enter()
+        {
+            Debug.Log("Resuming");
+            
+            _target = _timer.Time;
+            _timer.Time -= _timer.revertTime;
+            _timer.Beat = _timer.TimeToBeat(_timer.Time);
+        }
+
+        public void Update()
+        {
+            _timer.Time += Time.deltaTime;
+            _timer.Beat = _timer.Time / 60d * (double) _timer._bpm;
+
+            if (_target <= _timer.Time)
+                _timer.state.TransitionTo(_timer.state.running);
+        }
     }
 
     [Serializable]
@@ -121,7 +147,7 @@ namespace CYAN4S
             beforeStart = new BeforeStart();
             running = new Running(timer);
             paused = new Paused();
-            resuming = new Resuming();
+            resuming = new Resuming(timer);
         }
 
         public void Initialize(ITimerState startingState)

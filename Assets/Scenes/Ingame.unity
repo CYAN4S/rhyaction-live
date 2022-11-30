@@ -509,6 +509,12 @@ MonoBehaviour:
   noteCount: 0
   score: 0
   combo: 0
+  timer:
+    initialTime: -3
+    revertTime: 3
+    state: {}
+    <Time>k__BackingField: -3
+    <Beat>k__BackingField: 0
   scoreChanged:
     m_PersistentCalls:
       m_Calls:
@@ -624,6 +630,9 @@ MonoBehaviour:
   onButtonReleasedEx:
     m_PersistentCalls:
       m_Calls: []
+  onPausePressed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &219790241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -669,7 +678,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: b08e317337dedf742a6af4e24ff8bf13, type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 2
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -681,22 +690,6 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_ActionEvents:
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 288aa4d2-9811-42e2-94ff-b12b8cc45a08
-    m_ActionName: Player/Button0[/Keyboard/w]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: f5c0e8d9-3923-47dc-b163-27e52465739f
-    m_ActionName: Player/Button1[/Keyboard/e]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: fafb2ce9-7a20-491e-8e58-85e6af6acd36
-    m_ActionName: Player/Button2[/Keyboard/p]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 3b43aaca-5044-4b8a-9b85-0344f0ccf779
-    m_ActionName: Player/Button3[/Keyboard/leftBracket]
   - m_PersistentCalls:
       m_Calls: []
     m_ActionId: f1580a10-f471-4dcf-a3e2-1c9600cb0594
@@ -737,6 +730,22 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: c6978cac-1177-4fef-bf94-13da8ee0121c
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 219790240}
+        m_TargetAssemblyTypeName: CYAN4S.InputHandler, Assembly-CSharp
+        m_MethodName: OnPause
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 2c8d1a39-9b39-42e7-9658-8f7f3651505a
+    m_ActionName: Ingame/Pause[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Ingame
@@ -2301,6 +2310,7 @@ GameObject:
   - component: {fileID: 1229332774}
   - component: {fileID: 1229332773}
   - component: {fileID: 1229332772}
+  - component: {fileID: 1229332775}
   m_Layer: 5
   m_Name: Combo Label
   m_TagString: Untagged
@@ -2386,6 +2396,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1229332769}
   m_CullTransparentMesh: 1
+--- !u!114 &1229332775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1229332769}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 698cf6d0bab9d8e419ca41a311a386e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1345231506 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3449274457774384835, guid: 48133f4f4fe95bc4b9d60837b179ee80, type: 3}
@@ -3887,6 +3909,7 @@ GameObject:
   - component: {fileID: 2062935701}
   - component: {fileID: 2062935703}
   - component: {fileID: 2062935702}
+  - component: {fileID: 2062935704}
   m_Layer: 5
   m_Name: Glass Glow
   m_TagString: Untagged
@@ -3952,6 +3975,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2062935700}
   m_CullTransparentMesh: 1
+--- !u!95 &2062935704
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2062935700}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 491e29c58d4f52f418ca67a42bbdb62c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2075455080
 GameObject:
   m_ObjectHideFlags: 0

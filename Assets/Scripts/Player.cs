@@ -86,12 +86,14 @@ namespace CYAN4S
             // Add listener
             _ih.onButtonPressedEx.AddListener(ButtonPressListener);
             _ih.onButtonReleasedEx.AddListener(ButtonReleaseListener);
+            _ih.onPausePressed.AddListener(OnPause);
         }
         
         private void OnDestroy()
         {
             _ih.onButtonPressedEx.RemoveListener(ButtonPressListener);
             _ih.onButtonPressedEx.RemoveListener(ButtonReleaseListener);
+            _ih.onPausePressed.RemoveListener(OnPause);
         }
         
         private void Update()
@@ -128,6 +130,7 @@ namespace CYAN4S
                 cachedNotes[i] = Get(i);
             }
         }
+        
         private void ButtonPressListener(int btn, double rawTime)
         {
             JudgeButtonPressed(btn, timer.GetGameTime(rawTime));
@@ -158,7 +161,9 @@ namespace CYAN4S
             var target = cachedNotes[btn];
             if (target == null) return;
 
-            var delta = target.Time - time;
+            // TODO
+            // var delta = target.Time - time;
+            var delta = target.Time - timer.Time;
 
             if (delta >= ignorable || delta < tooLate)
                 return;
@@ -186,7 +191,9 @@ namespace CYAN4S
                     return;
                 }
                 
-                system.SetActive(timer.TimeToBeat(time), () => OnTicked(result, isEarly, btn));
+                // system.SetActive(timer.TimeToBeat(time), () => OnTicked(result, isEarly, btn));
+                system.SetActive(timer.TimeToBeat(timer.Time), () => OnTicked(result, isEarly, btn));
+                
                 cachedJudges[btn] = result;
                 cachedIsEarly[btn] = isEarly;
             }
@@ -238,9 +245,9 @@ namespace CYAN4S
             target.gameObject.SetActive(false);
         }
 
-        private void OnPause()
+        public void OnPause()
         {
-            Debug.Log("Paused");
+            Debug.Log("Esc Pressed");
             timer.PauseOrResume();
         } 
         
