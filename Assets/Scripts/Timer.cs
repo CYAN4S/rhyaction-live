@@ -14,7 +14,7 @@ namespace CYAN4S
         [Header("Debug")]
         [SerializeField] public TimerStateMachine state;
 
-        public decimal _bpm;
+        public float _bpm;
 
         public Timer()
         {
@@ -23,7 +23,7 @@ namespace CYAN4S
             state.Initialize(state.beforeStart);
         }
 
-        public void SetBpm(decimal bpm)
+        public void SetBpm(float bpm)
         {
             _bpm = bpm;
             Beat = initialTime / 60d * (double) bpm;
@@ -83,11 +83,6 @@ namespace CYAN4S
     {
         private readonly Timer _timer;
         public Running(Timer timer) => _timer = timer;
-
-        public void Enter()
-        {
-            Debug.Log("Running");
-        }
 
         public void Update()
         {

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Core
 {
     [Serializable]
-    public class Fraction
+    public class Fraction : IComparable<Fraction>
     {
         [SerializeField] private int num;
         [SerializeField] private int den;
@@ -75,6 +75,11 @@ namespace Core
             var gcd = Gcd(newNum, newDen);
 
             return new Fraction(newNum / gcd, newDen / gcd);
+        }
+
+        public int CompareTo(Fraction other)
+        {
+            return ((double) this).CompareTo((double) other);
         }
 
         public override string ToString()

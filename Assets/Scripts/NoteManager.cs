@@ -67,7 +67,6 @@ namespace CYAN4S
             }
 
             var endDivider = Math.Ceiling(chart.GetEndBeat());
-            Debug.Log(endDivider);
             // for (var i = 0; i <= endDivider; i++)
             // {
             //     var divider = Instantiate(dividerPrefab);

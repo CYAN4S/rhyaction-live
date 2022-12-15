@@ -10,8 +10,8 @@ namespace CYAN4S
     {
         public string title;
         public int button;
-        public decimal level;
-        public decimal bpm;
+        public int level;
+        public float bpm;
 
         public List<NoteData> notes;
         public List<LongNoteData> longNotes;

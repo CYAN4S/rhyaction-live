@@ -52,7 +52,12 @@ namespace CYAN4S
         private void Awake()
         {
             //TODO
-            _chart = Chart.GetTestChart();
+            _chart = Selected.Instance.chart;
+            if (Selected.Instance.situation == Situation.Debug)
+            {
+                _chart = Chart.GetTestChart();
+                Debug.Log("Debugging only.");
+            }
             
             // Initialize
             getBeat = () => timer.Beat;

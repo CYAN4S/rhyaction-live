@@ -4,22 +4,22 @@ namespace Core
 {
     public class Singleton<T> : MonoBehaviour where T : Component
     {
-        private static T instance;
+        private static T _instance;
 
         public static T Instance
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
-                    instance = (T) FindObjectOfType(typeof(T));
-                    if (instance == null)
+                    _instance = (T) FindObjectOfType(typeof(T));
+                    if (_instance == null)
                     {
                         SetupInstance();
                     }
                 }
 
-                return instance;
+                return _instance;
             }
         }
 
@@ -30,21 +30,21 @@ namespace Core
 
         private static void SetupInstance()
         {
-            instance = (T) FindObjectOfType(typeof(T));
-            if (instance == null)
+            _instance = (T) FindObjectOfType(typeof(T));
+            if (_instance == null)
             {
-                GameObject gameObj = new GameObject();
+                var gameObj = new GameObject();
                 gameObj.name = typeof(T).Name;
-                instance = gameObj.AddComponent<T>();
+                _instance = gameObj.AddComponent<T>();
                 DontDestroyOnLoad(gameObj);
             }
         }
 
         private void RemoveDuplicates()
         {
-            if (instance == null)
+            if (_instance == null)
             {
-                instance = this as T;
+                _instance = this as T;
                 DontDestroyOnLoad(gameObject);
             }
             else
