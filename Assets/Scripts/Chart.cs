@@ -42,8 +42,8 @@ namespace CYAN4S
 
         public static double GetEndBeat(Chart chart)
         {
-            var a = chart.notes.Max(note => (double)note.beat);
-            var b = chart.longNotes.Max(note => note.beat + (double)note.length);
+            var a = chart.notes?.Max(note => (double)note.beat) ?? 0;
+            var b = chart.longNotes?.Max(note => note.beat + (double)note.length) ?? 0;
 
             return a > b ? a : b;
         }

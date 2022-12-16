@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 namespace CYAN4S
 {
@@ -20,6 +21,8 @@ namespace CYAN4S
         public float greatLate;
         public float fairLate;
         public float tooLate;
+
+        public Result result;
 
         [Tooltip("Current target note of its line")]
         [SerializeField] private List<NoteSystem> cachedNotes;
@@ -74,8 +77,10 @@ namespace CYAN4S
             _a = GetComponent<AudioManager>();
             _n = GetComponent<NoteManager>();
             
+            // Set Timer
             timer = new Timer();
-            timer.SetBpm(_chart.bpm);
+            timer.SetTimer(_chart.bpm, _chart.GetEndBeat());
+            timer.OnFinished += OnFinished;
 
             // Set NoteManager
             _noteQueue = _n.Initialize(_chart);
@@ -271,6 +276,12 @@ namespace CYAN4S
         private void ResetCombo()
         {
             combo = 0;
+        }
+
+        private void OnFinished()
+        {
+            Result.Instance.score = score;
+            SceneManager.LoadScene("Result");
         }
     }
 
