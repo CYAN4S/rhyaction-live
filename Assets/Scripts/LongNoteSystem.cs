@@ -118,7 +118,7 @@ namespace CYAN4S
 
         private float GetYEndPos()
         {
-            return GetYPos(noteData.beat + _length, getBeat(), 4);
+            return GetYPos(noteData.beat + _length, getBeat(), getScrollSpeed());
         }
     }
 

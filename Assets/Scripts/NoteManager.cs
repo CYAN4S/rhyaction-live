@@ -10,10 +10,13 @@ namespace CYAN4S
         [Header("Note Prefab")] 
         [SerializeField] private NoteSystem notePrefab;
         [SerializeField] private LongNoteSystem longNotePrefab;
-        [SerializeField] private GameObject dividerPrefab;
+        [SerializeField] private NoteSystem notePrefabVariant;
+        [SerializeField] private LongNoteSystem longNotePrefabVariant;
+        [SerializeField] private Divider dividerPrefab;
 
         [Header("Transforms")] 
         [SerializeField] private RectTransform[] notes4B;
+        [SerializeField] private RectTransform dividers;
         
         private readonly List<Queue<NoteSystem>> _noteQueue = new();
 
@@ -22,6 +25,9 @@ namespace CYAN4S
         public List<Queue<NoteSystem>> Initialize(Chart chart)
         {
             _chart = chart;
+
+            NoteSystem.getScrollSpeed = Player.getScrollSpeed;
+            Divider.getScrollSpeed = Player.getScrollSpeed;
             
             // Get essential info from chart.
             var bpm = _chart.bpm;
@@ -41,8 +47,9 @@ namespace CYAN4S
 
             foreach (var note in noteDataList)
             {
-                var system = Instantiate(notePrefab, notes4B[note.line]);
-                var time = note.beat * 60d / (double) bpm;
+                var targetPrefab = note.line is 1 or 2 ? notePrefabVariant : notePrefab;
+                var system = Instantiate(targetPrefab, notes4B[note.line]);
+                var time = note.beat * 60d / bpm;
 
                 system.InstanceInitialize(note, time, beat);
                 noteTemp[note.line].Add(system);
@@ -50,9 +57,10 @@ namespace CYAN4S
 
             foreach (var note in longNoteDataList)
             {
-                var system = Instantiate(longNotePrefab, notes4B[note.line]);
-                var start = note.beat * 60d / (double) bpm;
-                var end = (note.beat + note.length) * 60d / (double) bpm;
+                var targetPrefab = note.line is 1 or 2 ? longNotePrefabVariant : longNotePrefab;
+                var system = Instantiate(targetPrefab, notes4B[note.line]);
+                var start = note.beat * 60d / bpm;
+                var end = (note.beat + note.length) * 60d / bpm;
 
                 system.InstanceInitialize(note, start, end, beat);
                 noteTemp[note.line].Add(system);
@@ -67,11 +75,11 @@ namespace CYAN4S
             }
 
             var endDivider = Math.Ceiling(chart.GetEndBeat());
-            // for (var i = 0; i <= endDivider; i++)
-            // {
-            //     var divider = Instantiate(dividerPrefab);
-            // }
-            
+            for (var i = 0; i <= endDivider; i++)
+            {
+                var divider = Instantiate(dividerPrefab, dividers);
+                divider.InstanceInitialize(i, beat);
+            }
 
             return _noteQueue;
         }

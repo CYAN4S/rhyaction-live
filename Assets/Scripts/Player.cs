@@ -22,48 +22,57 @@ namespace CYAN4S
         public float fairLate;
         public float tooLate;
 
+        [Header("Inspector Setup")]
+        [Tooltip("For the next scene")]
         public Result result;
 
+        [Header("Cached Data")]
         [Tooltip("Current target note of its line")]
         [SerializeField] private List<NoteSystem> cachedNotes;
         [Tooltip("Start judge of currently activated long note")]
         [SerializeField] private List<Judgement> cachedJudges;
         [Tooltip("Start judge of currently activated long note")]
         [SerializeField] private List<bool> cachedIsEarly;
+        
+        // Not Serializable
+        private List<Queue<NoteSystem>> _noteQueue;
 
         [Header("In-game Data")] 
         [SerializeField] private int noteCount;
         [SerializeField] private int score = 0;
         [SerializeField] private int combo = 0;
         [SerializeField] private Timer timer;
+        [SerializeField] private int scrollSpeed = 40;
         
         [Header("Observer Setup")] 
         [SerializeField] public UnityEvent<int> scoreChanged;
         [SerializeField] public UnityEvent<int> comboIncreased;
         [SerializeField] public UnityEvent<Judgement, bool, int> judged;
-
+        [SerializeField] public UnityEvent<int> speedChanged;
+        
+        [Header("Getter")]
+        public static Func<double> getBeat;
+        public static Func<int> getScrollSpeed;
+        
         // MonoBehaviour components.
         private InputHandler _ih;
         private AudioManager _a;
         private NoteManager _n;
 
-        // TODO
-        public static Func<double> getBeat;
-        private List<Queue<NoteSystem>> _noteQueue;
-
-
         private void Awake()
         {
-            //TODO
             _chart = Selected.Instance.chart;
+            
+            // Check if is for debugging
             if (Selected.Instance.situation == Situation.Debug)
             {
                 _chart = Chart.GetTestChart();
                 Debug.Log("Debugging only.");
             }
             
-            // Initialize
+            // Set getters
             getBeat = () => timer.Beat;
+            getScrollSpeed = () => scrollSpeed;
 
             // Create space for cache
             cachedNotes = new List<NoteSystem>(_chart.button);
@@ -96,14 +105,12 @@ namespace CYAN4S
             // Add listener
             _ih.onButtonPressedEx.AddListener(ButtonPressListener);
             _ih.onButtonReleasedEx.AddListener(ButtonReleaseListener);
-            _ih.onPausePressed.AddListener(OnPause);
         }
         
         private void OnDestroy()
         {
             _ih.onButtonPressedEx.RemoveListener(ButtonPressListener);
             _ih.onButtonPressedEx.RemoveListener(ButtonReleaseListener);
-            _ih.onPausePressed.RemoveListener(OnPause);
         }
         
         private void Update()
@@ -201,7 +208,6 @@ namespace CYAN4S
                     return;
                 }
                 
-                // system.SetActive(timer.TimeToBeat(time), () => OnTicked(result, isEarly, btn));
                 system.SetActive(timer.TimeToBeat(timer.Time), () => OnTicked(result, isEarly, btn));
                 
                 cachedJudges[btn] = result;
@@ -282,6 +288,26 @@ namespace CYAN4S
         {
             Result.Instance.score = score;
             SceneManager.LoadScene("Result");
+        }
+
+        public void OnSpeedUp()
+        {
+            if (scrollSpeed >= 99)
+                return;
+            
+            scrollSpeed += 1;
+            Debug.Log(scrollSpeed);
+            speedChanged?.Invoke(scrollSpeed);
+        }
+
+        public void OnSpeedDown()
+        {
+            if (scrollSpeed <= 5)
+                return;
+            
+            scrollSpeed -= 1;
+            Debug.Log(scrollSpeed);
+            speedChanged?.Invoke(scrollSpeed);
         }
     }
 

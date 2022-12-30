@@ -12,7 +12,10 @@ namespace CYAN4S
         
         // TODO MODE
         [SerializeField] private Key[] keys4B;
+        [SerializeField] private Key keys4BSpeedUp;
+        [SerializeField] private Key keys4BSpeedDown;
 
+        [Header("Inspector Setup")]
         public UnityEvent<int, double> onButtonPressed;
         public UnityEvent<int, double> onButtonIsPressed;
         public UnityEvent<int, double> onButtonReleased;
@@ -20,6 +23,9 @@ namespace CYAN4S
         public UnityEvent<int, double> onButtonPressedEx;
         public UnityEvent<int, double> onButtonIsPressedEx;
         public UnityEvent<int, double> onButtonReleasedEx;
+
+        public UnityEvent onSpeedUpPressed;
+        public UnityEvent onSpeedDownPressed;
 
         public UnityEvent onPausePressed;
         
@@ -52,11 +58,15 @@ namespace CYAN4S
                     _tasks.Enqueue(() => onButtonReleased?.Invoke(i1, time));
                 }
             }
+            
+            if (Keyboard.current[keys4BSpeedUp].wasPressedThisFrame)
+                _tasks.Enqueue(() => onSpeedUpPressed?.Invoke());
+            
+            if (Keyboard.current[keys4BSpeedDown].wasPressedThisFrame)
+                _tasks.Enqueue(() => onSpeedDownPressed?.Invoke());
 
             if (Keyboard.current[Key.Escape].wasPressedThisFrame)
-            {
                 _tasks.Enqueue(() => onPausePressed?.Invoke());
-            }
         }
 
         private void Update()

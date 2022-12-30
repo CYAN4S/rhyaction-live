@@ -6,6 +6,7 @@ namespace CYAN4S
 {
     public class NoteSystem : MonoBehaviour
     {
+        public static Func<int> getScrollSpeed;
         protected Func<double> getBeat;
 
         // From init
@@ -32,14 +33,14 @@ namespace CYAN4S
             rt.localPosition = new Vector3(rt.localPosition.x, GetYPos());
         }
 
-        protected static float GetYPos(double noteBeat, double currentBeat, float scrollSpeed)
+        public static float GetYPos(double noteBeat, double currentBeat, int scrollSpeed)
         {
-            return (float) (noteBeat - currentBeat) * 200f * scrollSpeed;
+            return (float) (noteBeat - currentBeat) * 20f * scrollSpeed;
         }
         
         protected float GetYPos()
         {
-            return GetYPos(noteData.beat, getBeat(), 4);
+            return GetYPos(noteData.beat, getBeat(), getScrollSpeed());
         }
     }
 }
