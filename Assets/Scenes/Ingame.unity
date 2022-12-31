@@ -520,7 +520,6 @@ MonoBehaviour:
   greatLate: -0.1
   fairLate: -0.15
   tooLate: -0.3
-  result: {fileID: 0}
   cachedNotes: []
   cachedJudges: 
   cachedIsEarly: 
@@ -535,6 +534,7 @@ MonoBehaviour:
     <Beat>k__BackingField: 0
     _bpm: 0
     endBeat: 0
+    onZeroInvoked: 0
   scrollSpeed: 40
   scoreChanged:
     m_PersistentCalls:
@@ -620,6 +620,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  speedUpAudio: {fileID: 8300000, guid: b84135135fe92de4aab5dbebc2d879a3, type: 3}
+  speedDownAudio: {fileID: 8300000, guid: 2fa605f25fba0e447b960b654194a1a7, type: 3}
 --- !u!4 &219790239
 Transform:
   m_ObjectHideFlags: 0
@@ -1750,7 +1752,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 707848533}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4936,7 +4938,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2110437635}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 917.67004, y: 545.74396, z: 0.5956912}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
