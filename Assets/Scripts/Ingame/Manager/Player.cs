@@ -35,16 +35,18 @@ namespace CYAN4S
 
         [Header("In-game Data")] 
         [SerializeField] private int noteCount;
-        [SerializeField] private int score = 0;
-        [SerializeField] private int combo = 0;
-        [SerializeField] private Timer timer;
+        [SerializeField] private int score;
+        [SerializeField] private int combo;
         [SerializeField] private int scrollSpeed = 40;
+        [SerializeField] private Timer timer;
         
         [Header("Observer Setup")] 
         [SerializeField] public UnityEvent<int> scoreChanged;
         [SerializeField] public UnityEvent<int> comboIncreased;
         [SerializeField] public UnityEvent<Judgement, bool, int> judged;
         [SerializeField] public UnityEvent<int> speedChanged;
+        [SerializeField] public UnityEvent paused;
+        [SerializeField] public UnityEvent resume;
 
         [Header("Scroll Speed Audio")] 
         [SerializeField] private AudioClip speedUpAudio;
@@ -60,6 +62,7 @@ namespace CYAN4S
 
         private void Awake()
         {
+            // Chart is from the previous scene via `Selected` singleton object.
             _chart = Selected.Instance.chart;
             
             // Check if is for debugging
@@ -70,7 +73,7 @@ namespace CYAN4S
             }
             
             // Set getters
-            getBeat = () => timer.Beat;
+            getBeat = () => timer.CurrentBeat;
             getScrollSpeed = () => scrollSpeed;
 
             // Create space for cache
@@ -87,8 +90,10 @@ namespace CYAN4S
             // Set Timer
             timer = new Timer();
             timer.SetTimer(_chart.bpm, _chart.GetEndBeat());
-            timer.OnFinished += OnFinished;
+            timer.onFinished += OnFinished;
             timer.onZero += () => { AudioManager.PlaySoundNAudio(_chart.audio); };
+            timer.onPaused += () => { paused?.Invoke(); };
+            timer.onResume += () => { resume?.Invoke(); };
 
             // Set NoteManager
             _noteQueue = _n.Initialize(_chart);
@@ -129,7 +134,7 @@ namespace CYAN4S
                 // Check unreleased long notes.
                 if (target is LongNoteSystem {IsInProgress: true} system)
                 {
-                    if (system.EndTime - timer.Time >= tooLate) continue;
+                    if (system.EndTime - timer.CurrentTime >= tooLate) continue;
 
                     OnJudge(Judgement.Poor, false, JudgeTarget.LongNoteEnd, i);
                     Release(target);
@@ -139,7 +144,7 @@ namespace CYAN4S
                 }
 
                 // Check missed notes.
-                if (target.Time - timer.Time >= tooLate) continue;
+                if (target.Time - timer.CurrentTime >= tooLate) continue;
 
                 Debug.Log(target.Time);
                 
@@ -182,7 +187,7 @@ namespace CYAN4S
 
             // TODO
             // var delta = target.Time - time;
-            var delta = target.Time - timer.Time;
+            var delta = target.Time - timer.CurrentTime;
 
             if (delta >= ignorable || delta < tooLate)
                 return;
@@ -210,7 +215,7 @@ namespace CYAN4S
                     return;
                 }
                 
-                system.SetActive(timer.TimeToBeat(timer.Time), () => OnTicked(result, isEarly, btn));
+                system.SetActive(timer.TimeToBeat(timer.CurrentTime), () => OnTicked(result, isEarly, btn));
                 
                 cachedJudges[btn] = result;
                 cachedIsEarly[btn] = isEarly;
@@ -232,7 +237,7 @@ namespace CYAN4S
             if (!target) return;
             if (!target.IsInProgress) return;
 
-            var delta = target.EndTime - timer.Time;
+            var delta = target.EndTime - timer.CurrentTime;
             
             Release(cachedNotes[btn]);
             cachedNotes[btn] = Get(btn);
@@ -263,11 +268,9 @@ namespace CYAN4S
             target.gameObject.SetActive(false);
         }
 
-        public void OnPause()
+        public void OnPauseKeyPressed()
         {
-            // TODO Pause feature
-            Debug.Log("Pause feature wip");
-            // timer.PauseOrResume();
+            timer.PauseOrResume();
         } 
         
         private void AddScore(int add)
@@ -313,7 +316,7 @@ namespace CYAN4S
             AudioSource.PlayClipAtPoint(speedDownAudio, Vector3.zero);
         }
     }
-
+    
     public enum Judgement
     {
         Precise = 100,

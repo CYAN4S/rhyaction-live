@@ -526,16 +526,15 @@ MonoBehaviour:
   noteCount: 0
   score: 0
   combo: 0
+  scrollSpeed: 40
   timer:
     initialTime: -3
     revertTime: 3
-    state: {}
-    <Time>k__BackingField: -3
-    <Beat>k__BackingField: 0
-    _bpm: 0
+    time: -3
+    beat: 0
+    bpm: 0
     endBeat: 0
     onZeroInvoked: 0
-  scrollSpeed: 40
   scoreChanged:
     m_PersistentCalls:
       m_Calls:
@@ -612,6 +611,36 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: CYAN4S.ScrollSpeedDisplay, Assembly-CSharp
         m_MethodName: OnSpeedChanged
         m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  paused:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1969811424}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  resume:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1969811424}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -705,7 +734,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 219790238}
         m_TargetAssemblyTypeName: CYAN4S.Player, Assembly-CSharp
-        m_MethodName: OnPause
+        m_MethodName: OnPauseKeyPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1842,7 +1871,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 724636318}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 219790238}
+        m_TargetAssemblyTypeName: CYAN4S.Player, Assembly-CSharp
+        m_MethodName: OnPauseKeyPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &724636318
 MonoBehaviour:
   m_ObjectHideFlags: 0

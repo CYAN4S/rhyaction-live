@@ -7,14 +7,16 @@ namespace CYAN4S
     [Serializable]
     public class NoteManager : MonoBehaviour
     {
-        [Header("Note Prefab")] 
+        [Header("Note Prefab")]
         [SerializeField] private NoteSystem notePrefab;
         [SerializeField] private LongNoteSystem longNotePrefab;
         [SerializeField] private NoteSystem notePrefabVariant;
         [SerializeField] private LongNoteSystem longNotePrefabVariant;
+        
+        [Header("Divider Prefab")]
         [SerializeField] private Divider dividerPrefab;
 
-        [Header("Transforms")] 
+        [Header("Parent Transform")] 
         [SerializeField] private RectTransform[] notes4B;
         [SerializeField] private RectTransform dividers;
         
@@ -26,6 +28,7 @@ namespace CYAN4S
         {
             _chart = chart;
 
+            // Set shared data
             NoteSystem.getScrollSpeed = Player.getScrollSpeed;
             Divider.getScrollSpeed = Player.getScrollSpeed;
             

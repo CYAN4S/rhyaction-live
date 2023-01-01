@@ -1,9 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:GroupBox style="flex-direction: row; justify-content: flex-start; padding-left: 0; padding-right: 0; padding-top: 0; padding-bottom: 0; margin-top: 0; margin-left: 0; margin-right: 0; margin-bottom: 0;">
-        <ui:DropdownField index="0" choices="0,1,2,3" name="Line" style="width: 48px;" />
-        <ui:TextField picking-mode="Ignore" name="Num" value="0" text="0" style="width: 48px; -unity-text-align: upper-right;" />
-        <ui:TextField picking-mode="Ignore" name="Den" value="1" text="1" style="width: 48px; -unity-text-align: upper-right;" />
-        <ui:TextField picking-mode="Ignore" name="Path" style="flex-grow: 1;" />
-        <ui:Button text="-" display-tooltip-when-elided="true" name="Remove" />
-    </ui:GroupBox>
-</ui:UXML>

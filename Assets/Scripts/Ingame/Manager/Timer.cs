@@ -3,6 +3,7 @@ using System.Collections;
 using Core;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 
 namespace CYAN4S
 {
@@ -14,28 +15,35 @@ namespace CYAN4S
 
         [Header("Debug")]
         [SerializeField] public TimerStateMachine state;
-        [field: SerializeField] public double Time { get; set; }
-        [field: SerializeField] public double Beat { get; set; }
-        
-        public float _bpm;
-        public double endBeat;
 
-        public Action OnFinished;
+        [SerializeField] private double time;
+        [SerializeField] private double beat;
+        [SerializeField] private float bpm;
+        [SerializeField] private double endBeat;
+        
+        public double CurrentTime => time;
+        public double CurrentBeat => beat;
+
+        public Action onFinished;
 
         public bool onZeroInvoked = false;
         public Action onZero;
 
+        public Action onPaused;
+        public Action onResume;
+
+
         public Timer()
         {
-            Time = initialTime;
+            time = initialTime;
             state = new TimerStateMachine(this);
             state.Initialize(state.beforeStart);
         }
 
         public void SetTimer(float bpm, double getEndBeat)
         {
-            _bpm = bpm;
-            Beat = initialTime / 60d * bpm;
+            this.bpm = bpm;
+            beat = initialTime / 60d * bpm;
             endBeat = getEndBeat;
             
             state.TransitionTo(state.running);
@@ -45,8 +53,10 @@ namespace CYAN4S
 
         public double GetGameTime(double rawTime) => rawTime + initialTime;
 
-        public double TimeToBeat(double time) => time / 60d *  _bpm;
-        public double BeatToTime(double beat) => beat * 60d / _bpm;
+        public double TimeToBeat(double time) => time / 60d *  bpm;
+        public double BeatToTime(double beat) => beat * 60d / bpm;
+
+        public bool Ended => beat >= endBeat + 4;
 
         public void PauseOrResume()
         {
@@ -59,15 +69,34 @@ namespace CYAN4S
 
         public void Pause() => state.TransitionTo(state.paused);
         public void Resume() => state.TransitionTo(state.resuming);
+
+        public void AddDeltaTime()
+        {
+            time += Time.deltaTime;
+            beat = CurrentTime / 60d * bpm;
+        }
+
+        public void RevertTime()
+        {
+            time -= revertTime;
+            beat = TimeToBeat(CurrentTime);
+        }
     }
 
     // State Pattern
-    public interface ITimerState : IState { }
+    public enum TimerState
+    {
+        BeforeStart, Running, Paused, Resuming, Finished
+    }
+    public interface ITimerState : IState
+    {
+    }
 
-    [Serializable]
-    public class BeforeStart : ITimerState { }
+    public class BeforeStart : ITimerState
+    {
+        
+    }
 
-    [Serializable]
     public class Running : ITimerState
     {
         private readonly Timer _timer;
@@ -75,32 +104,33 @@ namespace CYAN4S
 
         public void Update()
         {
-            _timer.Time += Time.deltaTime;
-            _timer.Beat = _timer.Time / 60d * _timer._bpm;
+            _timer.AddDeltaTime();
 
-            if (_timer.Time >= 0 && !_timer.onZeroInvoked)
+            if (_timer.CurrentTime >= 0 && !_timer.onZeroInvoked)
             {
                 _timer.onZero?.Invoke();
                 _timer.onZeroInvoked = true;
             }
 
-            if (_timer.Beat >= _timer.endBeat + 4)
+            if (_timer.Ended)
             {
                 _timer.state.TransitionTo(_timer.state.finished);
             }
         }
     }
 
-    [Serializable]
     public class Paused : ITimerState
     {
+        private readonly Timer _timer;
+        public Paused(Timer timer) => _timer = timer;
+        
         public void Enter()
         {
             Debug.Log("Paused");
+            _timer.onPaused?.Invoke();
         }
     }
 
-    [Serializable]
     public class Resuming : ITimerState
     {
         private readonly Timer _timer;
@@ -112,22 +142,21 @@ namespace CYAN4S
         {
             Debug.Log("Resuming");
             
-            _target = _timer.Time;
-            _timer.Time -= _timer.revertTime;
-            _timer.Beat = _timer.TimeToBeat(_timer.Time);
+            _target = _timer.CurrentTime;
+            _timer.RevertTime();
+
+            _timer.onResume?.Invoke();
         }
 
         public void Update()
         {
-            _timer.Time += Time.deltaTime;
-            _timer.Beat = _timer.Time / 60d * _timer._bpm;
+            _timer.AddDeltaTime();
 
-            if (_target <= _timer.Time)
+            if (_target <= _timer.CurrentTime)
                 _timer.state.TransitionTo(_timer.state.running);
         }
     }
 
-    [Serializable]
     public class Finished : ITimerState
     {
         private readonly Timer _timer;
@@ -135,7 +164,7 @@ namespace CYAN4S
         
         public void Enter()
         {
-            _timer.OnFinished?.Invoke();
+            _timer.onFinished?.Invoke();
         }
     }
 
@@ -154,7 +183,7 @@ namespace CYAN4S
         {
             beforeStart = new BeforeStart();
             running = new Running(timer);
-            paused = new Paused();
+            paused = new Paused(timer);
             resuming = new Resuming(timer);
             finished = new Finished(timer);
         }
