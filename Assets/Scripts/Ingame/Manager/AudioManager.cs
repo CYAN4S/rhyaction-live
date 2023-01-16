@@ -1,78 +1,33 @@
 using System;
 using System.IO;
-using NAudio.Wave;
-using NAudio;
+using FMOD;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace CYAN4S
 {
     public class AudioManager : MonoBehaviour
     {
-        private WaveOutEvent _outputDevice;
-        private AudioFileReader _audioFile;
 
-        private void Awake()
+        public static Sound? PrepareSound(string path)
         {
-        }
-
-        private void OnDestroy()
-        {
-            CleanUp();
-        }
-
-        public void Init(string path)
-        {
-            if (path is null) return;
+            if (path is null)
+            {
+                return null;
+            }
             
-            _outputDevice = new WaveOutEvent();
-            _audioFile = new AudioFileReader(@"C:/Temp/clap.wav");
-            _outputDevice.Init(_audioFile);
+            var system = FMODUnity.RuntimeManager.CoreSystem;
+            var fullPath = Path.Combine(Application.dataPath, "Tracks");
+            system.createSound(Path.Combine(fullPath, path), MODE.DEFAULT, out var sound);
+            return sound;
         }
 
-        public void CleanUp()
+        public static Channel PlaySound(Sound sound)
         {
-            _outputDevice.Dispose();
-            _outputDevice = null;
-            _audioFile.Dispose();
-            _audioFile = null;
-        }
-        
-        public void Play()
-        {
-            _outputDevice?.Play();
+            var system = FMODUnity.RuntimeManager.CoreSystem;
+            system.playSound(sound, new ChannelGroup(), false, out var channel);
+            return channel;
         }
 
-        public void Stop()
-        {
-            _outputDevice?.Stop();
-        }
-
-        public static void PlaySoundNAudio()
-        {
-            var output = new WaveOutEvent();
-            var file = new AudioFileReader(@"C:/Temp/clap.wav");
-            output.Init(file);
-            output.Play();
-        }
-
-        public static void PlaySoundNAudio(string path)
-        {
-            if (path is null) return;
-
-            var output = new WaveOutEvent();
-            var file = new AudioFileReader(Path.Combine(Application.dataPath, "Tracks", path));
-            output.Init(file);
-            output.Play();
-        }
-
-        public static void GetDevices()
-        {
-            
-            // for (int n = -1; n < WaveOut.DeviceCount; n++)
-            // {
-            //     var caps = WaveOut.GetCapabilities(n);
-            //     Console.WriteLine($"{n}: {caps.ProductName}");
-            // }
-        }
     }
 }

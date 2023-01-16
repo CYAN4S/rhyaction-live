@@ -1,9 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using FMOD;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using Debug = UnityEngine.Debug;
 
 namespace CYAN4S
 {
@@ -48,9 +50,9 @@ namespace CYAN4S
         [SerializeField] public UnityEvent paused;
         [SerializeField] public UnityEvent resume;
 
-        [Header("Scroll Speed Audio")] 
-        [SerializeField] private AudioClip speedUpAudio;
-        [SerializeField] private AudioClip speedDownAudio;
+        [Header("Scroll Speed Audio")]
+        [SerializeField] private FMODUnity.EventReference speedUpEvent;
+        [SerializeField] private FMODUnity.EventReference speedDownEvent;
         
         // Getter
         public static Func<double> getBeat;
@@ -86,12 +88,20 @@ namespace CYAN4S
             // Get component
             _ih = GetComponent<InputHandler>();
             _n = GetComponent<NoteManager>();
+
+            var sound = AudioManager.PrepareSound(_chart.audio);
             
             // Set Timer
             timer = new Timer();
             timer.SetTimer(_chart.bpm, _chart.GetEndBeat());
             timer.onFinished += OnFinished;
-            timer.onZero += () => { AudioManager.PlaySoundNAudio(_chart.audio); };
+
+            if (sound is Sound s)
+            {
+                 timer.onZero += () => { AudioManager.PlaySound(s); };
+            }
+            
+
             timer.onPaused += () => { paused?.Invoke(); };
             timer.onResume += () => { resume?.Invoke(); };
 
@@ -146,8 +156,6 @@ namespace CYAN4S
                 // Check missed notes.
                 if (target.Time - timer.CurrentTime >= tooLate) continue;
 
-                Debug.Log(target.Time);
-                
                 OnJudge(Judgement.Break, false, JudgeTarget.Note, i);
                 Release(target);
                 cachedNotes[i] = Get(i);
@@ -158,7 +166,6 @@ namespace CYAN4S
         {
             JudgeButtonPressed(btn, timer.GetGameTime(rawTime));
             // TODO Key sound
-            // AudioManager.PlaySoundNAudio();
         }
 
         private void ButtonReleaseListener(int btn, double rawTime)
@@ -303,7 +310,7 @@ namespace CYAN4S
             
             scrollSpeed += 1;
             speedChanged?.Invoke(scrollSpeed);
-            AudioSource.PlayClipAtPoint(speedUpAudio, Vector3.zero);
+            FMODUnity.RuntimeManager.PlayOneShot(speedUpEvent);
         }
 
         public void OnSpeedDown()
@@ -313,7 +320,7 @@ namespace CYAN4S
             
             scrollSpeed -= 1;
             speedChanged?.Invoke(scrollSpeed);
-            AudioSource.PlayClipAtPoint(speedDownAudio, Vector3.zero);
+            FMODUnity.RuntimeManager.PlayOneShot(speedDownEvent);
         }
     }
     
