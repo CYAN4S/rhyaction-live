@@ -10,5 +10,6 @@ namespace CYAN4S
         public Situation situation;
 
         public int score;
+        public int[,] judgeCount;
     }
 }

@@ -663,6 +663,14 @@ MonoBehaviour:
       Data3: 110207162
       Data4: -2114976240
     Path: event:/SpeedDown
+  resumeEvent:
+    Guid:
+      Data1: -1333459312
+      Data2: 1228835275
+      Data3: -570056001
+      Data4: -1143873141
+    Path: event:/ResumeCount
+  scoreWeight: 64000000460000001e00000001000000
 --- !u!4 &219790239
 Transform:
   m_ObjectHideFlags: 0
@@ -784,6 +792,8 @@ MonoBehaviour:
   longNotePrefab: {fileID: 6021690725684380341, guid: ec581df6864cff9478f18046ea05c5fc, type: 3}
   notePrefabVariant: {fileID: 688899336731762132, guid: fa0ac47107f1f28439c8bf4af4d598cf, type: 3}
   longNotePrefabVariant: {fileID: 1210159683054490299, guid: de1c48cddedf9dd4d981d8be4608be8b, type: 3}
+  notePrefabs4B: []
+  longNotePrefabs4B: []
   dividerPrefab: {fileID: 6979380334628491166, guid: d1702ec1bca827b4ab99de1a6c261717, type: 3}
   notes4B:
   - {fileID: 783069288}

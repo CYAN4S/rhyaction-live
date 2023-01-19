@@ -8,10 +8,9 @@ namespace CYAN4S
 {
     public class AudioManager : MonoBehaviour
     {
-
         public static Sound? PrepareSound(string path)
         {
-            if (path is null)
+            if (path is null or "")
             {
                 return null;
             }

@@ -12,6 +12,8 @@ namespace CYAN4S
         [SerializeField] private LongNoteSystem longNotePrefab;
         [SerializeField] private NoteSystem notePrefabVariant;
         [SerializeField] private LongNoteSystem longNotePrefabVariant;
+        [SerializeField] private NoteSystem[] notePrefabs4B;
+        [SerializeField] private LongNoteSystem[] longNotePrefabs4B;
         
         [Header("Divider Prefab")]
         [SerializeField] private Divider dividerPrefab;

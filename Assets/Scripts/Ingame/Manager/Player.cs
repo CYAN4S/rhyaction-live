@@ -41,6 +41,7 @@ namespace CYAN4S
         [SerializeField] private int combo;
         [SerializeField] private int scrollSpeed = 40;
         [SerializeField] private Timer timer;
+        [SerializeField] private int[,] judgeCount = new int[Enum.GetNames(typeof(Judgement)).Length, 2];
         
         [Header("Observer Setup")] 
         [SerializeField] public UnityEvent<int> scoreChanged;
@@ -50,9 +51,13 @@ namespace CYAN4S
         [SerializeField] public UnityEvent paused;
         [SerializeField] public UnityEvent resume;
 
-        [Header("Scroll Speed Audio")]
+        [Header("Audio")]
         [SerializeField] private FMODUnity.EventReference speedUpEvent;
         [SerializeField] private FMODUnity.EventReference speedDownEvent;
+        [SerializeField] private FMODUnity.EventReference resumeEvent;
+
+        [Header("Score Weight")] 
+        [SerializeField] private int[] scoreWeight;
         
         // Getter
         public static Func<double> getBeat;
@@ -88,23 +93,22 @@ namespace CYAN4S
             // Get component
             _ih = GetComponent<InputHandler>();
             _n = GetComponent<NoteManager>();
-
-            var sound = AudioManager.PrepareSound(_chart.audio);
             
             // Set Timer
             timer = new Timer();
             timer.SetTimer(_chart.bpm, _chart.GetEndBeat());
-            timer.onFinished += OnFinished;
-
-            if (sound is Sound s)
-            {
-                 timer.onZero += () => { AudioManager.PlaySound(s); };
-            }
-            
-
+            timer.onFinished += OnFinished;            
             timer.onPaused += () => { paused?.Invoke(); };
             timer.onResume += () => { resume?.Invoke(); };
-
+            
+            // Prepare sound
+            if (_chart.audio != "")
+            {
+                var sound = AudioManager.PrepareSound(_chart.audio);
+                if (sound is Sound s)
+                    timer.onZero += () => { AudioManager.PlaySound(s); };
+            }
+            
             // Set NoteManager
             _noteQueue = _n.Initialize(_chart);
 
@@ -176,7 +180,7 @@ namespace CYAN4S
         private void OnJudge(Judgement judgement, bool isEarly, JudgeTarget target, int line)
         {
             if (target is JudgeTarget.Note or JudgeTarget.LongNoteEnd && judgement != Judgement.Break)
-                AddScore((int) judgement);
+                AddScore(scoreWeight[(int) judgement]);
 
             if (judgement == Judgement.Break)
                 ResetCombo();
@@ -186,7 +190,6 @@ namespace CYAN4S
             judged.Invoke(judgement, isEarly, line);
         }
 
-        // Instead of using _t.Time, using time param is ideal.
         private void JudgeButtonPressed(int btn, double time)
         {
             var target = cachedNotes[btn];
@@ -324,20 +327,7 @@ namespace CYAN4S
         }
     }
     
-    public enum Judgement
-    {
-        Precise = 100,
-        Great = 50,
-        Fair = 20,
-        Poor = 1,
-        Break = -1
-    }
+    public enum Judgement { Precise, Great, Fair, Poor, Break }
 
-    public enum JudgeTarget
-    {
-        Note,
-        LongNoteStart,
-        LongNoteTick,
-        LongNoteEnd
-    }
+    public enum JudgeTarget { Note, LongNoteStart, LongNoteTick, LongNoteEnd }
 }
