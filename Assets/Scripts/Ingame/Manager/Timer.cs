@@ -29,7 +29,7 @@ namespace CYAN4S
         public bool onZeroInvoked = false;
         public Action onZero;
 
-        public Action onPaused;
+        public Action paused;
         public Action onResume;
 
 
@@ -127,7 +127,7 @@ namespace CYAN4S
         public void Enter()
         {
             Debug.Log("Paused");
-            _timer.onPaused?.Invoke();
+            _timer.paused?.Invoke();
         }
     }
 

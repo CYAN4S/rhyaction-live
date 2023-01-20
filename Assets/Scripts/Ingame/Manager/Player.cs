@@ -67,6 +67,8 @@ namespace CYAN4S
         private InputHandler _ih;
         private NoteManager _n;
 
+        private Channel _channel;
+
         private void Awake()
         {
             // Chart is from the previous scene via `Selected` singleton object.
@@ -97,16 +99,27 @@ namespace CYAN4S
             // Set Timer
             timer = new Timer();
             timer.SetTimer(_chart.bpm, _chart.GetEndBeat());
-            timer.onFinished += OnFinished;            
-            timer.onPaused += () => { paused?.Invoke(); };
-            timer.onResume += () => { resume?.Invoke(); };
+            timer.onFinished += OnFinished;
+            timer.paused += () =>
+            {
+                paused?.Invoke();
+                _channel.setPaused(true);
+            };
+            timer.onResume += () =>
+            {
+                resume?.Invoke();
+                _channel.setPaused(false);
+            };
             
             // Prepare sound
             if (_chart.audio != "")
             {
                 var sound = AudioManager.PrepareSound(_chart.audio);
                 if (sound is Sound s)
-                    timer.onZero += () => { AudioManager.PlaySound(s); };
+                    timer.onZero += () =>
+                    {
+                        _channel = AudioManager.PlaySound(s);
+                    };
             }
             
             // Set NoteManager
@@ -303,6 +316,7 @@ namespace CYAN4S
         private void OnFinished()
         {
             Result.Instance.score = score;
+            Result.Instance.judgeCount = judgeCount;
             SceneManager.LoadScene("Result");
         }
 
