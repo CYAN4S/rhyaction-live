@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Transactions;
 using Core;
 using UnityEngine;
 using UnityEngine.Events;
@@ -12,9 +13,8 @@ namespace CYAN4S
     {
         public TimerStateMachine state;
         
-        [Header("In-game settings")]
-        [SerializeField] public double initialTime = -3d;
-        [SerializeField] public double revertTime = 3d;
+        private double _initialTime = -3;
+        private double _revertTime = 4;
 
         [Header("Debug")]
         [SerializeField] private double time;
@@ -28,10 +28,9 @@ namespace CYAN4S
         public bool onZeroInvoked = false;
         public Action onZero;
 
-
         public Timer()
         {
-            time = initialTime;
+            time = _initialTime;
             state = new TimerStateMachine(this);
             state.Initialize(state.beforeStart);
         }
@@ -39,7 +38,7 @@ namespace CYAN4S
         public void SetTimer(float bpm, double getEndBeat)
         {
             this.bpm = bpm;
-            beat = initialTime / 60d * bpm;
+            beat = _initialTime / 60d * bpm;
             endBeat = getEndBeat;
             
             state.TransitionTo(state.running);
@@ -47,7 +46,7 @@ namespace CYAN4S
 
         public void Update() => state.Update();
 
-        public double GetGameTime(double rawTime) => rawTime + initialTime;
+        public double GetGameTime(double rawTime) => rawTime + _initialTime;
 
         public double TimeToBeat(double time) => time / 60d *  bpm;
         public double BeatToTime(double beat) => beat * 60d / bpm;
@@ -74,7 +73,7 @@ namespace CYAN4S
 
         public void RevertTime()
         {
-            time -= revertTime;
+            time -= _revertTime;
             beat = TimeToBeat(CurrentTime);
         }
     }
@@ -139,8 +138,7 @@ namespace CYAN4S
         
         public void Enter()
         {
-            Debug.Log("Resuming");
-            
+            OnEnter?.Invoke();
             _target = _timer.CurrentTime;
             _timer.RevertTime();
         }
@@ -148,7 +146,6 @@ namespace CYAN4S
         public void Update()
         {
             _timer.AddDeltaTime();
-
             if (_target <= _timer.CurrentTime)
                 _timer.state.TransitionTo(_timer.state.running);
         }

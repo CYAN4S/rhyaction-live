@@ -1,5 +1,59 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-9024816967729089220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Paused
+  m_EditorClassIdentifier: 
+  Path: event:/Paused
+  Guid:
+    Data1: -1943606691
+    Data2: 1215600642
+    Data3: -835909444
+    Data4: 1049193168
+  Banks:
+  - {fileID: 3358805680799850239}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2133
+--- !u!114 &-3546842279791611224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Resuming
+  m_EditorClassIdentifier: 
+  Path: event:/Resuming
+  Guid:
+    Data1: -745165372
+    Data2: 1299737387
+    Data3: -1748385894
+    Data4: -714999560
+  Banks:
+  - {fileID: 3358805680799850239}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 5375
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19,12 +73,14 @@ MonoBehaviour:
   - {fileID: 26591117620137715}
   - {fileID: 2351514841641257039}
   - {fileID: 6961717343244528441}
+  - {fileID: -9024816967729089220}
+  - {fileID: -3546842279791611224}
   EditorParameters: []
   MasterBanks:
   - {fileID: 3358805680799850239}
   StringsBanks:
   - {fileID: 1089629482488893364}
-  cacheTime: 638094910500812971
+  cacheTime: 638100292189337563
   cacheVersion: 131601
 --- !u!114 &26591117620137715
 MonoBehaviour:
@@ -68,10 +124,10 @@ MonoBehaviour:
   Path: ../../Documents/FMOD Studio/rhyaction-live/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638094910500812971
+  lastModified: 638100292189337563
   FileSizes:
   - Name: Desktop
-    Value: 858
+    Value: 940
   Exists: 1
 --- !u!114 &2351514841641257039
 MonoBehaviour:
@@ -115,10 +171,10 @@ MonoBehaviour:
   Path: ../../Documents/FMOD Studio/rhyaction-live/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638094910500783048
+  lastModified: 638100292189317610
   FileSizes:
   - Name: Desktop
-    Value: 80640
+    Value: 132192
   Exists: 1
 --- !u!114 &6961717343244528441
 MonoBehaviour:

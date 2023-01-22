@@ -50,12 +50,14 @@ namespace CYAN4S
         [SerializeField] public UnityEvent<Judgement, bool, int> judged;
         [SerializeField] public UnityEvent<int> speedChanged;
         [SerializeField] public UnityEvent paused;
-        [SerializeField] public UnityEvent resume;
+        [SerializeField] public UnityEvent resuming;
+        [SerializeField] public UnityEvent resumed;
 
         [Header("Audio")]
         [SerializeField] private FMODUnity.EventReference speedUpEvent;
         [SerializeField] private FMODUnity.EventReference speedDownEvent;
-        [SerializeField] private FMODUnity.EventReference resumeEvent;
+        [SerializeField] private FMODUnity.EventReference pausedEvent;
+        [SerializeField] private FMODUnity.EventReference resumingEvent;
 
         [Header("Score Weight")] 
         [SerializeField] private int[] scoreWeight;
@@ -106,10 +108,16 @@ namespace CYAN4S
             {
                 paused?.Invoke();
                 _channel.setPaused(true);
+                FMODUnity.RuntimeManager.PlayOneShot(pausedEvent);
+            };
+            timer.state.resuming.OnEnter += () =>
+            {
+                resuming?.Invoke();
+                FMODUnity.RuntimeManager.PlayOneShot(resumingEvent);
             };
             timer.state.resuming.OnExit += () =>
             {
-                resume?.Invoke();
+                resumed?.Invoke();
                 _channel.setPaused(false);
             };
             

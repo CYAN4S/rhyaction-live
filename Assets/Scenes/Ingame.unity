@@ -529,7 +529,7 @@ MonoBehaviour:
   scrollSpeed: 40
   timer:
     initialTime: -3
-    revertTime: 3
+    revertTime: 5
     time: -3
     beat: 0
     bpm: 0
@@ -634,7 +634,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-  resume:
+  resuming:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1969811424}
@@ -649,6 +649,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  resumed:
+    m_PersistentCalls:
+      m_Calls: []
   speedUpEvent:
     Guid:
       Data1: -918911967
@@ -663,13 +666,20 @@ MonoBehaviour:
       Data3: 110207162
       Data4: -2114976240
     Path: event:/SpeedDown
-  resumeEvent:
+  pausedEvent:
     Guid:
-      Data1: -1333459312
-      Data2: 1228835275
-      Data3: -570056001
-      Data4: -1143873141
-    Path: event:/ResumeCount
+      Data1: -1943606691
+      Data2: 1215600642
+      Data3: -835909444
+      Data4: 1049193168
+    Path: event:/Paused
+  resumingEvent:
+    Guid:
+      Data1: -745165372
+      Data2: 1299737387
+      Data3: -1748385894
+      Data4: -714999560
+    Path: event:/Resuming
   scoreWeight: 64000000460000001e00000001000000
 --- !u!4 &219790239
 Transform:
@@ -1121,7 +1131,6 @@ RectTransform:
   m_Children:
   - {fileID: 1714466104}
   - {fileID: 1969811425}
-  - {fileID: 1059815335}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2486,7 +2495,7 @@ GameObject:
   - component: {fileID: 1059815337}
   - component: {fileID: 1059815336}
   m_Layer: 5
-  m_Name: Label
+  m_Name: Scroll Speed Label
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2499,12 +2508,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1059815334}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 318290868}
+  m_Father: {fileID: 1714466104}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -4157,6 +4166,7 @@ RectTransform:
   - {fileID: 1442551750}
   - {fileID: 1345231506}
   - {fileID: 350735814}
+  - {fileID: 1059815335}
   - {fileID: 1087342695}
   - {fileID: 2139001998}
   m_Father: {fileID: 318290868}
