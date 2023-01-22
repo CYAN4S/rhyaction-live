@@ -10,12 +10,13 @@ namespace CYAN4S
     [Serializable]
     public class Timer
     {
+        public TimerStateMachine state;
+        
+        [Header("In-game settings")]
         [SerializeField] public double initialTime = -3d;
         [SerializeField] public double revertTime = 3d;
 
         [Header("Debug")]
-        [SerializeField] public TimerStateMachine state;
-
         [SerializeField] private double time;
         [SerializeField] private double beat;
         [SerializeField] private float bpm;
@@ -24,13 +25,8 @@ namespace CYAN4S
         public double CurrentTime => time;
         public double CurrentBeat => beat;
 
-        public Action onFinished;
-
         public bool onZeroInvoked = false;
         public Action onZero;
-
-        public Action paused;
-        public Action onResume;
 
 
         public Timer()
@@ -84,17 +80,20 @@ namespace CYAN4S
     }
 
     // State Pattern
-    public enum TimerState
-    {
-        BeforeStart, Running, Paused, Resuming, Finished
-    }
+    
     public interface ITimerState : IState
     {
+        public Action OnEnter { get; set; }
+        public Action OnExit { get; set; }
+
+        void IState.Enter() => OnEnter?.Invoke();
+        void IState.Exit() => OnExit?.Invoke();
     }
 
     public class BeforeStart : ITimerState
     {
-        
+        public Action OnEnter { get; set; }
+        public Action OnExit { get; set; }
     }
 
     public class Running : ITimerState
@@ -117,6 +116,9 @@ namespace CYAN4S
                 _timer.state.TransitionTo(_timer.state.finished);
             }
         }
+
+        public Action OnEnter { get; set; }
+        public Action OnExit { get; set; }
     }
 
     public class Paused : ITimerState
@@ -124,11 +126,8 @@ namespace CYAN4S
         private readonly Timer _timer;
         public Paused(Timer timer) => _timer = timer;
         
-        public void Enter()
-        {
-            Debug.Log("Paused");
-            _timer.paused?.Invoke();
-        }
+        public Action OnEnter { get; set; }
+        public Action OnExit { get; set; }
     }
 
     public class Resuming : ITimerState
@@ -144,8 +143,6 @@ namespace CYAN4S
             
             _target = _timer.CurrentTime;
             _timer.RevertTime();
-
-            _timer.onResume?.Invoke();
         }
 
         public void Update()
@@ -155,17 +152,18 @@ namespace CYAN4S
             if (_target <= _timer.CurrentTime)
                 _timer.state.TransitionTo(_timer.state.running);
         }
+
+        public Action OnEnter { get; set; }
+        public Action OnExit { get; set; }
     }
 
     public class Finished : ITimerState
     {
         private readonly Timer _timer;
         public Finished(Timer timer) => _timer = timer;
-        
-        public void Enter()
-        {
-            _timer.onFinished?.Invoke();
-        }
+
+        public Action OnEnter { get; set; }
+        public Action OnExit { get; set; }
     }
 
     [Serializable]

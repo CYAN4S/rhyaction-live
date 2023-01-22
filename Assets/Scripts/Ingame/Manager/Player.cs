@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using FMOD;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -99,17 +100,19 @@ namespace CYAN4S
             // Set Timer
             timer = new Timer();
             timer.SetTimer(_chart.bpm, _chart.GetEndBeat());
-            timer.onFinished += OnFinished;
-            timer.paused += () =>
+
+            timer.state.finished.OnEnter += OnFinished;
+            timer.state.paused.OnEnter += () =>
             {
                 paused?.Invoke();
                 _channel.setPaused(true);
             };
-            timer.onResume += () =>
+            timer.state.resuming.OnExit += () =>
             {
                 resume?.Invoke();
                 _channel.setPaused(false);
             };
+            
             
             // Prepare sound
             if (_chart.audio != "")
