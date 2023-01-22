@@ -75,12 +75,13 @@ MonoBehaviour:
   - {fileID: 6961717343244528441}
   - {fileID: -9024816967729089220}
   - {fileID: -3546842279791611224}
+  - {fileID: 2491329990171490162}
   EditorParameters: []
   MasterBanks:
   - {fileID: 3358805680799850239}
   StringsBanks:
   - {fileID: 1089629482488893364}
-  cacheTime: 638100292189337563
+  cacheTime: 638100349354288709
   cacheVersion: 131601
 --- !u!114 &26591117620137715
 MonoBehaviour:
@@ -124,10 +125,10 @@ MonoBehaviour:
   Path: ../../Documents/FMOD Studio/rhyaction-live/Build/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 638100292189337563
+  lastModified: 638100349354288709
   FileSizes:
   - Name: Desktop
-    Value: 940
+    Value: 976
   Exists: 1
 --- !u!114 &2351514841641257039
 MonoBehaviour:
@@ -156,6 +157,33 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 4375
+--- !u!114 &2491329990171490162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Clap
+  m_EditorClassIdentifier: 
+  Path: event:/Clap
+  Guid:
+    Data1: -1824806726
+    Data2: 1187791169
+    Data3: -1937855577
+    Data4: 1574283120
+  Banks:
+  - {fileID: 3358805680799850239}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1850
 --- !u!114 &3358805680799850239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,10 +199,10 @@ MonoBehaviour:
   Path: ../../Documents/FMOD Studio/rhyaction-live/Build/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 638100292189317610
+  lastModified: 638100349354268402
   FileSizes:
   - Name: Desktop
-    Value: 132192
+    Value: 134688
   Exists: 1
 --- !u!114 &6961717343244528441
 MonoBehaviour:

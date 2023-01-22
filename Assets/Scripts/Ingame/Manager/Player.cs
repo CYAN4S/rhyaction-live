@@ -58,6 +58,7 @@ namespace CYAN4S
         [SerializeField] private FMODUnity.EventReference speedDownEvent;
         [SerializeField] private FMODUnity.EventReference pausedEvent;
         [SerializeField] private FMODUnity.EventReference resumingEvent;
+        [SerializeField] private FMODUnity.EventReference clapEvent;
 
         [Header("Score Weight")] 
         [SerializeField] private int[] scoreWeight;
@@ -127,10 +128,7 @@ namespace CYAN4S
             {
                 var sound = AudioManager.PrepareSound(_chart.audio);
                 if (sound is Sound s)
-                    timer.onZero += () =>
-                    {
-                        _channel = AudioManager.PlaySound(s);
-                    };
+                    timer.onZero += () => _channel = AudioManager.PlaySound(s);
             }
             
             // Set NoteManager
@@ -193,7 +191,7 @@ namespace CYAN4S
         private void ButtonPressListener(int btn, double rawTime)
         {
             JudgeButtonPressed(btn, timer.GetGameTime(rawTime));
-            // TODO Key sound
+            FMODUnity.RuntimeManager.PlayOneShot(clapEvent);
         }
 
         private void ButtonReleaseListener(int btn, double rawTime)

@@ -1,13 +1,34 @@
 using System;
 using System.IO;
+using Core;
 using FMOD;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 namespace CYAN4S
 {
-    public class AudioManager : MonoBehaviour
+    
+    public class AudioManager : Singleton<AudioManager>
     {
+        public FMOD.System system;
+        
+        public override void Awake()
+        {
+            base.Awake();
+
+            Debug.Log("Hi!");
+            
+            system = FMODUnity.RuntimeManager.CoreSystem;
+            system.setOutput(OUTPUTTYPE.ASIO);
+            system.getNumDrivers(out var driver);
+            for (var i = 0; i < driver; i++)
+            {
+                system.getDriverInfo(i, out var dec, 100, out var _, out var _, out var _, out var _);
+                Debug.Log(dec);
+            }
+
+        }
+
         public static Sound? PrepareSound(string path)
         {
             if (path is null or "")
