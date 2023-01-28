@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Core;
@@ -12,4 +13,5 @@ namespace CYAN4S
         public int score;
         public int[,] judgeCount;
     }
+
 }

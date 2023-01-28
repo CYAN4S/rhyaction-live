@@ -202,13 +202,21 @@ namespace CYAN4S
         private void OnJudge(Judgement judgement, bool isEarly, JudgeTarget target, int line)
         {
             if (target is JudgeTarget.Note or JudgeTarget.LongNoteEnd && judgement != Judgement.Break)
+            {
                 AddScore(scoreWeight[(int) judgement]);
+                judgeCount[(int)judgement, isEarly ? 0 : 1]++;
+            }
 
             if (judgement == Judgement.Break)
+            {
                 ResetCombo();
+                judgeCount[(int)judgement, isEarly ? 0 : 1]++;
+            }
             else
+            {
                 AddCombo(1);
-            
+            }
+
             judged.Invoke(judgement, isEarly, line);
         }
 
