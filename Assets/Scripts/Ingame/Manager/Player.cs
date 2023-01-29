@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using FMOD;
+using Unity.Mathematics;
 using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Events;
@@ -72,6 +73,7 @@ namespace CYAN4S
         private NoteManager _n;
 
         private Channel _channel;
+        private double _pausedTime;
 
         private void Awake()
         {
@@ -107,6 +109,7 @@ namespace CYAN4S
             timer.state.finished.OnEnter += OnFinished;
             timer.state.paused.OnEnter += () =>
             {
+                _pausedTime = timer.CurrentTime;
                 paused?.Invoke();
                 _channel.setPaused(true);
                 FMODUnity.RuntimeManager.PlayOneShot(pausedEvent);
@@ -172,7 +175,7 @@ namespace CYAN4S
                 {
                     if (system.EndTime - timer.CurrentTime >= tooLate) continue;
 
-                    OnJudge(Judgement.Poor, false, JudgeTarget.LongNoteEnd, i);
+                    Judge(Judgement.Poor, false, JudgeTarget.LongNoteEnd, i);
                     Release(target);
                     cachedNotes[i] = Get(i);
 
@@ -182,7 +185,7 @@ namespace CYAN4S
                 // Check missed notes.
                 if (target.Time - timer.CurrentTime >= tooLate) continue;
 
-                OnJudge(Judgement.Break, false, JudgeTarget.Note, i);
+                Judge(Judgement.Break, false, JudgeTarget.Note, i);
                 Release(target);
                 cachedNotes[i] = Get(i);
             }
@@ -199,7 +202,7 @@ namespace CYAN4S
             JudgeButtonReleased(btn, timer.GetGameTime(rawTime));
         }
 
-        private void OnJudge(Judgement judgement, bool isEarly, JudgeTarget target, int line)
+        private void Judge(Judgement judgement, bool isEarly, JudgeTarget target, int line)
         {
             if (target is JudgeTarget.Note or JudgeTarget.LongNoteEnd && judgement != Judgement.Break)
             {
@@ -220,33 +223,51 @@ namespace CYAN4S
             judged.Invoke(judgement, isEarly, line);
         }
 
+        private Judgement GetJudgement(double delta)
+        {
+            if (delta >      tooEarly) return Judgement.Break;
+            if (delta >     fairEarly) return Judgement.Poor;
+            if (delta >    greatEarly) return Judgement.Fair;
+            if (delta >  preciseEarly) return Judgement.Great;
+            if (delta >= preciseLate)  return Judgement.Precise;
+            if (delta >=   greatLate)  return Judgement.Great;
+            if (delta >=    fairLate)  return Judgement.Fair;
+            if (delta >=     tooLate)  return Judgement.Poor;
+                                       return Judgement.Break;
+        }
+
         private void JudgeButtonPressed(int btn, double time)
         {
+            if (timer.Current is not (Running or Resuming))
+                return;
+            
             var target = cachedNotes[btn];
             if (target == null) return;
 
-            // TODO
-            // var delta = target.Time - time;
             var delta = target.Time - timer.CurrentTime;
 
             if (delta >= ignorable || delta < tooLate)
                 return;
-            
-            Judgement result;
-            if      (delta >      tooEarly) result = Judgement.Break;
-            else if (delta >     fairEarly) result = Judgement.Poor;
-            else if (delta >    greatEarly) result = Judgement.Fair;
-            else if (delta >  preciseEarly) result = Judgement.Great;
-            else if (delta >= preciseLate)  result = Judgement.Precise;
-            else if (delta >=   greatLate)  result = Judgement.Great;
-            else if (delta >=    fairLate)  result = Judgement.Fair;
-            else                            result = Judgement.Poor;
 
+            var result = GetJudgement(delta);
             var isEarly = delta >= 0;
+            
+            if (timer.Current is Resuming)
+            {
+                var p = target.Time - _pausedTime;
+                Debug.Log(p);
+                
+                if (p < 0 && p < delta && delta < -p)
+                {
+                    result = GetJudgement(p);
+                    isEarly = p >= 0;
+                    Debug.Log(isEarly);
+                }
+            }
 
             if (target is LongNoteSystem system)
             {
-                OnJudge(result, isEarly, JudgeTarget.LongNoteStart, btn);
+                Judge(result, isEarly, JudgeTarget.LongNoteStart, btn);
                 
                 if (result == Judgement.Break)
                 {
@@ -255,14 +276,14 @@ namespace CYAN4S
                     return;
                 }
                 
-                system.SetActive(timer.TimeToBeat(timer.CurrentTime), () => OnTicked(result, isEarly, btn));
+                system.SetActive(timer.TimeToBeat(timer.CurrentTime), () => OnTick(result, isEarly, btn));
                 
                 cachedJudges[btn] = result;
                 cachedIsEarly[btn] = isEarly;
             }
             else // target is NoteSystem
             {
-                OnJudge(result, isEarly, JudgeTarget.Note, btn);
+                Judge(result, isEarly, JudgeTarget.Note, btn);
                 
                 Release(target);
                 cachedNotes[btn] = Get(btn);
@@ -285,17 +306,17 @@ namespace CYAN4S
             // Released so early.
             if (delta > tooEarly)
             {
-                OnJudge(Judgement.Break, true, JudgeTarget.LongNoteEnd, btn);
+                Judge(Judgement.Break, true, JudgeTarget.LongNoteEnd, btn);
             }
             else
             {
-                OnJudge(cachedJudges[btn], cachedIsEarly[btn], JudgeTarget.LongNoteEnd, btn);
+                Judge(cachedJudges[btn], cachedIsEarly[btn], JudgeTarget.LongNoteEnd, btn);
             }
         }
 
-        private void OnTicked(Judgement result, bool isEarly, int line)
+        private void OnTick(Judgement result, bool isEarly, int line)
         {
-            OnJudge(result, isEarly, JudgeTarget.LongNoteTick, line);
+            Judge(result, isEarly, JudgeTarget.LongNoteTick, line);
         }
 
         private NoteSystem Get(int value)

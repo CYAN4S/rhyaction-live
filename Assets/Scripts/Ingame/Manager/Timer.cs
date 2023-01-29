@@ -12,7 +12,8 @@ namespace CYAN4S
     public class Timer
     {
         public TimerStateMachine state;
-        
+        public ITimerState Current => state.CurrentState;
+
         private double _initialTime = -3;
         private double _revertTime = 4;
 

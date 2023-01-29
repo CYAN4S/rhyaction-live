@@ -15,8 +15,6 @@ namespace CYAN4S
         public override void Awake()
         {
             base.Awake();
-
-            Debug.Log("Hi!");
             
             system = FMODUnity.RuntimeManager.CoreSystem;
             system.setOutput(OUTPUTTYPE.ASIO);

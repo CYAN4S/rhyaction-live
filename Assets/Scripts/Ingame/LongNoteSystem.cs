@@ -120,6 +120,11 @@ namespace CYAN4S
         {
             return GetYPos(noteData.beat + _length, getBeat(), getScrollSpeed());
         }
+
+        public void CutOnPause()
+        {
+            
+        }
     }
 
     public interface ILongNoteState : IState { }
