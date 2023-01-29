@@ -184,7 +184,7 @@ namespace CYAN4S
                 // Check missed notes.
                 if (target is LongNoteSystem { Current: CutLongNoteState } note)
                 {
-                    if (note.pausedTime - timer.CurrentTime >= tooLate)
+                    if (note.cutTime - timer.CurrentTime >= tooLate)
                         continue;
                 }
                 else if (target.Time - timer.CurrentTime >= tooLate) 
@@ -253,7 +253,7 @@ namespace CYAN4S
 
             if (target is LongNoteSystem {Current:CutLongNoteState} note)
             {
-                delta = note.pausedTime - timer.CurrentTime;
+                delta = note.cutTime - timer.CurrentTime;
             }
 
             if (delta >= ignorable || delta < tooLate)
@@ -313,7 +313,7 @@ namespace CYAN4S
             var target = cachedNotes[btn] as LongNoteSystem;
 
             if (!target) return;
-            if (!target.IsInProgress) return;
+            if (target.Current is not ActiveLongNoteState) return;
 
             var delta = target.EndTime - timer.CurrentTime;
             
