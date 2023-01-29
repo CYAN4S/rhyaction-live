@@ -7,7 +7,7 @@ namespace CYAN4S
     public class NoteSystem : MonoBehaviour
     {
         public static Func<int> getScrollSpeed;
-        protected Func<double> getBeat;
+        public static Func<double> getBeat;
 
         // From init
         protected NoteData noteData;
@@ -16,11 +16,10 @@ namespace CYAN4S
         // Awake
         protected RectTransform rt;
         
-        public void InstanceInitialize(NoteData data, double time, Func<double> beat)
+        public void InstanceInitialize(NoteData data, double time)
         {
             noteData = data;
             Time = time;
-            getBeat = beat;
         }
         
         protected virtual void Awake()
@@ -41,6 +40,11 @@ namespace CYAN4S
         protected float GetYPos()
         {
             return GetYPos(noteData.beat, getBeat(), getScrollSpeed());
+        }
+        
+        protected float GetYPos(double beat)
+        {
+            return GetYPos(beat, getBeat(), getScrollSpeed());
         }
     }
 }

@@ -10,7 +10,7 @@ namespace CYAN4S
         // Awake
         private RectTransform _rt;
         private double _beat;
-        private Func<double> _currentBeat;
+        public static Func<double> getCurrentBeat;
         public static Func<int> getScrollSpeed;
 
         protected virtual void Awake()
@@ -18,15 +18,14 @@ namespace CYAN4S
             _rt = GetComponent<RectTransform>();
         }
         
-        public void InstanceInitialize(double beat, Func<double> currentBeat)
+        public void InstanceInitialize(double beat)
         {
             _beat = beat;
-            _currentBeat = currentBeat;
         }
         
         private void Update()
         {
-            _rt.localPosition = new Vector3(0, NoteSystem.GetYPos(_beat, _currentBeat(), getScrollSpeed()));
+            _rt.localPosition = new Vector3(0, NoteSystem.GetYPos(_beat, getCurrentBeat(), getScrollSpeed()));
         }
 
     }

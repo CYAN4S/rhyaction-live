@@ -49,7 +49,7 @@ namespace CYAN4S
 
         public double GetGameTime(double rawTime) => rawTime + _initialTime;
 
-        public double TimeToBeat(double time) => time / 60d *  bpm;
+        public double TimeToBeat(double time) => time / 60d * bpm;
         public double BeatToTime(double beat) => beat * 60d / bpm;
 
         public bool Ended => beat >= endBeat + 4;
@@ -80,7 +80,6 @@ namespace CYAN4S
     }
 
     // State Pattern
-    
     public interface ITimerState : IState
     {
         public Action OnEnter { get; set; }

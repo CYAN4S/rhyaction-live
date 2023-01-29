@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace CYAN4S
 {
+    /// <summary>
+    /// Long note which is not in process yet.
+    /// </summary>
     public class IdleLongNoteState : ILongNoteState
     {
         private readonly LongNoteSystem _note;
@@ -17,6 +20,10 @@ namespace CYAN4S
         }
     }
 
+    /// <summary>
+    /// Long note which is currently in process.
+    /// Head of the note is placed in judgement line.
+    /// </summary>
     public class ActiveLongNoteState : ILongNoteState
     {
         private readonly LongNoteSystem _note;
@@ -27,6 +34,31 @@ namespace CYAN4S
             _note.UpdateActiveLong();
             _note.CheckTick();
         }
+    }
+
+    /// <summary>
+    /// Long note which was cut because of pausing by user.
+    /// If it pressed, judgement of head should be considered.
+    /// Anything is same as IdleLongNoteState.
+    /// </summary>
+    public class CutLongNoteState : ILongNoteState
+    {
+        private readonly LongNoteSystem _note;
+        public CutLongNoteState(LongNoteSystem note) => _note = note;
+
+        public void Update()
+        {
+            _note.UpdateCutLong();
+        }
+    }    
+    
+    /// <summary>
+    /// Long note which is missed, or released too early.
+    /// Just for visual, and it only needs to fall.
+    /// </summary>
+    public class MissedLongNoteState : ILongNoteState
+    {
+        
     }
 
     public class LongNoteSystem : NoteSystem
@@ -40,7 +72,11 @@ namespace CYAN4S
 
         private double _length;
 
+        public double pausedTime;
+        private double _pausedBeat;
+
         public LongNoteStateMachine state;
+        public ILongNoteState Current => state.CurrentState;
 
         protected override void Awake()
         {
@@ -68,13 +104,11 @@ namespace CYAN4S
             }
         }
 
-        public void InstanceInitialize(LongNoteData data, double startTime, double endTime, Func<double> beat)
+        public void InstanceInitialize(LongNoteData data, double startTime, double endTime)
         {
             noteData = data;
             Time = startTime;
             EndTime = endTime;
-            getBeat = beat;
-
             _length = (noteData as LongNoteData)?.length;
         }
 
@@ -116,17 +150,28 @@ namespace CYAN4S
             rt.sizeDelta = new Vector2(rt.sizeDelta.x,Mathf.Max(GetYEndPos(), 0f));
         }
 
+        public void UpdateCutLong()
+        {
+            rt.localPosition = new Vector3(rt.localPosition.x, GetYPos(_pausedBeat));
+            rt.sizeDelta = new Vector2(rt.sizeDelta.x, GetYEndPos() - GetYPos(_pausedBeat));
+        }
+
         private float GetYEndPos()
         {
             return GetYPos(noteData.beat + _length, getBeat(), getScrollSpeed());
         }
 
-        public void CutOnPause()
+        public void Pause(double time)
         {
-            
+            _pausedBeat = getBeat();
+            pausedTime = time;
+            state.TransitionTo(state.cutLongNoteState);
         }
     }
 
+    /// <summary>
+    /// Behaviour of long note changes depend on its own state.
+    /// </summary>
     public interface ILongNoteState : IState { }
 
     [Serializable]
@@ -136,11 +181,13 @@ namespace CYAN4S
 
         public IdleLongNoteState idleState;
         public ActiveLongNoteState activeState;
+        public CutLongNoteState cutLongNoteState;
 
         public LongNoteStateMachine(LongNoteSystem note)
         {
             idleState = new IdleLongNoteState(note);
             activeState = new ActiveLongNoteState(note);
+            cutLongNoteState = new CutLongNoteState(note);
         }
 
         public void Initialize(ILongNoteState startingState)

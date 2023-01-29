@@ -31,7 +31,9 @@ namespace CYAN4S
             _chart = chart;
 
             // Set shared data
+            NoteSystem.getBeat = Player.getBeat;
             NoteSystem.getScrollSpeed = Player.getScrollSpeed;
+            Divider.getCurrentBeat = Player.getBeat;
             Divider.getScrollSpeed = Player.getScrollSpeed;
             
             // Get essential info from chart.
@@ -39,8 +41,6 @@ namespace CYAN4S
             var buttonCount = _chart.button;
             var noteDataList = _chart.notes;
             var longNoteDataList = _chart.longNotes;
-
-            var beat = Player.getBeat;
 
             var noteTemp = new List<List<NoteSystem>>();
 
@@ -56,7 +56,7 @@ namespace CYAN4S
                 var system = Instantiate(targetPrefab, notes4B[note.line]);
                 var time = note.beat * 60d / bpm;
 
-                system.InstanceInitialize(note, time, beat);
+                system.InstanceInitialize(note, time);
                 noteTemp[note.line].Add(system);
             }
 
@@ -67,7 +67,7 @@ namespace CYAN4S
                 var start = note.beat * 60d / bpm;
                 var end = (note.beat + note.length) * 60d / bpm;
 
-                system.InstanceInitialize(note, start, end, beat);
+                system.InstanceInitialize(note, start, end);
                 noteTemp[note.line].Add(system);
             }
 
@@ -83,7 +83,7 @@ namespace CYAN4S
             for (var i = 0; i <= endDivider; i++)
             {
                 var divider = Instantiate(dividerPrefab, dividers);
-                divider.InstanceInitialize(i, beat);
+                divider.InstanceInitialize(i);
             }
 
             return _noteQueue;

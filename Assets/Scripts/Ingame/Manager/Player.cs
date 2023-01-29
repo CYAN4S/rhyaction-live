@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using FMOD;
 using Unity.Mathematics;
 using UnityEditor.Rendering;
@@ -74,6 +75,7 @@ namespace CYAN4S
 
         private Channel _channel;
         private double _pausedTime;
+        private double _pausedBeat;
 
         private void Awake()
         {
@@ -107,13 +109,7 @@ namespace CYAN4S
             timer.SetTimer(_chart.bpm, _chart.GetEndBeat());
 
             timer.state.finished.OnEnter += OnFinished;
-            timer.state.paused.OnEnter += () =>
-            {
-                _pausedTime = timer.CurrentTime;
-                paused?.Invoke();
-                _channel.setPaused(true);
-                FMODUnity.RuntimeManager.PlayOneShot(pausedEvent);
-            };
+            timer.state.paused.OnEnter += OnPaused;
             timer.state.resuming.OnEnter += () =>
             {
                 resuming?.Invoke();
@@ -163,6 +159,9 @@ namespace CYAN4S
 
         private void LateUpdate()
         {
+            if (timer.Current is not (Running or Resuming))
+                return;
+            
             // Check for missed notes and unreleased long notes.
             for (var i = 0; i < _chart.button; i++)
             {
@@ -171,19 +170,25 @@ namespace CYAN4S
                 if (target is null) continue;
 
                 // Check unreleased long notes.
-                if (target is LongNoteSystem {IsInProgress: true} system)
+                if (target is LongNoteSystem { Current: ActiveLongNoteState } system)
                 {
                     if (system.EndTime - timer.CurrentTime >= tooLate) continue;
-
+                        
                     Judge(Judgement.Poor, false, JudgeTarget.LongNoteEnd, i);
                     Release(target);
                     cachedNotes[i] = Get(i);
-
+                        
                     continue;
                 }
 
                 // Check missed notes.
-                if (target.Time - timer.CurrentTime >= tooLate) continue;
+                if (target is LongNoteSystem { Current: CutLongNoteState } note)
+                {
+                    if (note.pausedTime - timer.CurrentTime >= tooLate)
+                        continue;
+                }
+                else if (target.Time - timer.CurrentTime >= tooLate) 
+                    continue;
 
                 Judge(Judgement.Break, false, JudgeTarget.Note, i);
                 Release(target);
@@ -215,7 +220,7 @@ namespace CYAN4S
                 ResetCombo();
                 judgeCount[(int)judgement, isEarly ? 0 : 1]++;
             }
-            else
+            else if (target != JudgeTarget.LongNoteCut)
             {
                 AddCombo(1);
             }
@@ -246,6 +251,11 @@ namespace CYAN4S
 
             var delta = target.Time - timer.CurrentTime;
 
+            if (target is LongNoteSystem {Current:CutLongNoteState} note)
+            {
+                delta = note.pausedTime - timer.CurrentTime;
+            }
+
             if (delta >= ignorable || delta < tooLate)
                 return;
 
@@ -255,19 +265,23 @@ namespace CYAN4S
             if (timer.Current is Resuming)
             {
                 var p = target.Time - _pausedTime;
-                Debug.Log(p);
-                
                 if (p < 0 && p < delta && delta < -p)
                 {
                     result = GetJudgement(p);
                     isEarly = p >= 0;
-                    Debug.Log(isEarly);
                 }
             }
 
             if (target is LongNoteSystem system)
             {
-                Judge(result, isEarly, JudgeTarget.LongNoteStart, btn);
+                if (system.Current is CutLongNoteState)
+                {
+                    Judge(cachedJudges[btn], cachedIsEarly[btn], JudgeTarget.LongNoteCut, btn);
+                }
+                else
+                {
+                    Judge(result, isEarly, JudgeTarget.LongNoteStart, btn);
+                }
                 
                 if (result == Judgement.Break)
                 {
@@ -292,6 +306,9 @@ namespace CYAN4S
 
         private void JudgeButtonReleased(int btn, double time)
         {
+            if (timer.Current is not (Running or Resuming))
+                return;
+            
             // Check only if note is long note, and is in progress.
             var target = cachedNotes[btn] as LongNoteSystem;
 
@@ -351,6 +368,16 @@ namespace CYAN4S
             combo = 0;
         }
 
+        private void OnPaused()
+        {
+            _pausedTime = timer.CurrentTime;
+            _pausedBeat = timer.CurrentBeat;
+            cachedNotes.ForEach(note => (note as LongNoteSystem)?.Pause(_pausedTime));
+            paused?.Invoke();
+            _channel.setPaused(true);
+            FMODUnity.RuntimeManager.PlayOneShot(pausedEvent);
+        }
+
         private void OnFinished()
         {
             Result.Instance.score = score;
@@ -381,5 +408,7 @@ namespace CYAN4S
     
     public enum Judgement { Precise, Great, Fair, Poor, Break }
 
-    public enum JudgeTarget { Note, LongNoteStart, LongNoteTick, LongNoteEnd }
+    public enum JudgeTarget { Note, LongNoteStart, LongNoteTick, LongNoteEnd,
+        LongNoteCut
+    }
 }
