@@ -121,7 +121,6 @@ namespace CYAN4S
                 _channel.setPaused(false);
             };
             
-            
             // Prepare sound
             if (_chart.audio != "")
             {
@@ -251,7 +250,7 @@ namespace CYAN4S
 
             var delta = target.Time - timer.CurrentTime;
 
-            if (target is LongNoteSystem {Current:CutLongNoteState} note)
+            if (target is LongNoteSystem { Current: CutLongNoteState } note)
             {
                 delta = note.cutTime - timer.CurrentTime;
             }
@@ -281,6 +280,8 @@ namespace CYAN4S
                 else
                 {
                     Judge(result, isEarly, JudgeTarget.LongNoteStart, btn);
+                    cachedJudges[btn] = result;
+                    cachedIsEarly[btn] = isEarly;
                 }
                 
                 if (result == Judgement.Break)
@@ -291,9 +292,6 @@ namespace CYAN4S
                 }
                 
                 system.SetActive(timer.TimeToBeat(timer.CurrentTime), () => OnTick(result, isEarly, btn));
-                
-                cachedJudges[btn] = result;
-                cachedIsEarly[btn] = isEarly;
             }
             else // target is NoteSystem
             {
@@ -403,6 +401,16 @@ namespace CYAN4S
             scrollSpeed -= 1;
             speedChanged?.Invoke(scrollSpeed);
             FMODUnity.RuntimeManager.PlayOneShot(speedDownEvent);
+        }
+
+        public void Back()
+        {
+            SceneManager.LoadScene("Select");
+        }
+
+        public void Retry()
+        {
+            SceneManager.LoadScene("Ingame");
         }
     }
     
