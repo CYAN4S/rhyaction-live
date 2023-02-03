@@ -30,10 +30,14 @@ namespace CYAN4S
         [Header("Cached Data")]
         [Tooltip("Current target note of its line")]
         [SerializeField] private List<NoteSystem> cachedNotes;
-        [Tooltip("Start judge of currently activated long note")]
-        [SerializeField] private List<Judgement> cachedJudges;
-        [Tooltip("Start judge of currently activated long note")]
-        [SerializeField] private List<bool> cachedIsEarly;
+        // [Tooltip("Start judge of currently activated long note")]
+        // [SerializeField] private List<Judgement> cachedJudges;
+        // [Tooltip("Start judge of currently activated long note")]
+        // [SerializeField] private List<bool> cachedIsEarly;
+        [Tooltip("Cached long note delta")]
+        [SerializeField] private List<double> cachedDelta;
+        [Tooltip("Cached long note cut time")]
+        [SerializeField] private List<double> cachedCutTime;
         
         // Not Serializable
         private List<Queue<NoteSystem>> _noteQueue;
@@ -95,7 +99,8 @@ namespace CYAN4S
 
             // Create space for cache
             cachedNotes = new List<NoteSystem>(_chart.button);
-            cachedJudges = new List<Judgement>(_chart.button);
+            cachedDelta = new List<double>(_chart.button);
+            cachedCutTime = new List<double>(_chart.button);
             
             // Use info from chart
             noteCount = _chart.notes.Count + _chart.longNotes.Count;
@@ -136,8 +141,8 @@ namespace CYAN4S
             for (var i = 0; i < _chart.button; i++)
             {
                 cachedNotes.Add(Get(i));
-                cachedJudges.Add(Judgement.Precise);
-                cachedIsEarly.Add(false);
+                cachedDelta.Add(0);
+                cachedCutTime.Add(0);
             }
             
             // Add listener
@@ -247,42 +252,46 @@ namespace CYAN4S
             
             var target = cachedNotes[btn];
             if (target == null) return;
+            
+            if (target is LongNoteSystem { Current: CutLongNoteState } note)
+            {
+                var cDelta = cachedCutTime[btn] - timer.CurrentTime;
+                if (cDelta >= ignorable || cDelta < tooLate)
+                    return;
+
+                var r = GetJudgement(cachedDelta[btn]);
+                var x = cachedDelta[btn] >= 0;
+                
+                if (r == Judgement.Break)
+                {
+                    Judge(r, x, JudgeTarget.LongNoteCut, btn);
+                    Release(target);
+                    cachedNotes[btn] = Get(btn);
+                    return;
+                }
+                
+                Judge(r, x, JudgeTarget.LongNoteCut, btn);
+                note.SetActive(0, () => OnTick(r, x, btn));
+                return;
+            }
 
             var delta = target.Time - timer.CurrentTime;
 
-            if (target is LongNoteSystem { Current: CutLongNoteState } note)
+            if (timer.Current is Resuming)
             {
-                delta = note.cutTime - timer.CurrentTime;
+                var pDelta = target.Time - _pausedTime;
+                delta = math.abs(delta) >= math.abs(pDelta) ? delta : pDelta;
             }
-
+            
             if (delta >= ignorable || delta < tooLate)
                 return;
 
             var result = GetJudgement(delta);
             var isEarly = delta >= 0;
-            
-            if (timer.Current is Resuming)
-            {
-                var p = target.Time - _pausedTime;
-                if (p < 0 && p < delta && delta < -p)
-                {
-                    result = GetJudgement(p);
-                    isEarly = p >= 0;
-                }
-            }
 
             if (target is LongNoteSystem system)
             {
-                if (system.Current is CutLongNoteState)
-                {
-                    Judge(cachedJudges[btn], cachedIsEarly[btn], JudgeTarget.LongNoteCut, btn);
-                }
-                else
-                {
-                    Judge(result, isEarly, JudgeTarget.LongNoteStart, btn);
-                    cachedJudges[btn] = result;
-                    cachedIsEarly[btn] = isEarly;
-                }
+                Judge(result, isEarly, JudgeTarget.LongNoteStart, btn);
                 
                 if (result == Judgement.Break)
                 {
@@ -291,12 +300,12 @@ namespace CYAN4S
                     return;
                 }
                 
+                cachedDelta[btn] = delta;
                 system.SetActive(timer.TimeToBeat(timer.CurrentTime), () => OnTick(result, isEarly, btn));
             }
             else // target is NoteSystem
             {
                 Judge(result, isEarly, JudgeTarget.Note, btn);
-                
                 Release(target);
                 cachedNotes[btn] = Get(btn);
             }
@@ -307,7 +316,6 @@ namespace CYAN4S
             if (timer.Current is not (Running or Resuming))
                 return;
             
-            // Check only if note is long note, and is in progress.
             var target = cachedNotes[btn] as LongNoteSystem;
 
             if (!target) return;
@@ -325,7 +333,9 @@ namespace CYAN4S
             }
             else
             {
-                Judge(cachedJudges[btn], cachedIsEarly[btn], JudgeTarget.LongNoteEnd, btn);
+                var r = GetJudgement(cachedDelta[btn]);
+                var x = cachedDelta[btn] >= 0;
+                Judge(r, x, JudgeTarget.LongNoteEnd, btn);
             }
         }
 
@@ -371,6 +381,15 @@ namespace CYAN4S
             _pausedTime = timer.CurrentTime;
             _pausedBeat = timer.CurrentBeat;
             cachedNotes.ForEach(note => (note as LongNoteSystem)?.Pause(_pausedTime));
+
+            for (int i = 0; i < cachedCutTime.Count; i++)
+            {
+                if (cachedNotes[i] is LongNoteSystem {Current: CutLongNoteState})
+                {
+                    cachedCutTime[i] = timer.CurrentTime;
+                }
+            }
+            
             paused?.Invoke();
             _channel.setPaused(true);
             FMODUnity.RuntimeManager.PlayOneShot(pausedEvent);
