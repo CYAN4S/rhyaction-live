@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Core;
 using FMOD;
@@ -11,20 +12,62 @@ namespace CYAN4S
     public class AudioManager : Singleton<AudioManager>
     {
         public FMOD.System system;
-        
-        public override void Awake()
+        public List<AudioDriver> drivers = new();
+        public int current = 0;
+
+        [Serializable]
+        public struct AudioDriver
         {
-            base.Awake();
-            
-            system = FMODUnity.RuntimeManager.CoreSystem;
-            system.setOutput(OUTPUTTYPE.ASIO);
-            system.getNumDrivers(out var driver);
-            for (var i = 0; i < driver; i++)
+            public OUTPUTTYPE type;
+            public int id;
+            public string name;
+        }
+
+        private void Start()
+        {
+            if (drivers.Count != 0)
             {
-                system.getDriverInfo(i, out var dec, 100, out var _, out var _, out var _, out var _);
-                Debug.Log(dec);
+                return;
             }
 
+            system = FMODUnity.RuntimeManager.CoreSystem;
+            system.setOutput(OUTPUTTYPE.AUTODETECT);
+            
+            var types = new[] { OUTPUTTYPE.WASAPI, OUTPUTTYPE.ASIO };
+
+            foreach (var type in types)
+            {
+                if (system.setOutput(type) != RESULT.OK)
+                    continue;
+
+                system.getOutput(out var output);
+                if (type != output)
+                    continue;
+                
+                system.getNumDrivers(out var driver);
+                for (var i = 0; i < driver; i++)
+                {
+                    system.getDriverInfo(i, out var dec, 100, out _, out _, out _, out _);
+                    drivers.Add(new AudioDriver {id = i, name = dec, type = type});
+                }
+            }
+
+            Debug.Log("checked!");
+
+            system.setOutput(drivers[current].type);
+            system.setDriver(drivers[current].id);
+        }
+
+        public void ChangeDevice(int index)
+        {
+            system.setOutput(drivers[index].type);
+            system.setDriver(drivers[index].id);
+            current = index;
+        }
+
+        public void ChangeSize(uint size)
+        {
+            system.setDSPBufferSize(size, 2);
         }
 
         public static Sound? PrepareSound(string path)
