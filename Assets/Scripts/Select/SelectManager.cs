@@ -15,44 +15,45 @@ namespace CYAN4S
 
         private void Awake()
         {
-            var charts = ExploreCharts().ToList();
-
-            for (var i = 0; i < charts.Count; i++)
-            {
-                var target = MakeTrackElement(charts[i]);
-                target.GetComponent<RectTransform>().localPosition = new Vector3(0, -100 * i);
-            }
+            ExploreCharts();
         }
 
         private TrackButton MakeTrackElement(string path)
         {
+            var text = File.ReadAllText(path);
+            var target = new ChartFactoryRLC().GetChart(text);
+            
             var result = Instantiate(trackButtonPrefab, tracksPanel);
-            result.text.text = path;
+            result.text.text = target.title;
             result.GetComponent<Button>().onClick.AddListener(() => { OnSelect(path); });
             return result;
         }
 
         private void OnSelect(string path)
         {
-            Selected.Instance.chart = JsonUtility.FromJson<RlcAdapter>(File.ReadAllText(path)).GetChart();
+            var text = File.ReadAllText(path);
+            Selected.Instance.chart = new ChartFactoryRLC().GetChart(text);
             SceneManager.LoadScene("Ingame");
         }
 
-        private IEnumerable<string> ExploreCharts()
+        private void ExploreCharts()
         {
             var path = Path.Combine(Application.dataPath, "Tracks");
 
-            Debug.Log(path);
-
             if (!Directory.Exists(path))
             {
+                Directory.CreateDirectory(path);
                 Debug.Log("Make a directory named: \\Tracks");
-                return null;
+                return;
             }
+            
+            var files = Directory.EnumerateFiles(path, "*.rlc").ToList();
 
-            var files = Directory.EnumerateFiles(path, "*.rlc");
-
-            return files;
+            for (var i = 0; i < files.Count; i++)
+            {
+                var target = MakeTrackElement(files[i]);
+                target.GetComponent<RectTransform>().localPosition = new Vector3(0, -100 * i);
+            }
         }
     }
 }
