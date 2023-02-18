@@ -1,55 +1,35 @@
+using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Core
 {
     public class Singleton<T> : MonoBehaviour where T : Component
     {
-        private static T _instance;
+        private static T instance;
 
         public static T Instance
         {
             get
             {
-                if (_instance == null)
-                {
-                    _instance = (T) FindObjectOfType(typeof(T));
-                    if (_instance == null)
-                    {
-                        SetupInstance();
-                    }
-                }
-
-                return _instance;
+                if (instance is null)
+                    throw new Exception($"There is no {typeof(T).Name}!");
+                return instance;
             }
         }
 
-        public virtual void Awake()
+        protected virtual void Awake()
         {
-            RemoveDuplicates();
-        }
-
-        private static void SetupInstance()
-        {
-            _instance = (T) FindObjectOfType(typeof(T));
-            if (_instance == null)
+            if (instance is null)
             {
-                var gameObj = new GameObject();
-                gameObj.name = typeof(T).Name;
-                _instance = gameObj.AddComponent<T>();
-                DontDestroyOnLoad(gameObj);
-            }
-        }
-
-        private void RemoveDuplicates()
-        {
-            if (_instance == null)
-            {
-                _instance = this as T;
+                instance = this as T;
+                Debug.Log($"{typeof(T).Name} at {SceneManager.GetActiveScene().name}");
                 DontDestroyOnLoad(gameObject);
             }
             else
             {
-                Destroy(gameObject);
+                Debug.Log($"{typeof(T).Name} at {SceneManager.GetActiveScene().name} Destroyed");
+                Destroy(this);
             }
         }
     }

@@ -17,7 +17,7 @@ namespace CYAN4S
         {
             var charts = ExploreCharts().ToList();
 
-            for (var i = 0; i < charts.Count(); i++)
+            for (var i = 0; i < charts.Count; i++)
             {
                 var target = MakeTrackElement(charts[i]);
                 target.GetComponent<RectTransform>().localPosition = new Vector3(0, -100 * i);

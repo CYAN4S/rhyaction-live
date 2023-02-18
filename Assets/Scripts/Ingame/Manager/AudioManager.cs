@@ -4,16 +4,19 @@ using System.IO;
 using Core;
 using FMOD;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
 
 namespace CYAN4S
 {
-    
     public class AudioManager : Singleton<AudioManager>
     {
         public FMOD.System system;
         public List<AudioDriver> drivers = new();
-        public int current = 0;
+        public List<uint> bufferSizes = new() { 32, 64, 128, 256, 512 };
+        public int currentDriver = 0;
+        public int currentBufferSize = 0;
 
         [Serializable]
         public struct AudioDriver
@@ -23,16 +26,18 @@ namespace CYAN4S
             public string name;
         }
 
-        private void Start()
+        protected override void Awake()
         {
-            if (drivers.Count != 0)
-            {
-                return;
-            }
-
-            system = FMODUnity.RuntimeManager.CoreSystem;
-            system.setOutput(OUTPUTTYPE.AUTODETECT);
+            base.Awake();
+            if (Instance != this) return;
             
+            system = FMODUnity.RuntimeManager.CoreSystem;
+            
+            SearchDrivers();
+        }
+
+        private void SearchDrivers()
+        {
             var types = new[] { OUTPUTTYPE.WASAPI, OUTPUTTYPE.ASIO };
 
             foreach (var type in types)
@@ -51,18 +56,18 @@ namespace CYAN4S
                     drivers.Add(new AudioDriver {id = i, name = dec, type = type});
                 }
             }
-
-            Debug.Log("checked!");
-
-            system.setOutput(drivers[current].type);
-            system.setDriver(drivers[current].id);
         }
 
         public void ChangeDevice(int index)
         {
             system.setOutput(drivers[index].type);
             system.setDriver(drivers[index].id);
-            current = index;
+            currentDriver = index;
+        }
+
+        public void ChangeSize(int index)
+        {
+            ChangeSize(bufferSizes[index]);
         }
 
         public void ChangeSize(uint size)

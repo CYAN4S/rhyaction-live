@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace CYAN4S
 {
-    public class Settings : MonoBehaviour
+    public class SettingsManager : MonoBehaviour
     {
         [SerializeField] private GameObject panel;
         [SerializeField] private TMP_Dropdown outputDevices;
@@ -14,13 +14,12 @@ namespace CYAN4S
 
         private void Awake()
         {
-            outputDevices.onValueChanged.AddListener(i => AudioManager.Instance.ChangeDevice(i));
-            bufferSizes.onValueChanged.AddListener(i => AudioManager.Instance.ChangeSize((uint)math.pow(2, i + 5)));
-        }
-
-        private void Start()
-        {
             outputDevices.AddOptions(AudioManager.Instance.drivers.Select(a => a.name).ToList());
+            outputDevices.value = AudioManager.Instance.currentDriver;
+            bufferSizes.value = AudioManager.Instance.currentBufferSize;
+            
+            outputDevices.onValueChanged.AddListener(i => AudioManager.Instance.ChangeDevice(i));
+            bufferSizes.onValueChanged.AddListener(i => AudioManager.Instance.ChangeSize(i));
         }
 
         public void SwitchActive()
