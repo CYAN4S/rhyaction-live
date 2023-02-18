@@ -89,5 +89,10 @@ namespace CYAN4S
             if (Selected.Instance.chart == null) return;
             SceneManager.LoadScene("Ingame");
         }
+
+        public void GoToTitle()
+        {
+            SceneManager.LoadScene("Title");
+        }
     }
 }
