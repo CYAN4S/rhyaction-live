@@ -1,7 +1,5 @@
-using System;
 using System.Linq;
 using TMPro;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace CYAN4S

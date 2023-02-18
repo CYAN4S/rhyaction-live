@@ -1,5 +1,3 @@
-using System;
-
 namespace CYAN4S
 {
     public interface IState

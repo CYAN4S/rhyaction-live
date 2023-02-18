@@ -4,9 +4,6 @@ using System.IO;
 using Core;
 using FMOD;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
-using Debug = UnityEngine.Debug;
 
 namespace CYAN4S
 {

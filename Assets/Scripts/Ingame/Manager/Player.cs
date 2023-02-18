@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using FMOD;
 using Unity.Mathematics;
-using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -30,10 +27,6 @@ namespace CYAN4S
         [Header("Cached Data")]
         [Tooltip("Current target note of its line")]
         [SerializeField] private List<NoteSystem> cachedNotes;
-        // [Tooltip("Start judge of currently activated long note")]
-        // [SerializeField] private List<Judgement> cachedJudges;
-        // [Tooltip("Start judge of currently activated long note")]
-        // [SerializeField] private List<bool> cachedIsEarly;
         [Tooltip("Cached long note delta")]
         [SerializeField] private List<double> cachedDelta;
         [Tooltip("Cached long note cut time")]

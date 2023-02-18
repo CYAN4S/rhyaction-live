@@ -1,10 +1,5 @@
 using System;
-using System.Collections;
-using System.Transactions;
-using Core;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.Serialization;
 
 namespace CYAN4S
 {

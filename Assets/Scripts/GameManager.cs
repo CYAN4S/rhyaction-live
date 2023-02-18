@@ -1,7 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Core;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,6 +12,7 @@ namespace CYAN4S
 
         public void Exit()
         {
+            Debug.Log("Application Quit!");
             Application.Quit();
         }
     }
