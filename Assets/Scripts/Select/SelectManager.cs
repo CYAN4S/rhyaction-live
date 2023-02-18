@@ -12,6 +12,14 @@ namespace CYAN4S
     {
         [SerializeField] private Transform tracksPanel;
         [SerializeField] private TrackButton trackButtonPrefab;
+        [SerializeField] private TextMeshProUGUI noTracksWarningText;
+        [SerializeField] private TextMeshProUGUI selectedTrackTitleText;
+        [SerializeField] private TextMeshProUGUI selectedTrackButtonText;
+        [SerializeField] private TextMeshProUGUI selectedTrackLevelText;
+        [SerializeField] private TextMeshProUGUI selectedTrackBPMText;
+        [SerializeField] private TextMeshProUGUI selectedTrackNoteCountText;
+        [SerializeField] private TextMeshProUGUI selectedTrackLongNoteCountText;
+
 
         private void Awake()
         {
@@ -24,7 +32,8 @@ namespace CYAN4S
             var target = new ChartFactoryRLC().GetChart(text);
             
             var result = Instantiate(trackButtonPrefab, tracksPanel);
-            result.text.text = target.title;
+            var info = $"{target.title} / {target.button}B / LV {target.level}";
+            result.text.text = info;
             result.GetComponent<Button>().onClick.AddListener(() => { OnSelect(path); });
             return result;
         }
@@ -33,27 +42,52 @@ namespace CYAN4S
         {
             var text = File.ReadAllText(path);
             Selected.Instance.chart = new ChartFactoryRLC().GetChart(text);
-            SceneManager.LoadScene("Ingame");
+            selectedTrackTitleText.text = Selected.Instance.chart.title;
+            selectedTrackButtonText.text = $"{Selected.Instance.chart.button}B";
+            selectedTrackLevelText.text = $"LEVEL {Selected.Instance.chart.level}";
+            selectedTrackBPMText.text = $"{Selected.Instance.chart.bpm} BPM";
+            selectedTrackNoteCountText.text = $"{Selected.Instance.chart.notes.Count}";
+            selectedTrackLongNoteCountText.text = $"{Selected.Instance.chart.longNotes.Count}";
         }
 
         private void ExploreCharts()
         {
             var path = Path.Combine(Application.dataPath, "Tracks");
-
+            
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
-                Debug.Log("Make a directory named: \\Tracks");
+                noTracksWarningText.text = $"채보가 발견되지 않았습니다.\n하단 경로로 폴더가 생성되었습니다.\n해당 위치에 채보 파일을 넣으세요.\n{path}";
+                noTracksWarningText.gameObject.SetActive(true);
+                Selected.Instance.chart = null;
                 return;
             }
             
             var files = Directory.EnumerateFiles(path, "*.rlc").ToList();
 
+            if (files.Count == 0)
+            {
+                noTracksWarningText.text = $"채보가 발견되지 않았습니다.\n하단 경로에 채보 파일을 넣으세요.\n{path}";
+                noTracksWarningText.gameObject.SetActive(true);
+                Selected.Instance.chart = null;
+                return;
+            }
+            
+            noTracksWarningText.gameObject.SetActive(false);
+
             for (var i = 0; i < files.Count; i++)
             {
                 var target = MakeTrackElement(files[i]);
-                target.GetComponent<RectTransform>().localPosition = new Vector3(0, -100 * i);
+                target.GetComponent<RectTransform>().localPosition = new Vector3(0, -84 * i);
             }
+
+            Selected.Instance.chart = null;
+        }
+
+        public void Play()
+        {
+            if (Selected.Instance.chart == null) return;
+            SceneManager.LoadScene("Ingame");
         }
     }
 }

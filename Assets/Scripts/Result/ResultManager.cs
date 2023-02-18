@@ -5,6 +5,7 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace CYAN4S
 {
@@ -12,12 +13,23 @@ namespace CYAN4S
     {
         [SerializeField] private TextMeshProUGUI scoreText;
         [SerializeField] private TextMeshProUGUI judgesText;
-        
+        [SerializeField] private TextMeshProUGUI accuracyText;
+        [SerializeField] private Image rankImage;
+        [SerializeField] private Sprite[] rankImageSprites;
 
         private void Awake()
         {
             scoreText.text = $"{Result.Instance.score}";
             judgesText.text = $"{DebugOnly()}";
+            accuracyText.text = $"{Result.Instance.accuracy:0.00}%";
+
+            rankImage.sprite =
+                Result.Instance.accuracy >= 95 ? rankImageSprites[0] :
+                Result.Instance.accuracy >= 90 ? rankImageSprites[1] :
+                Result.Instance.accuracy >= 80 ? rankImageSprites[2] :
+                Result.Instance.accuracy >= 70 ? rankImageSprites[3] :
+                Result.Instance.accuracy >= 50 ? rankImageSprites[4] :
+                rankImageSprites[5];
         }
 
         public void GoToSelect()

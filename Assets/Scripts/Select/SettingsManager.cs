@@ -14,6 +14,8 @@ namespace CYAN4S
 
         private void Awake()
         {
+            panel.SetActive(false);
+            
             outputDevices.AddOptions(AudioManager.Instance.drivers.Select(a => a.name).ToList());
             outputDevices.value = AudioManager.Instance.currentDriver;
             bufferSizes.value = AudioManager.Instance.currentBufferSize;
