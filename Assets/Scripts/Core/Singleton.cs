@@ -23,12 +23,10 @@ namespace Core
             if (instance is null)
             {
                 instance = this as T;
-                Debug.Log($"{typeof(T).Name} at {SceneManager.GetActiveScene().name}");
                 DontDestroyOnLoad(gameObject);
             }
             else
             {
-                Debug.Log($"{typeof(T).Name} at {SceneManager.GetActiveScene().name} Destroyed");
                 Destroy(this);
             }
         }

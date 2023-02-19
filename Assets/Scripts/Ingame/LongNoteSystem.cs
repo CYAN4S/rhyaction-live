@@ -114,6 +114,8 @@ namespace CYAN4S
 
         public void Pause(double time)
         {
+            if (Current is not ActiveLongNoteState) return;
+            
             cutBeat = getBeat();
             cutTime = time;
             state.TransitionTo(state.cutLongNoteState);

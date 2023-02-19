@@ -23,7 +23,6 @@ namespace CYAN4S
 
         private void Awake()
         {
-            // Get Components
             _image = GetComponent<Image>();
             _animator = GetComponent<Animator>();
         }

@@ -31,6 +31,8 @@ namespace CYAN4S
             system = FMODUnity.RuntimeManager.CoreSystem;
             
             SearchDrivers();
+            system.setOutput(drivers[currentDriver].type);
+            system.setDriver(drivers[currentDriver].id);
         }
 
         private void SearchDrivers()

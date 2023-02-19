@@ -72,11 +72,5 @@ namespace CYAN4S
             while (_tasks.Count != 0)
                 _tasks.Dequeue().Invoke();
         }
-
-        // private void Update()
-        // {
-        //     while (_tasks.Count != 0)
-        //         _tasks.Dequeue().Invoke();
-        // }
     }
 }
