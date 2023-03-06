@@ -7,7 +7,8 @@ namespace CYAN4S
 {
     public interface IChartFactory
     {
-        public Chart GetChart(string text);
+        public Chart ToChart(string text);
+        public string FromChart(Chart chart);
     }
     
     [Serializable]
@@ -26,7 +27,7 @@ namespace CYAN4S
             public List<LongNoteData> longNotes;
         }
         
-        public Chart GetChart(string text)
+        public Chart ToChart(string text)
         {
             var result = JsonUtility.FromJson<RLCData>(text);
             
@@ -40,6 +41,20 @@ namespace CYAN4S
                 notes = result.notes,
                 longNotes = result.longNotes
             };
+        }
+
+        public string FromChart(Chart chart)
+        {
+            return JsonUtility.ToJson(new RLCData
+            {
+                title = chart.title,
+                button = chart.button,
+                level = chart.level,
+                bpm = chart.bpm,
+                audio = chart.audio,
+                notes = chart.notes,
+                longNotes = chart.longNotes
+            });
         }
     }
 }

@@ -28,7 +28,7 @@ namespace CYAN4S
         private TrackButton MakeTrackElement(string path)
         {
             var text = File.ReadAllText(path);
-            var target = new ChartFactoryRLC().GetChart(text);
+            var target = new ChartFactoryRLC().ToChart(text);
             
             var result = Instantiate(trackButtonPrefab, tracksPanel);
             var info = $"{target.title} / {target.button}B / LV {target.level}";
@@ -40,7 +40,7 @@ namespace CYAN4S
         private void OnSelect(string path)
         {
             var text = File.ReadAllText(path);
-            Selected.Instance.chart = new ChartFactoryRLC().GetChart(text);
+            Selected.Instance.chart = new ChartFactoryRLC().ToChart(text);
             selectedTrackTitleText.text = Selected.Instance.chart.title;
             selectedTrackButtonText.text = $"{Selected.Instance.chart.button}B";
             selectedTrackLevelText.text = $"LEVEL {Selected.Instance.chart.level}";
