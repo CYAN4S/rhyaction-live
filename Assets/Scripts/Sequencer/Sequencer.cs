@@ -14,19 +14,32 @@ namespace CYAN4S
 {
     public class Sequencer : MonoBehaviour, IScrollHandler, IPointerMoveHandler
     {
-        [Header("Debug")] public Chart chart;
+        [Header("Debug")] 
+        public Chart chart = new() { button = 4, bpm = 120f };
         public float scale = 2;
         public float currentBeat;
-        public List<SequencerLine> lines;
+        public List<SequencerLine> lines = new();
         public List<SequencerDivider> dividers;
 
-        [Header("Set on inspector")] public RectTransform canvas;
+        [Header("Preferences Debug")] 
+        public int snapNumerator;
+
+        [Header("UIs")] 
+        public RectTransform canvas;
         public TextMeshProUGUI currentBeatText;
         public TextMeshProUGUI scaleText;
         public TextMeshProUGUI cursorBeatText;
+        
+        [Header("Preferences UIs")] 
+        public TMP_InputField snapNumeratorInputField;
+
+        [Header("Parent Transforms")]
+        public Transform dividersTransform;
+        public Transform linesTransform;
+
+        [Header("Prefabs")]
         public SequencerLine linePrefab;
         public SequencerDivider dividerPrefab;
-        public Transform dividersTransform;
 
         public event Action<float> OnCurrentBeatChange;
         public event Action<float> OnScaleChange;
@@ -45,23 +58,36 @@ namespace CYAN4S
 
             OnCurrentBeatChange?.Invoke(currentBeat);
             OnScaleChange?.Invoke(scale);
+            OnButtonModeChange(chart.button);
         }
 
         public void PlaceLines(int button)
         {
-            // TODO
+            foreach (var line in lines)
+                Destroy(line.gameObject);
+
+            lines = Enumerable.Range(0, button).Select(i =>
+            {
+                var target = Instantiate(linePrefab, linesTransform);
+                target.transform.GetComponent<RectTransform>().localPosition = new Vector3(100 * i, 0);
+                target.lineNumber = i;
+                return target;
+            })
+                .ToList();
         }
 
         public void OnButtonModeChange(int i)
         {
-            PlaceLines(i switch { 0 => 4, 1 => 5, 2 => 6, 3 => 8, _ => throw new Exception("huh?") });
+            var b = i switch { 0 => 4, 1 => 5, 2 => 6, 3 => 8, _ => throw new Exception("huh?")};
+            chart.button = b;
+            PlaceLines(b);
         }
 
         public void OnScroll(PointerEventData eventData)
         {
             if (Keyboard.current.leftCtrlKey.isPressed)
             {
-                scale += eventData.scrollDelta.y / 120f;
+                scale += eventData.scrollDelta.y / 60f;
                 if (scale < 0.5f) scale = 0.5f;
                 scaleText.text = $"{scale:F2}";
                 OnScaleChange?.Invoke(scale);
@@ -69,7 +95,7 @@ namespace CYAN4S
                 return;
             }
 
-            currentBeat += eventData.scrollDelta.y / (120f * scale);
+            currentBeat += eventData.scrollDelta.y / (60f * scale);
             if (currentBeat < 0) currentBeat = 0;
             currentBeatText.text = $"{currentBeat:F2}";
             OnCurrentBeatChange?.Invoke(currentBeat);
@@ -105,6 +131,18 @@ namespace CYAN4S
                 .ToList();
 
             Debug.Log(new ChartFactoryRLC().FromChart(chart));
+        }
+
+        public void OnNumEdit(string input)
+        {
+            if (int.TryParse(input, out var result))
+            {
+                snapNumerator = result;
+            }
+            else
+            {
+                snapNumeratorInputField.text = $"{snapNumerator}";
+            }
         }
     }
 }

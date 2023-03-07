@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,6 +10,7 @@ namespace CYAN4S
     public class SequencerNote : MonoBehaviour, IPointerClickHandler
     {
         public float beat;
+        public Fraction beatFraction;
 
         private RectTransform rt;
 

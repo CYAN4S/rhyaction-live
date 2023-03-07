@@ -90,3 +90,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   beat: 0
+  beatFraction:
+    num: 0
+    den: 0
