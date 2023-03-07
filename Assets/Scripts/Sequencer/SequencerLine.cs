@@ -14,9 +14,9 @@ namespace CYAN4S
         public GameObject notePreview;
 
         public SequencerNote notePrefab;
-        public List<SequencerNote> notes;
+        public Dictionary<float, SequencerNote> notes = new();
 
-        private RectTransform _canvas;
+        private RectTransform canvas;
         private RectTransform _notePreview;
 
         private void Awake()
@@ -25,7 +25,7 @@ namespace CYAN4S
             notePreview.SetActive(false);
             _notePreview = notePreview.GetComponent<RectTransform>();
 
-            _canvas = FindObjectOfType<Canvas>().gameObject.GetComponent<RectTransform>();
+            canvas = FindObjectOfType<Canvas>().gameObject.GetComponent<RectTransform>();
         }
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -35,7 +35,7 @@ namespace CYAN4S
 
         public void OnPointerMove(PointerEventData eventData)
         {
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas, eventData.position,
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas, eventData.position,
                     eventData.pressEventCamera, out var localCursor))
             {
                 _notePreview.localPosition = new Vector3(0, localCursor.y);
@@ -44,11 +44,19 @@ namespace CYAN4S
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas, eventData.position,
+            if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas, eventData.position,
                     eventData.pressEventCamera, out var localCursor)) return;
             
+            var beat = Sequencer.Instance.YPosToBeat(localCursor.y);
+            if (beat < 0) return;
+            
             var target = Instantiate(notePrefab, transform);
+            
+            target.beat = beat;
             target.GetComponent<RectTransform>().localPosition = new Vector3(0, localCursor.y);
+            
+            notes.Add(target.beat, target);
+            target.onThisClick = () => notes.Remove(target.beat);
         }
 
         public void OnPointerExit(PointerEventData eventData)

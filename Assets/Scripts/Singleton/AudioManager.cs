@@ -27,9 +27,9 @@ namespace CYAN4S
         {
             base.Awake();
             if (Instance != this) return;
-            
+
             system = FMODUnity.RuntimeManager.CoreSystem;
-            
+
             SearchDrivers();
             system.setOutput(drivers[currentDriver].type);
             system.setDriver(drivers[currentDriver].id);
@@ -37,7 +37,8 @@ namespace CYAN4S
 
         private void SearchDrivers()
         {
-            var types = new[] { OUTPUTTYPE.WASAPI, OUTPUTTYPE.ASIO };
+            var types = new[]
+                { OUTPUTTYPE.WASAPI, OUTPUTTYPE.ASIO, OUTPUTTYPE.COREAUDIO, OUTPUTTYPE.PULSEAUDIO, OUTPUTTYPE.AAUDIO };
 
             foreach (var type in types)
             {
@@ -47,12 +48,12 @@ namespace CYAN4S
                 system.getOutput(out var output);
                 if (type != output)
                     continue;
-                
+
                 system.getNumDrivers(out var driver);
                 for (var i = 0; i < driver; i++)
                 {
                     system.getDriverInfo(i, out var dec, 100, out _, out _, out _, out _);
-                    drivers.Add(new AudioDriver {id = i, name = dec, type = type});
+                    drivers.Add(new AudioDriver { id = i, name = dec, type = type });
                 }
             }
         }
@@ -80,7 +81,7 @@ namespace CYAN4S
             {
                 return null;
             }
-            
+
             var system = FMODUnity.RuntimeManager.CoreSystem;
             var fullPath = Path.Combine(Application.dataPath, "Tracks");
             system.createSound(Path.Combine(fullPath, path), MODE.DEFAULT, out var sound);
@@ -93,6 +94,5 @@ namespace CYAN4S
             system.playSound(sound, new ChannelGroup(), false, out var channel);
             return channel;
         }
-
     }
 }
