@@ -42,17 +42,15 @@ namespace CYAN4S
             if (!RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas, eventData.position,
                     eventData.pressEventCamera, out var localCursor)) return;
 
-            var beat = Sequencer.Instance.YPosToBeat(localCursor.y);
-
-            if (Keyboard.current.altKey.isPressed)
-            {
-                _notePreview.localPosition = new Vector3(0, beat);
-                return;
-            }
+            var y = localCursor.y;
+            var beatPos = Sequencer.Instance.YPosToBeat(y);
+            var den = Keyboard.current.altKey.isPressed ? 100 : Sequencer.Instance.snap;
             
-            var a = beat * Sequencer.Instance.snapNumerator;
-            var b = math.round(a) / Sequencer.Instance.snapNumerator;
-            var snappedPos = Sequencer.Instance.BeatToYPos(b);
+            var a = beatPos * den;
+            var num = (int)math.round(a);
+            var fraction = new Fraction(num, den);
+            
+            var snappedPos = Sequencer.Instance.BeatToYPos((float)fraction);
             
             _notePreview.localPosition = new Vector3(0, snappedPos);
         }
@@ -64,11 +62,11 @@ namespace CYAN4S
 
             var y = localCursor.y;
             var beatPos = Sequencer.Instance.YPosToBeat(y);
-            var numerator = Keyboard.current.altKey.isPressed ? 100 : Sequencer.Instance.snapNumerator;
+            var den = Keyboard.current.altKey.isPressed ? 100 : Sequencer.Instance.snap;
             
-            var a = beatPos * numerator;
-            var denominator = (int)math.round(a);
-            var fraction = new Fraction(numerator, denominator);
+            var a = beatPos * den;
+            var num = (int)math.round(a);
+            var fraction = new Fraction(num, den);
 
             CreateNote(fraction);
         }

@@ -27,7 +27,7 @@ namespace CYAN4S
         public List<SequencerDivider> dividers;
         
         [Header("Preferences Debug")] 
-        public int snapNumerator;
+        public int snap;
 
         [Header("UIs")] 
         public RectTransform canvas;
@@ -42,7 +42,7 @@ namespace CYAN4S
         public TMP_InputField exportChartPathInputField;
         
         [Header("Preferences UIs")] 
-        public TMP_InputField snapNumeratorInputField;
+        public TMP_InputField snapInputField;
 
         [Header("Parent Transforms")]
         public Transform dividersTransform;
@@ -66,6 +66,7 @@ namespace CYAN4S
         private void Awake()
         {
             chart = new Chart { button = 4, bpm = 120f };
+            snap = 4;
             Instance = this;
             
             dividers = Enumerable.Range(0, 200).Select(i =>
@@ -231,9 +232,9 @@ namespace CYAN4S
         public void OnNumEdit(string input)
         {
             if (int.TryParse(input, out var result))
-                snapNumerator = result;
+                snap = result;
             else
-                snapNumeratorInputField.text = $"{snapNumerator}";
+                snapInputField.text = $"{snap}";
         }
 
         public void OnBpmEdit(string input)
