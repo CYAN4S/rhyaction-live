@@ -88,10 +88,10 @@ namespace CYAN4S
             return sound;
         }
 
-        public static Channel PlaySound(Sound sound)
+        public static Channel PlaySound(Sound sound, bool paused = false)
         {
             var system = FMODUnity.RuntimeManager.CoreSystem;
-            system.playSound(sound, new ChannelGroup(), false, out var channel);
+            system.playSound(sound, new ChannelGroup(), paused, out var channel);
             return channel;
         }
     }

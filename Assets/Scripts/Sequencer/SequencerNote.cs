@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using Core;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
 namespace CYAN4S
 {
     public class SequencerNote : MonoBehaviour, IPointerClickHandler
     {
-        public float beat;
+        public float beatFloat;
         public Fraction beatFraction;
 
         private RectTransform rt;
@@ -31,7 +32,7 @@ namespace CYAN4S
 
         private void OnChange(float _)
         {
-            rt.localPosition = new Vector3(0, Sequencer.Instance.BeatToYPos(beat));
+            rt.localPosition = new Vector3(0, Sequencer.Instance.BeatToYPos(beatFloat));
         }
 
         public void OnPointerClick(PointerEventData eventData)

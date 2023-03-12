@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Core;
 using Unity.Mathematics;
+using UnityEditor.Tilemaps;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
@@ -61,25 +63,33 @@ namespace CYAN4S
                     eventData.pressEventCamera, out var localCursor)) return;
 
             var y = localCursor.y;
-            var beat = Sequencer.Instance.YPosToBeat(y);
+            var beatPos = Sequencer.Instance.YPosToBeat(y);
+            var numerator = Keyboard.current.altKey.isPressed ? 100 : Sequencer.Instance.snapNumerator;
             
-            if (!Keyboard.current.altKey.isPressed)
-            {
-                var a = beat * Sequencer.Instance.snapNumerator;
-                beat = math.round(a) / Sequencer.Instance.snapNumerator;
-                y = Sequencer.Instance.BeatToYPos(beat);
-            }
+            var a = beatPos * numerator;
+            var denominator = (int)math.round(a);
+            var fraction = new Fraction(numerator, denominator);
+
+            CreateNote(fraction);
+        }
+
+        public SequencerNote CreateNote(Fraction beat)
+        {
+            var beatFloat = (float)beat;
             
-            if (beat < 0) return;
-            if (notes.ContainsKey(beat)) return;
+            if (beatFloat < 0) return null;
+            if (notes.ContainsKey(beatFloat)) return null;
             
             var target = Instantiate(notePrefab, transform);
-            
-            target.beat = beat;
-            target.GetComponent<RectTransform>().localPosition = new Vector3(0, y);
 
-            notes.Add(beat, target);
-            target.onThisClick = () => notes.Remove(beat);
+            target.beatFraction = beat;
+            target.beatFloat = beatFloat;
+            target.GetComponent<RectTransform>().localPosition = new Vector3(0, Sequencer.Instance.BeatToYPos(beatFloat));
+
+            notes.Add(beatFloat, target);
+            target.onThisClick = () => notes.Remove(beatFloat);
+
+            return target;
         }
 
         public void OnPointerExit(PointerEventData eventData)
