@@ -393,6 +393,7 @@ namespace CYAN4S
             Result.Instance.score = score;
             Result.Instance.judgeCount = judgeCount;
             Result.Instance.accuracy = (double)score / (noteCount * scoreWeight[0]) * 100d;
+            _channel.stop();
             SceneManager.LoadScene("Result");
         }
 
@@ -418,11 +419,13 @@ namespace CYAN4S
 
         public void Back()
         {
+            _channel.stop();
             SceneManager.LoadScene("Select");
         }
 
         public void Retry()
         {
+            _channel.stop();
             SceneManager.LoadScene("Ingame");
         }
     }

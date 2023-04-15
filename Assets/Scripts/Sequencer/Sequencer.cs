@@ -9,9 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
-
 
 namespace CYAN4S
 {
@@ -247,6 +245,7 @@ namespace CYAN4S
 
         public void OnAudioImport()
         {
+            chart.audio = audioPathInputField.text;
             OnAudioImport(audioPathInputField.text);
         }
         

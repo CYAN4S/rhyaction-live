@@ -1,4 +1,5 @@
 using System;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Core
@@ -26,10 +27,13 @@ namespace Core
 
         public static int Gcd(int a, int b)
         {
+            a = math.abs(a);
+            b = math.abs(b);
+            
             while (a != 0 && b != 0)
                 if (a > b) a %= b;
                 else b %= a;
-
+            
             return a | b;
         }
 
