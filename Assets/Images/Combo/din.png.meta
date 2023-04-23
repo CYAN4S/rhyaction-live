@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -107,6 +109,18 @@ TextureImporter:
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -337,19 +351,18 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      din_8: 1800025066
-      din_5: 350973416
-      din_3: -1704156377
-      din_9: -1054344192
-      din_7: 1388698531
-      din_2: -1342330630
-      din_6: 211954108
-      din_4: -1701879960
-      din_1: -1315843653
       din_0: -869823477
-  spritePackingTag: 
+      din_1: -1315843653
+      din_2: -1342330630
+      din_3: -1704156377
+      din_4: -1701879960
+      din_5: 350973416
+      din_6: 211954108
+      din_7: 1388698531
+      din_8: 1800025066
+      din_9: -1054344192
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
