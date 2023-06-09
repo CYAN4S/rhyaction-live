@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,7 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
   cookieLightType: 0
   platformSettings:
   - serializedVersion: 3
@@ -107,6 +109,18 @@ TextureImporter:
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -463,45 +477,44 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      timeline: 697632718
-      white: -2110120543
-      gear-extended: 451884415
-      timeline-glow: -1135956791
-      cyan_21: -1306252084
-      cyan_30: 1469746340
-      cyan: -269108557
-      combo-glow: 648100182
       combo: -2086249316
-      pressed: 594000503
+      combo-glow: 648100182
+      cyan: -269108557
+      cyan-pressed: 1379708535
+      cyan_0: 243065182
       cyan_14: 377555932
+      cyan_15: -922810423
+      cyan_16: 907955813
       cyan_17: 613885376
-      cyan_22: 1520712066
-      cyan_25: 2025435675
-      gauge: -162300324
       cyan_18: -548260699
-      cyan_31: 105792537
-      cyan_26: 856046166
-      cyan_34: -379835828
       cyan_19: 160533556
       cyan_20: -1288437525
-      cyan-pressed: 1379708535
+      cyan_21: -1306252084
+      cyan_22: 1520712066
+      cyan_23: -1075476627
+      cyan_24: -1167284701
+      cyan_25: 2025435675
+      cyan_26: 856046166
+      cyan_27: -803819124
+      cyan_30: 1469746340
+      cyan_31: 105792537
+      cyan_32: -1888897035
+      cyan_33: 805169440
+      cyan_34: -379835828
+      gauge: -162300324
+      gear: -962066979
+      gear-extended: 451884415
+      glass: -2037654058
       glass-glow: -128238278
       label: 1003172834
-      cyan_24: -1167284701
-      cyan_15: -922810423
-      cyan_33: 805169440
-      cyan_23: -1075476627
-      cyan_32: -1888897035
+      pressed: 594000503
       pressed-glow: -95224785
-      cyan_16: 907955813
-      gear: -962066979
-      cyan_0: 243065182
-      cyan_27: -803819124
-      glass: -2037654058
+      timeline: 697632718
+      timeline-glow: -1135956791
+      white: -2110120543
       white-pressed: -838569854
-  spritePackingTag: 
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

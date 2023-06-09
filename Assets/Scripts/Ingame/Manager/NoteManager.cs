@@ -8,18 +8,17 @@ namespace CYAN4S
     public class NoteManager : MonoBehaviour
     {
         [Header("Note Prefab")]
-        [SerializeField] private NoteSystem notePrefab;
-        [SerializeField] private LongNoteSystem longNotePrefab;
-        [SerializeField] private NoteSystem notePrefabVariant;
-        [SerializeField] private LongNoteSystem longNotePrefabVariant;
         [SerializeField] private NoteSystem[] notePrefabs4B;
         [SerializeField] private LongNoteSystem[] longNotePrefabs4B;
-        
+        [SerializeField] private NoteSystem[] notePrefabs6B;
+        [SerializeField] private LongNoteSystem[] longNotePrefabs6B;
+
         [Header("Divider Prefab")]
         [SerializeField] private Divider dividerPrefab;
 
         [Header("Parent Transform")] 
         [SerializeField] private RectTransform[] notes4B;
+        [SerializeField] private RectTransform[] notes6B;
         [SerializeField] private RectTransform dividers;
         
         private readonly List<Queue<NoteSystem>> _noteQueue = new();
@@ -29,6 +28,27 @@ namespace CYAN4S
         public List<Queue<NoteSystem>> Initialize(Chart chart)
         {
             _chart = chart;
+
+            var notePrefabs = chart.button switch
+            {
+                4 => notePrefabs4B,
+                6 => notePrefabs6B,
+                _ => throw new Exception($"{chart.button}B is not supported.")
+            };
+            
+            var longNotePrefabs = chart.button switch
+            {
+                4 => longNotePrefabs4B,
+                6 => longNotePrefabs6B,
+                _ => throw new Exception($"{chart.button}B is not supported.")
+            };
+            
+            var notes = chart.button switch
+            {
+                4 => notes4B,
+                6 => notes6B,
+                _ => throw new Exception($"{chart.button}B is not supported.")
+            };
 
             // Set shared data
             NoteSystem.getBeat = Player.getBeat;
@@ -52,8 +72,8 @@ namespace CYAN4S
 
             foreach (var note in noteDataList)
             {
-                var targetPrefab = note.line is 1 or 2 ? notePrefabVariant : notePrefab;
-                var system = Instantiate(targetPrefab, notes4B[note.line]);
+                var targetPrefab =  notePrefabs[note.line];
+                var system = Instantiate(targetPrefab, notes[note.line]);
                 var time = note.beat * 60d / bpm;
 
                 system.InstanceInitialize(note, time);
@@ -62,8 +82,8 @@ namespace CYAN4S
 
             foreach (var note in longNoteDataList)
             {
-                var targetPrefab = note.line is 1 or 2 ? longNotePrefabVariant : longNotePrefab;
-                var system = Instantiate(targetPrefab, notes4B[note.line]);
+                var targetPrefab =  longNotePrefabs[note.line];
+                var system = Instantiate(targetPrefab, notes[note.line]);
                 var start = note.beat * 60d / bpm;
                 var end = (note.beat + note.length) * 60d / bpm;
 

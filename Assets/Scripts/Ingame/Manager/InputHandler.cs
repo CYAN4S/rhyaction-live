@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace CYAN4S
 {
@@ -12,8 +13,16 @@ namespace CYAN4S
         
         // TODO MODE
         [SerializeField] private Key[] keys4B;
-        [SerializeField] private Key keys4BSpeedUp;
-        [SerializeField] private Key keys4BSpeedDown;
+        [SerializeField] private Key key4BSpeedUp;
+        [SerializeField] private Key key4BSpeedDown;
+        
+        [SerializeField] private Key[] keys6B;
+        [SerializeField] private Key key6BSpeedUp;
+        [SerializeField] private Key key6BSpeedDown;
+        
+        private Key[] keys;
+        private Key keySpeedUp;
+        private Key keySpeedDown;
 
         [Header("Inspector Setup")]
         public UnityEvent<int, double> onButtonPressed;
@@ -30,6 +39,26 @@ namespace CYAN4S
         public UnityEvent onPausePressed;
         
         private readonly Queue<Action> _tasks = new();
+
+        private void Awake()
+        {
+            // Chart is from the previous scene via `Selected` singleton object.
+            var chart = Selected.Instance.chart;
+            
+            // Check if is for debugging
+            if (Selected.Instance.situation == Situation.Debug)
+            {
+                chart = Chart.GetTestChart();
+                Debug.Log("Debugging only.");
+            }
+
+            (keys, keySpeedUp, keySpeedDown) = chart.button switch
+            {
+                4 => (keys4B, key4BSpeedUp, key4BSpeedDown),
+                6 => (keys6B, key6BSpeedUp, key6BSpeedDown),
+                _ => throw new Exception("Unsupported Button")
+            };
+        }
 
         // TODO FixedUpdate
         private void Update()
@@ -60,10 +89,10 @@ namespace CYAN4S
                 }
             }
             
-            if (Keyboard.current[keys4BSpeedUp].wasPressedThisFrame)
+            if (Keyboard.current[key4BSpeedUp].wasPressedThisFrame)
                 _tasks.Enqueue(() => onSpeedUpPressed?.Invoke());
             
-            if (Keyboard.current[keys4BSpeedDown].wasPressedThisFrame)
+            if (Keyboard.current[key4BSpeedDown].wasPressedThisFrame)
                 _tasks.Enqueue(() => onSpeedDownPressed?.Invoke());
 
             if (Keyboard.current[Key.Escape].wasPressedThisFrame)
