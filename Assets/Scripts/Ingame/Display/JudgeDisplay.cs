@@ -8,6 +8,7 @@ namespace CYAN4S
     {
         private Image _image;
         private Animator _animator;
+        private Player player;
 
         [SerializeField] private Sprite preciseSprite;
         [SerializeField] private Sprite greatEarlySprite;
@@ -23,6 +24,9 @@ namespace CYAN4S
 
         private void Awake()
         {
+            player = FindObjectOfType<Player>();
+            player.judged.AddListener(OnJudge);
+
             _image = GetComponent<Image>();
             _animator = GetComponent<Animator>();
         }
@@ -47,6 +51,11 @@ namespace CYAN4S
                 Judgement.Great => GreatAnim,
                 _ => FairAnim
             });
+        }
+
+        private void OnDestroy()
+        {
+            player.judged.RemoveListener(OnJudge);
         }
     }
 }

@@ -5,6 +5,8 @@ namespace CYAN4S
 {
     public class ScoreDisplay : MonoBehaviour
     {
+        private Player player;
+
         private TextMeshProUGUI _text;
 
         private void Awake()

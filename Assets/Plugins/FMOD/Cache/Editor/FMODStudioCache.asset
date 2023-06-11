@@ -101,6 +101,53 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2133
+--- !u!114 &-539869311543253769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/ResumeCount
+  m_EditorClassIdentifier: 
+  Path: event:/ResumeCount
+  Guid:
+    Data1: -1333459312
+    Data2: 1228835275
+    Data3: -570056001
+    Data4: -1143873141
+  Banks:
+  - {fileID: -395874927739030409}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 4375
+--- !u!114 &-395874927739030409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/FMOD Project/rhyaction-live/Build/Desktop/Master.bank
+  Name: Master
+  StudioPath: bank:/Master
+  lastModified: 638100349354268402
+  FileSizes:
+  - Name: Desktop
+    Value: 134688
+  Exists: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,22 +161,76 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
   EditorBanks:
-  - {fileID: -6710093280168689049}
-  - {fileID: 5125987590554314181}
+  - {fileID: 7791770962169825148}
+  - {fileID: -395874927739030409}
   EditorEvents:
-  - {fileID: -7095168804100752539}
-  - {fileID: -889221823251992374}
-  - {fileID: -6892884801893822832}
-  - {fileID: 7743687702766988390}
-  - {fileID: 4632379163898716279}
-  - {fileID: 8969578724213295039}
+  - {fileID: 7314832818309532398}
+  - {fileID: 6397535710889058204}
+  - {fileID: -539869311543253769}
+  - {fileID: 4052839488268677782}
+  - {fileID: 2413958192020331433}
+  - {fileID: 6609351312577413728}
   EditorParameters: []
   MasterBanks:
-  - {fileID: 5125987590554314181}
+  - {fileID: -395874927739030409}
   StringsBanks:
-  - {fileID: -6710093280168689049}
+  - {fileID: 7791770962169825148}
   cacheTime: 638100349354288709
   cacheVersion: 131603
+--- !u!114 &2413958192020331433
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Resuming
+  m_EditorClassIdentifier: 
+  Path: event:/Resuming
+  Guid:
+    Data1: -745165372
+    Data2: 1299737387
+    Data3: -1748385894
+    Data4: -714999560
+  Banks:
+  - {fileID: -395874927739030409}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 5375
+--- !u!114 &4052839488268677782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Clap
+  m_EditorClassIdentifier: 
+  Path: event:/Clap
+  Guid:
+    Data1: -1824806726
+    Data2: 1187791169
+    Data3: -1937855577
+    Data4: 1574283120
+  Banks:
+  - {fileID: -395874927739030409}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1850
 --- !u!114 &4632379163898716279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -177,6 +278,87 @@ MonoBehaviour:
   - Name: Desktop
     Value: 134688
   Exists: 1
+--- !u!114 &6397535710889058204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Paused
+  m_EditorClassIdentifier: 
+  Path: event:/Paused
+  Guid:
+    Data1: -1943606691
+    Data2: 1215600642
+    Data3: -835909444
+    Data4: 1049193168
+  Banks:
+  - {fileID: -395874927739030409}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2133
+--- !u!114 &6609351312577413728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SpeedDown
+  m_EditorClassIdentifier: 
+  Path: event:/SpeedDown
+  Guid:
+    Data1: 1413215964
+    Data2: 1075587785
+    Data3: 110207162
+    Data4: -2114976240
+  Banks:
+  - {fileID: -395874927739030409}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 1908
+--- !u!114 &7314832818309532398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SpeedUp
+  m_EditorClassIdentifier: 
+  Path: event:/SpeedUp
+  Guid:
+    Data1: -918911967
+    Data2: 1266349096
+    Data3: -1701843526
+    Data4: -1016145825
+  Banks:
+  - {fileID: -395874927739030409}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2038
 --- !u!114 &7743687702766988390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -204,6 +386,26 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 1850
+--- !u!114 &7791770962169825148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.strings.bank
+  m_EditorClassIdentifier: 
+  Path: Assets/FMOD Project/rhyaction-live/Build/Desktop/Master.strings.bank
+  Name: Master.strings
+  StudioPath: bank:/Master.strings
+  lastModified: 638100349354288709
+  FileSizes:
+  - Name: Desktop
+    Value: 976
+  Exists: 1
 --- !u!114 &8969578724213295039
 MonoBehaviour:
   m_ObjectHideFlags: 0

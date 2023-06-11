@@ -7,23 +7,30 @@ namespace CYAN4S
     {
         [SerializeField] private Player player;
         
-        private TextMeshProUGUI _text;
-        private Animator _animator;
+        public TextMeshProUGUI _text;
+        public Animator[] _animator;
         
         private static readonly int ComboAnimaID = Animator.StringToHash("Combo");
 
         private void Awake()
         {
             player ??= GameObject.FindWithTag("Player").GetComponent<Player>();
-            
-            _text = GetComponent<TextMeshProUGUI>();
-            _animator = GetComponent<Animator>();
+            player.comboIncreased.AddListener(ComboChanged);
         }
 
         public void ComboChanged(int combo)
         {
             _text.text = $"{combo}";
-            _animator.SetTrigger(ComboAnimaID);
+
+            foreach (var item in _animator)
+            {
+                item.SetTrigger(ComboAnimaID);
+            }
+        }
+
+        private void OnDestroy()
+        {
+            player.comboIncreased.RemoveListener(ComboChanged);
         }
     }
 }

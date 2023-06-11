@@ -7,47 +7,37 @@ namespace CYAN4S
     [Serializable]
     public class NoteManager : MonoBehaviour
     {
+        [Header("Visual")]
+        public NoteScriptableObject noteset;
+
         [Header("Note Prefab")]
-        [SerializeField] private NoteSystem[] notePrefabs4B;
-        [SerializeField] private LongNoteSystem[] longNotePrefabs4B;
-        [SerializeField] private NoteSystem[] notePrefabs6B;
-        [SerializeField] private LongNoteSystem[] longNotePrefabs6B;
+        [SerializeField] private NoteSystem[] notePrefabs;
+        [SerializeField] private LongNoteSystem[] longNotePrefabs;
 
         [Header("Divider Prefab")]
         [SerializeField] private Divider dividerPrefab;
 
         [Header("Parent Transform")] 
-        [SerializeField] private RectTransform[] notes4B;
-        [SerializeField] private RectTransform[] notes6B;
+        [SerializeField] private RectTransform[] notes;
         [SerializeField] private RectTransform dividers;
         
         private readonly List<Queue<NoteSystem>> _noteQueue = new();
 
         private Chart _chart;
 
-        public List<Queue<NoteSystem>> Initialize(Chart chart)
+        public List<Queue<NoteSystem>> Initialize(Chart chart, Gear gear)
         {
             _chart = chart;
+            notes = gear.noteTransforms;
+            dividers = gear.dividersTransform;
 
-            var notePrefabs = chart.button switch
+            (notePrefabs, longNotePrefabs) = chart.button switch 
             {
-                4 => notePrefabs4B,
-                6 => notePrefabs6B,
-                _ => throw new Exception($"{chart.button}B is not supported.")
-            };
-            
-            var longNotePrefabs = chart.button switch
-            {
-                4 => longNotePrefabs4B,
-                6 => longNotePrefabs6B,
-                _ => throw new Exception($"{chart.button}B is not supported.")
-            };
-            
-            var notes = chart.button switch
-            {
-                4 => notes4B,
-                6 => notes6B,
-                _ => throw new Exception($"{chart.button}B is not supported.")
+                4 => (noteset.prefab4B, noteset.prefabLong4B),
+                5 => (noteset.prefab5B, noteset.prefabLong5B),
+                6 => (noteset.prefab6B, noteset.prefabLong6B),
+                8 => (noteset.prefab8B, noteset.prefabLong8B),
+                _ => throw new Exception("Error here!")
             };
 
             // Set shared data

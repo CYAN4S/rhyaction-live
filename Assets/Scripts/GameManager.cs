@@ -10,6 +10,16 @@ namespace CYAN4S
             SceneManager.LoadScene("Select");
         }
 
+        public void GoToEditor()
+        {
+            SceneManager.LoadScene("Editor");
+        }
+
+        public void GoToTitle()
+        {
+            SceneManager.LoadScene("Title");
+        }
+
         public void Exit()
         {
             Debug.Log("Application Quit!");

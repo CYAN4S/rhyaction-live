@@ -11,6 +11,10 @@ namespace CYAN4S
 
         private void Awake()
         {
+            if (input is null)
+            {
+                input = FindObjectOfType<InputHandler>();
+            }
             input.onButtonPressed.AddListener(ButtonPressed);
             input.onButtonReleased.AddListener(ButtonReleased);
         }

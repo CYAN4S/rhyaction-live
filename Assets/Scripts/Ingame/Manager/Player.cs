@@ -24,6 +24,12 @@ namespace CYAN4S
         public float fairLate;
         public float tooLate;
 
+        [Header("Visual")]
+
+        public GearScriptableObject gearset;
+        public RectTransform gearTransform;
+        private Gear gear;
+
         [Header("Cached Data")]
         [Tooltip("Current target note of its line")]
         [SerializeField] private List<NoteSystem> cachedNotes;
@@ -126,9 +132,20 @@ namespace CYAN4S
                 if (sound is Sound s)
                     timer.onZero += () => _channel = AudioManager.PlaySound(s);
             }
+
+            // Set Gear
+            var targetGear = (_chart.button) switch 
+            {
+                4 => gearset.prefab4B,
+                5 => gearset.prefab5B,
+                6 => gearset.prefab6B,
+                8 => gearset.prefab8B,
+                _ => throw new Exception("Error here!")
+            };
+            gear = Instantiate<Gear>(targetGear, gearTransform);
             
             // Set NoteManager
-            _noteQueue = _n.Initialize(_chart);
+            _noteQueue = _n.Initialize(_chart, gear);
 
             // Cache
             for (var i = 0; i < _chart.button; i++)

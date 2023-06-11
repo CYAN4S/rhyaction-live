@@ -14,5 +14,6 @@ namespace CYAN4S
         
         [Header("Debugging")]
         public Chart chart;
+
     }
 }
