@@ -12,6 +12,13 @@ namespace CYAN4S
         private void Awake()
         {
             _text = GetComponent<TextMeshProUGUI>();
+            player = FindObjectOfType<Player>();
+            player.scoreChanged.AddListener(ScoreChanged);
+        }
+
+        private void OnDestroy()
+        {
+            player.scoreChanged.RemoveListener(ScoreChanged);
         }
 
         public void ScoreChanged(int score)

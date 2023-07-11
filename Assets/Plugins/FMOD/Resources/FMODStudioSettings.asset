@@ -663,7 +663,7 @@ MonoBehaviour:
   EnableErrorCallback: 0
   SharedLibraryUpdateStage: 0
   SharedLibraryTimeSinceStart: 0
-  CurrentVersion: 131603
+  CurrentVersion: 131605
   HideSetupWizard: 1
   LastEventReferenceScanVersion: 131601
   Platforms:

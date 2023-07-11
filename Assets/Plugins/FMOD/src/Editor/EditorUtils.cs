@@ -358,7 +358,14 @@ namespace FMODUnity
             EditorApplication.playModeStateChanged += HandleOnPlayModeChanged;
             EditorApplication.pauseStateChanged += HandleOnPausedModeChanged;
 
-            EditorApplication.update += CallStartupMethodsWhenReady;
+            if (Application.isBatchMode)
+            {
+                BuildStatusWatcher.Startup();
+            }
+            else
+            {
+                EditorApplication.update += CallStartupMethodsWhenReady;
+            }
         }
 
         private static void HandleBeforeAssemblyReload()
@@ -476,6 +483,18 @@ namespace FMODUnity
             FMODEventPlayableBehavior.GraphStop += (sender, args) =>
             {
                 PreviewStop(args.eventInstance);
+            };
+
+            FMODEventPlayable.OnCreatePlayable += (sender, args) =>
+            {
+                FMODEventPlayable playable = sender as FMODEventPlayable;
+                if (playable.Parameters.Length > 0 || playable.Template.ParameterLinks.Count > 0)
+                {
+                    LoadPreviewBanks();
+                    FMOD.Studio.EventDescription eventDescription;
+                    system.getEventByID(playable.EventReference.Guid, out eventDescription);
+                    playable.LinkParameters(eventDescription);
+                }
             };
 #endif
 
@@ -651,7 +670,7 @@ namespace FMODUnity
             {
                 url = string.Format("{0}/{1}/{2}", Prefix, version, section);
             }
-                
+
             Application.OpenURL(url);
         }
 

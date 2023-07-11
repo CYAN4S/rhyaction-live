@@ -77,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -89,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -101,6 +103,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -432,29 +448,29 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      button-sub: 346445539
-      design-system_21: 305913928
-      design-system_18: -35447383
-      design-system_8: -493229345
+      back: -143194226
       button: -1574079202
+      button-sub: 346445539
+      design-system_15: 467475522
       design-system_16: 331789216
-      lr: -557098722
-      tune: 1274063185
+      design-system_18: -35447383
       design-system_19: -1521286519
-      selected: 572226090
+      design-system_20: -1417296289
+      design-system_21: 305913928
+      design-system_8: -493229345
+      design-system_9: 273908850
       exit: 1133189946
+      label: 1105174402
+      label-sub: -1552081115
+      lr: -557098722
+      lr-l: -1150809441
+      lr-r: 1792813900
+      lr-sub: 2028353974
       next: 458946700
       retry: -254361342
-      label: 1105174402
-      design-system_20: -1417296289
-      lr-l: -1150809441
-      back: -143194226
-      lr-r: 1792813900
-      design-system_15: 467475522
-      lr-sub: 2028353974
+      selected: 572226090
       start: -707958435
-      design-system_9: 273908850
-      label-sub: -1552081115
+      tune: 1274063185
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

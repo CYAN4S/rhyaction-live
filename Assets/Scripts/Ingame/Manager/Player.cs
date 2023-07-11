@@ -11,7 +11,7 @@ namespace CYAN4S
 {
     public class Player : MonoBehaviour
     {
-        private Chart _chart;
+        private Chart chart;
 
         [Header("Judgement")] 
         public float ignorable;
@@ -39,7 +39,7 @@ namespace CYAN4S
         [SerializeField] private List<double> cachedCutTime;
         
         // Not Serializable
-        private List<Queue<NoteSystem>> _noteQueue;
+        private List<Queue<NoteSystem>> noteQueue;
 
         [Header("In-game Data")] 
         [SerializeField] private int noteCount;
@@ -73,22 +73,22 @@ namespace CYAN4S
         public static Func<int> getScrollSpeed;
 
         // MonoBehaviour components.
-        private InputHandler _ih;
-        private NoteManager _n;
+        private InputHandler ih;
+        private NoteManager n;
 
-        private Channel _channel;
-        private double _pausedTime;
-        private double _pausedBeat;
+        private Channel channel;
+        private double pausedTime;
+        private double pausedBeat;
 
         private void Awake()
         {
             // Chart is from the previous scene via `Selected` singleton object.
-            _chart = Selected.Instance.chart;
+            chart = Selected.Instance.chart;
             
             // Check if is for debugging
             if (Selected.Instance.situation == Situation.Debug)
             {
-                _chart = Chart.GetTestChart();
+                chart = Chart.GetTestChart();
                 Debug.Log("Debugging only.");
             }
             
@@ -97,20 +97,20 @@ namespace CYAN4S
             getScrollSpeed = () => scrollSpeed;
 
             // Create space for cache
-            cachedNotes = new List<NoteSystem>(_chart.button);
-            cachedDelta = new List<double>(_chart.button);
-            cachedCutTime = new List<double>(_chart.button);
+            cachedNotes = new List<NoteSystem>(chart.button);
+            cachedDelta = new List<double>(chart.button);
+            cachedCutTime = new List<double>(chart.button);
             
             // Use info from chart
-            noteCount = _chart.notes.Count + _chart.longNotes.Count;
+            noteCount = chart.notes.Count + chart.longNotes.Count;
 
             // Get component
-            _ih = GetComponent<InputHandler>();
-            _n = GetComponent<NoteManager>();
+            ih = GetComponent<InputHandler>();
+            n = GetComponent<NoteManager>();
             
             // Set Timer
             timer = new Timer();
-            timer.SetTimer(_chart.bpm, _chart.GetEndBeat());
+            timer.SetTimer(chart.bpm, chart.GetEndBeat());
 
             timer.state.finished.OnEnter += OnFinished;
             timer.state.paused.OnEnter += OnPaused;
@@ -122,19 +122,19 @@ namespace CYAN4S
             timer.state.resuming.OnExit += () =>
             {
                 resumed?.Invoke();
-                _channel.setPaused(false);
+                channel.setPaused(false);
             };
             
             // Prepare sound
-            if (_chart.audio != "")
+            if (chart.audio != "")
             {
-                var sound = AudioManager.PrepareSound(_chart.audio);
+                var sound = AudioManager.PrepareSound(chart.audio);
                 if (sound is Sound s)
-                    timer.onZero += () => _channel = AudioManager.PlaySound(s);
+                    timer.onZero += () => channel = AudioManager.PlaySound(s);
             }
 
             // Set Gear
-            var targetGear = (_chart.button) switch 
+            var targetGear = (chart.button) switch 
             {
                 4 => gearset.prefab4B,
                 5 => gearset.prefab5B,
@@ -145,10 +145,10 @@ namespace CYAN4S
             gear = Instantiate<Gear>(targetGear, gearTransform);
             
             // Set NoteManager
-            _noteQueue = _n.Initialize(_chart, gear);
+            noteQueue = n.Initialize(chart, gear);
 
             // Cache
-            for (var i = 0; i < _chart.button; i++)
+            for (var i = 0; i < chart.button; i++)
             {
                 cachedNotes.Add(Get(i));
                 cachedDelta.Add(0);
@@ -156,14 +156,14 @@ namespace CYAN4S
             }
             
             // Add listener
-            _ih.onButtonPressedEx.AddListener(ButtonPressListener);
-            _ih.onButtonReleasedEx.AddListener(ButtonReleaseListener);
+            ih.onButtonPressedEx.AddListener(ButtonPressListener);
+            ih.onButtonReleasedEx.AddListener(ButtonReleaseListener);
         }
         
         private void OnDestroy()
         {
-            _ih.onButtonPressedEx.RemoveListener(ButtonPressListener);
-            _ih.onButtonPressedEx.RemoveListener(ButtonReleaseListener);
+            ih.onButtonPressedEx.RemoveListener(ButtonPressListener);
+            ih.onButtonPressedEx.RemoveListener(ButtonReleaseListener);
         }
         
         private void Update()
@@ -177,7 +177,7 @@ namespace CYAN4S
                 return;
             
             // Check for missed notes and unreleased long notes.
-            for (var i = 0; i < _chart.button; i++)
+            for (var i = 0; i < chart.button; i++)
             {
                 var target = cachedNotes[i];
 
@@ -289,7 +289,7 @@ namespace CYAN4S
 
             if (timer.Current is Resuming)
             {
-                var pDelta = target.Time - _pausedTime;
+                var pDelta = target.Time - pausedTime;
                 delta = math.abs(delta) >= math.abs(pDelta) ? delta : pDelta;
             }
             
@@ -356,7 +356,7 @@ namespace CYAN4S
 
         private NoteSystem Get(int value)
         {
-            return _noteQueue[value].Count == 0 ? null : _noteQueue[value].Dequeue();
+            return noteQueue[value].Count == 0 ? null : noteQueue[value].Dequeue();
         }
 
         private void Release(NoteSystem target)
@@ -388,9 +388,9 @@ namespace CYAN4S
 
         private void OnPaused()
         {
-            _pausedTime = timer.CurrentTime;
-            _pausedBeat = timer.CurrentBeat;
-            cachedNotes.ForEach(note => (note as LongNoteSystem)?.Pause(_pausedTime));
+            pausedTime = timer.CurrentTime;
+            pausedBeat = timer.CurrentBeat;
+            cachedNotes.ForEach(note => (note as LongNoteSystem)?.Pause(pausedTime));
 
             for (int i = 0; i < cachedCutTime.Count; i++)
             {
@@ -401,7 +401,7 @@ namespace CYAN4S
             }
             
             paused?.Invoke();
-            _channel.setPaused(true);
+            channel.setPaused(true);
             FMODUnity.RuntimeManager.PlayOneShot(pausedEvent);
         }
 
@@ -410,7 +410,7 @@ namespace CYAN4S
             Result.Instance.score = score;
             Result.Instance.judgeCount = judgeCount;
             Result.Instance.accuracy = (double)score / (noteCount * scoreWeight[0]) * 100d;
-            _channel.stop();
+            channel.stop();
             SceneManager.LoadScene("Result");
         }
 
@@ -436,13 +436,13 @@ namespace CYAN4S
 
         public void Back()
         {
-            _channel.stop();
+            channel.stop();
             SceneManager.LoadScene("Select");
         }
 
         public void Retry()
         {
-            _channel.stop();
+            channel.stop();
             SceneManager.LoadScene("Ingame");
         }
     }

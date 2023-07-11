@@ -140,7 +140,8 @@ PlayerSettings:
   vulkanEnableCommandBufferRecycling: 1
   loadStoreDebugModeEnabled: 0
   bundleVersion: 0.2.0
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: 11400000, guid: fa9f04d2d0d75df4284d99c9687c4b18, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -162,6 +163,7 @@ PlayerSettings:
   applicationIdentifier:
     Standalone: studio.cyan4s.rhyactionlive
   buildNumber:
+    Bratwurst: 0
     Standalone: 0
     iPhone: 0
     tvOS: 0
@@ -187,6 +189,8 @@ PlayerSettings:
   tvOSSdkVersion: 0
   tvOSRequireExtendedGameController: 0
   tvOSTargetOSVersionString: 12.0
+  bratwurstSdkVersion: 0
+  bratwurstTargetOSVersionString: 16.4
   uIPrerenderedIcon: 0
   uIRequiresPersistentWiFi: 0
   uIRequiresFullScreen: 1
@@ -234,8 +238,10 @@ PlayerSettings:
   appleDeveloperTeamID: 
   iOSManualSigningProvisioningProfileID: 
   tvOSManualSigningProvisioningProfileID: 
+  bratwurstManualSigningProvisioningProfileID: 
   iOSManualSigningProvisioningProfileType: 0
   tvOSManualSigningProvisioningProfileType: 0
+  bratwurstManualSigningProvisioningProfileType: 0
   appleEnableAutomaticSigning: 0
   iOSRequireARKit: 0
   iOSAutomaticallyDetectAndAddCapabilities: 1
@@ -280,7 +286,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: c1f18e3ea3c095145acfbf849314220a, type: 3}
+      m_Icon: {fileID: 2800000, guid: 9861c65bb9d531f4d9fca76352677531, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -710,7 +716,6 @@ PlayerSettings:
   suppressCommonWarnings: 1
   allowUnsafeCode: 0
   useDeterministicCompilation: 1
-  selectedPlatform: 0
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 1
   gcIncremental: 1

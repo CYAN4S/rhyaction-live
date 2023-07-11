@@ -77,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -89,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -101,6 +103,20 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 1024
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -453,32 +469,32 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      ui_11: 21945946
-      ui_14: 1575521080
-      ui_13: 993126057
-      ui_9: -1890324512
-      ui_4: -341218096
-      ui_12: -1027050136
-      ui_19: -1521468789
       ui_0: 1172509397
+      ui_1: -1535912286
+      ui_10: 1388028085
+      ui_11: 21945946
+      ui_12: -1027050136
+      ui_13: 993126057
+      ui_14: 1575521080
+      ui_15: -993798433
+      ui_16: -1330813152
+      ui_17: 531496908
+      ui_18: -769984776
+      ui_19: -1521468789
+      ui_2: 610478186
+      ui_20: 733118149
       ui_21: -635203854
       ui_22: -1531372144
-      ui_3: -671078872
-      ui_6: -949393236
-      ui_8: -526986952
-      ui_7: 1029788752
-      ui_2: 610478186
-      ui_5: -1784508931
-      ui_16: -1330813152
-      ui_20: 733118149
       ui_23: 939010630
-      ui_17: 531496908
-      ui_10: 1388028085
       ui_24: -2135650641
-      ui_1: -1535912286
-      ui_15: -993798433
-      ui_18: -769984776
       ui_25: -475804709
+      ui_3: -671078872
+      ui_4: -341218096
+      ui_5: -1784508931
+      ui_6: -949393236
+      ui_7: 1029788752
+      ui_8: -526986952
+      ui_9: -1890324512
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
