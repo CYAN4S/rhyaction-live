@@ -1,33 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-7307568116046205593
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/Resuming
-  m_EditorClassIdentifier: 
-  Path: event:/Resuming
-  Guid:
-    Data1: -745165372
-    Data2: 1299737387
-    Data3: -1748385894
-    Data4: -714999560
-  Banks:
-  - {fileID: -3084490316448233872}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 5375
---- !u!114 &-5296169790649806927
+--- !u!114 &-8895689734211302130
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -46,7 +19,7 @@ MonoBehaviour:
     Data3: -835909444
     Data4: 1049193168
   Banks:
-  - {fileID: -3084490316448233872}
+  - {fileID: -2719251995109355520}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -54,34 +27,7 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 2133
---- !u!114 &-5037069231910830223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/SpeedUp
-  m_EditorClassIdentifier: 
-  Path: event:/SpeedUp
-  Guid:
-    Data1: -918911967
-    Data2: 1266349096
-    Data3: -1701843526
-    Data4: -1016145825
-  Banks:
-  - {fileID: -3084490316448233872}
-  IsStream: 0
-  Is3D: 0
-  IsOneShot: 1
-  Parameters: []
-  MinDistance: 1
-  MaxDistance: 20
-  Length: 2038
---- !u!114 &-3084490316448233872
+--- !u!114 &-2719251995109355520
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -101,7 +47,7 @@ MonoBehaviour:
   - Name: Desktop
     Value: 134688
   Exists: 1
---- !u!114 &-1289572407877409958
+--- !u!114 &-770782276488423082
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -134,23 +80,23 @@ MonoBehaviour:
   m_Name: FMODStudioCache
   m_EditorClassIdentifier: 
   EditorBanks:
-  - {fileID: -1289572407877409958}
-  - {fileID: -3084490316448233872}
+  - {fileID: -770782276488423082}
+  - {fileID: -2719251995109355520}
   EditorEvents:
-  - {fileID: -5037069231910830223}
-  - {fileID: -5296169790649806927}
-  - {fileID: 1322279784715640389}
-  - {fileID: 6595580263726797490}
-  - {fileID: -7307568116046205593}
-  - {fileID: 8597071266483225163}
+  - {fileID: 4321017118047775486}
+  - {fileID: -8895689734211302130}
+  - {fileID: 3275278761181710329}
+  - {fileID: 1332066831655412204}
+  - {fileID: 926372062358259405}
+  - {fileID: 7557900537517259717}
   EditorParameters: []
   MasterBanks:
-  - {fileID: -3084490316448233872}
+  - {fileID: -2719251995109355520}
   StringsBanks:
-  - {fileID: -1289572407877409958}
+  - {fileID: -770782276488423082}
   cacheTime: 638100349354288709
-  cacheVersion: 131605
---- !u!114 &1322279784715640389
+  cacheVersion: 131619
+--- !u!114 &926372062358259405
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,24 +106,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
-  m_Name: event:/ResumeCount
+  m_Name: event:/Resuming
   m_EditorClassIdentifier: 
-  Path: event:/ResumeCount
+  Path: event:/Resuming
   Guid:
-    Data1: -1333459312
-    Data2: 1228835275
-    Data3: -570056001
-    Data4: -1143873141
+    Data1: -745165372
+    Data2: 1299737387
+    Data3: -1748385894
+    Data4: -714999560
   Banks:
-  - {fileID: -3084490316448233872}
+  - {fileID: -2719251995109355520}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
   Parameters: []
   MinDistance: 1
   MaxDistance: 20
-  Length: 4375
---- !u!114 &6595580263726797490
+  Length: 5375
+--- !u!114 &1332066831655412204
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -196,7 +142,7 @@ MonoBehaviour:
     Data3: -1937855577
     Data4: 1574283120
   Banks:
-  - {fileID: -3084490316448233872}
+  - {fileID: -2719251995109355520}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -204,7 +150,61 @@ MonoBehaviour:
   MinDistance: 1
   MaxDistance: 20
   Length: 1850
---- !u!114 &8597071266483225163
+--- !u!114 &3275278761181710329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/ResumeCount
+  m_EditorClassIdentifier: 
+  Path: event:/ResumeCount
+  Guid:
+    Data1: -1333459312
+    Data2: 1228835275
+    Data3: -570056001
+    Data4: -1143873141
+  Banks:
+  - {fileID: -2719251995109355520}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 4375
+--- !u!114 &4321017118047775486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SpeedUp
+  m_EditorClassIdentifier: 
+  Path: event:/SpeedUp
+  Guid:
+    Data1: -918911967
+    Data2: 1266349096
+    Data3: -1701843526
+    Data4: -1016145825
+  Banks:
+  - {fileID: -2719251995109355520}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 1
+  MaxDistance: 20
+  Length: 2038
+--- !u!114 &7557900537517259717
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -223,7 +223,7 @@ MonoBehaviour:
     Data3: 110207162
     Data4: -2114976240
   Banks:
-  - {fileID: -3084490316448233872}
+  - {fileID: -2719251995109355520}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
