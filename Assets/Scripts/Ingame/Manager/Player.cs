@@ -79,6 +79,9 @@ namespace CYAN4S
         private Channel channel;
         private double pausedTime;
         private double pausedBeat;
+        
+        // TODO
+        private Dictionary<string, Sound> sounds = new();
 
         private void Awake()
         {
@@ -128,9 +131,21 @@ namespace CYAN4S
             // Prepare sound
             if (chart.audio != "")
             {
-                var sound = AudioManager.PrepareSound(chart.audio);
+                var sound = AudioManager.PrepareSound(chart.audio, chart.rootPath);
                 if (sound is Sound s)
                     timer.onZero += () => channel = AudioManager.PlaySound(s);
+            }
+
+            foreach (var note in chart.notes)
+            {
+                if (sounds.ContainsKey(note.audioPath))
+                {
+                    continue;
+                }
+                
+                var sound = AudioManager.PrepareSound(note.audioPath, chart.rootPath);
+                if (sound is Sound s)
+                    sounds.Add(note.audioPath, s);
             }
 
             // Set Gear
@@ -213,7 +228,8 @@ namespace CYAN4S
         private void ButtonPressListener(int btn, double rawTime)
         {
             JudgeButtonPressed(btn, timer.GetGameTime(rawTime));
-            FMODUnity.RuntimeManager.PlayOneShot(clapEvent);
+            // FMODUnity.RuntimeManager.PlayOneShot(clapEvent);
+            
         }
 
         private void ButtonReleaseListener(int btn, double rawTime)
@@ -262,6 +278,11 @@ namespace CYAN4S
             
             var target = cachedNotes[btn];
             if (target == null) return;
+
+            if (sounds.ContainsKey(target.Path))
+            {
+                AudioManager.PlaySound(sounds[target.Path]);
+            }
             
             if (target is LongNoteSystem { Current: CutLongNoteState } note)
             {

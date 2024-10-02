@@ -15,9 +15,11 @@ namespace CYAN4S
 
         public List<NoteData> notes;
         public List<LongNoteData> longNotes;
-        
+
         // TODO
         [NonSerialized] public string audio;
+        [NonSerialized] public string rootPath;
+
 
         // This uses only for development.
         public static Chart GetTestChart()

@@ -29,6 +29,7 @@ namespace CYAN4S
         {
             var text = File.ReadAllText(path);
             var target = new ChartFactoryRLC().ToChart(text);
+            target.rootPath = path;
             
             var result = Instantiate(trackButtonPrefab, tracksPanel);
             var info = $"{target.title} / {target.button}B / LV {target.level}";
@@ -41,6 +42,7 @@ namespace CYAN4S
         {
             var text = File.ReadAllText(path);
             Selected.Instance.chart = new ChartFactoryRLC().ToChart(text);
+            Selected.Instance.chart.rootPath = Path.GetDirectoryName(path);
             selectedTrackTitleText.text = Selected.Instance.chart.title;
             selectedTrackButtonText.text = $"{Selected.Instance.chart.button}B";
             selectedTrackLevelText.text = $"LEVEL {Selected.Instance.chart.level}";
@@ -63,6 +65,12 @@ namespace CYAN4S
             }
             
             var files = Directory.EnumerateFiles(path, "*.rlc").ToList();
+            
+            files.AddRange(
+                Directory
+                .EnumerateDirectories(path)
+                .SelectMany(subpath => Directory.EnumerateFiles(subpath, "*.rlc"))
+            );
 
             if (files.Count == 0)
             {
@@ -77,7 +85,7 @@ namespace CYAN4S
             for (var i = 0; i < files.Count; i++)
             {
                 var target = MakeTrackElement(files[i]);
-                target.GetComponent<RectTransform>().localPosition = new Vector3(0, -84 * i);
+                // target.GetComponent<RectTransform>().localPosition = new Vector3(0, -84 * i);
             }
 
             Selected.Instance.chart = null;

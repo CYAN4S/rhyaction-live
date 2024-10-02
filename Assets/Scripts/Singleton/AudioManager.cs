@@ -87,6 +87,19 @@ namespace CYAN4S
             system.createSound(Path.Combine(fullPath, path), MODE.DEFAULT, out var sound);
             return sound;
         }
+        
+        public static Sound? PrepareSound(string path, string rootPath)
+        {
+            if (path is null or "")
+            {
+                return null;
+            }
+
+            var system = FMODUnity.RuntimeManager.CoreSystem;
+            // var fullPath = Path.Combine(Application.dataPath, "Tracks");
+            system.createSound(Path.Combine(rootPath, path), MODE.LOOP_OFF, out var sound);
+            return sound;
+        }
 
         public static Channel PlaySound(Sound sound, bool paused = false)
         {
