@@ -13,6 +13,8 @@ namespace CYAN4S
         protected NoteData noteData;
         public double Time { get; protected set; }
 
+        public string Path => noteData.audioPath;
+
         // Awake
         protected RectTransform rt;
         

@@ -48,13 +48,6 @@ namespace CYAN4S
             // Chart is from the previous scene via `Selected` singleton object.
             var chart = Selected.Instance.chart;
 
-            // Check if is for debugging
-            if (Selected.Instance.situation == Situation.Debug)
-            {
-                chart = Chart.GetTestChart();
-                Debug.Log("Debugging only.");
-            }
-
             schema = chart.button switch
             {
                 4 => schema4B,

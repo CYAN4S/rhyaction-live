@@ -250,7 +250,7 @@ namespace CYAN4S
         
         public void OnAudioImport(string path)
         {
-            var x = AudioManager.PrepareSound(path);
+            var x = AudioManager.PrepareSound(path, Path.Combine(Application.dataPath, "Tracks"));
             if (x == null) return;
             
             sound = (Sound)x;

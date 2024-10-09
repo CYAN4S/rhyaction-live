@@ -11,8 +11,6 @@ namespace CYAN4S
 {
     public class Player : MonoBehaviour
     {
-        private Chart chart;
-
         [Header("Judgement")] 
         public float ignorable;
         public float tooEarly;
@@ -25,7 +23,6 @@ namespace CYAN4S
         public float tooLate;
 
         [Header("Visual")]
-
         public GearScriptableObject gearset;
         public RectTransform gearTransform;
         private Gear gear;
@@ -73,24 +70,21 @@ namespace CYAN4S
         public static Func<int> getScrollSpeed;
 
         // MonoBehaviour components.
-        private InputHandler ih;
-        private NoteManager n;
+        private InputHandler inputHandler;
+        private NoteManager noteManager;
 
+        private Chart chart;
         private Channel channel;
         private double pausedTime;
         private double pausedBeat;
+        
+        // TODO
+        private Dictionary<string, Sound> sounds = new();
 
         private void Awake()
         {
             // Chart is from the previous scene via `Selected` singleton object.
             chart = Selected.Instance.chart;
-            
-            // Check if is for debugging
-            if (Selected.Instance.situation == Situation.Debug)
-            {
-                chart = Chart.GetTestChart();
-                Debug.Log("Debugging only.");
-            }
             
             // Set getters
             getBeat = () => timer.CurrentBeat;
@@ -105,8 +99,8 @@ namespace CYAN4S
             noteCount = chart.notes.Count + chart.longNotes.Count;
 
             // Get component
-            ih = GetComponent<InputHandler>();
-            n = GetComponent<NoteManager>();
+            inputHandler = GetComponent<InputHandler>();
+            noteManager = GetComponent<NoteManager>();
             
             // Set Timer
             timer = new Timer();
@@ -128,9 +122,21 @@ namespace CYAN4S
             // Prepare sound
             if (chart.audio != "")
             {
-                var sound = AudioManager.PrepareSound(chart.audio);
+                var sound = AudioManager.PrepareSound(chart.audio, chart.rootPath);
                 if (sound is Sound s)
                     timer.onZero += () => channel = AudioManager.PlaySound(s);
+            }
+
+            foreach (var note in chart.notes)
+            {
+                if (sounds.ContainsKey(note.audioPath))
+                {
+                    continue;
+                }
+                
+                var sound = AudioManager.PrepareSound(note.audioPath, chart.rootPath);
+                if (sound is Sound s)
+                    sounds.Add(note.audioPath, s);
             }
 
             // Set Gear
@@ -145,7 +151,7 @@ namespace CYAN4S
             gear = Instantiate<Gear>(targetGear, gearTransform);
             
             // Set NoteManager
-            noteQueue = n.Initialize(chart, gear);
+            noteQueue = noteManager.Initialize(chart, gear);
 
             // Cache
             for (var i = 0; i < chart.button; i++)
@@ -156,14 +162,14 @@ namespace CYAN4S
             }
             
             // Add listener
-            ih.onButtonPressedEx.AddListener(ButtonPressListener);
-            ih.onButtonReleasedEx.AddListener(ButtonReleaseListener);
+            inputHandler.onButtonPressedEx.AddListener(ButtonPressListener);
+            inputHandler.onButtonReleasedEx.AddListener(ButtonReleaseListener);
         }
         
         private void OnDestroy()
         {
-            ih.onButtonPressedEx.RemoveListener(ButtonPressListener);
-            ih.onButtonPressedEx.RemoveListener(ButtonReleaseListener);
+            inputHandler.onButtonPressedEx.RemoveListener(ButtonPressListener);
+            inputHandler.onButtonPressedEx.RemoveListener(ButtonReleaseListener);
         }
         
         private void Update()
@@ -213,7 +219,7 @@ namespace CYAN4S
         private void ButtonPressListener(int btn, double rawTime)
         {
             JudgeButtonPressed(btn, timer.GetGameTime(rawTime));
-            FMODUnity.RuntimeManager.PlayOneShot(clapEvent);
+            // FMODUnity.RuntimeManager.PlayOneShot(clapEvent);
         }
 
         private void ButtonReleaseListener(int btn, double rawTime)
@@ -262,6 +268,11 @@ namespace CYAN4S
             
             var target = cachedNotes[btn];
             if (target == null) return;
+
+            if (sounds.ContainsKey(target.Path))
+            {
+                AudioManager.PlaySound(sounds[target.Path]);
+            }
             
             if (target is LongNoteSystem { Current: CutLongNoteState } note)
             {
