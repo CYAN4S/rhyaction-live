@@ -1,0 +1,90 @@
+{
+  "title": "Simple Loop",
+  "button": 4,
+  "level": 0,
+  "bpm": 132.0,
+  "audio": "bgm.wav",
+  "notes": [
+    {
+      "beat": {
+        "num": 0,
+        "den": 1
+      },
+      "line": 0,
+      "audioPath": "kick.wav"
+    },
+    {
+      "beat": {
+        "num": 1,
+        "den": 1
+      },
+      "line": 0,
+      "audioPath": "kick.wav"
+    },
+    {
+      "beat": {
+        "num": 2,
+        "den": 1
+      },
+      "line": 0,
+      "audioPath": "kick.wav"
+    },
+    {
+      "beat": {
+        "num": 3,
+        "den": 1
+      },
+      "line": 0,
+      "audioPath": "kick.wav"
+    },
+    {
+      "beat": {
+        "num": 1,
+        "den": 2
+      },
+      "line": 2,
+      "audioPath": "hihat.wav"
+    },
+    {
+      "beat": {
+        "num": 3,
+        "den": 2
+      },
+      "line": 2,
+      "audioPath": "hihat.wav"
+    },
+    {
+      "beat": {
+        "num": 5,
+        "den": 2
+      },
+      "line": 2,
+      "audioPath": "hihat.wav"
+    },
+    {
+      "beat": {
+        "num": 7,
+        "den": 2
+      },
+      "line": 2,
+      "audioPath": "hihat.wav"
+    },
+    {
+      "beat": {
+        "num": 1,
+        "den": 1
+      },
+      "line": 3,
+      "audioPath": "clap.wav"
+    },
+    {
+      "beat": {
+        "num": 3,
+        "den": 1
+      },
+      "line": 3,
+      "audioPath": "clap.wav"
+    }
+  ],
+  "longNotes": []
+}
