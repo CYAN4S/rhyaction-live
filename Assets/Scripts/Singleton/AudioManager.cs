@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using Core;
 using FMOD;
-using UnityEngine;
 
 namespace CYAN4S
 {
@@ -74,19 +73,6 @@ namespace CYAN4S
         {
             system.setDSPBufferSize(size, 2);
         }
-
-        public static Sound? PrepareSound(string path)
-        {
-            if (path is null or "")
-            {
-                return null;
-            }
-
-            var system = FMODUnity.RuntimeManager.CoreSystem;
-            var fullPath = Path.Combine(Application.dataPath, "Tracks");
-            system.createSound(Path.Combine(fullPath, path), MODE.DEFAULT, out var sound);
-            return sound;
-        }
         
         public static Sound? PrepareSound(string path, string rootPath)
         {
@@ -96,7 +82,6 @@ namespace CYAN4S
             }
 
             var system = FMODUnity.RuntimeManager.CoreSystem;
-            // var fullPath = Path.Combine(Application.dataPath, "Tracks");
             system.createSound(Path.Combine(rootPath, path), MODE.LOOP_OFF, out var sound);
             return sound;
         }
