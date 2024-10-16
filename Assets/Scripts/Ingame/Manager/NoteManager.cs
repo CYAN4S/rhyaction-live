@@ -62,6 +62,9 @@ namespace CYAN4S
 
             foreach (var note in noteDataList)
             {
+                if (note.line >= 8)
+                    continue;
+                
                 var targetPrefab =  notePrefabs[note.line];
                 var system = Instantiate(targetPrefab, notes[note.line]);
                 var time = note.beat * 60d / bpm;
@@ -72,6 +75,9 @@ namespace CYAN4S
 
             foreach (var note in longNoteDataList)
             {
+                if (note.line >= 8)
+                    continue;
+                
                 var targetPrefab =  longNotePrefabs[note.line];
                 var system = Instantiate(targetPrefab, notes[note.line]);
                 var start = note.beat * 60d / bpm;

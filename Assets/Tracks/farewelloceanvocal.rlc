@@ -1,0 +1,3214 @@
+{
+    "title": "farewelloceanvocal",
+    "button": 8,
+    "level": 0,
+    "bpm": 120.0,
+    "audio": "",
+    "notes": [],
+    "longNotes": [
+        {
+            "beat": {
+                "num": 23,
+                "den": 11
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 133,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 161,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 61,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 212,
+                "den": 55
+            },
+            "line": 9,
+            "audioPath": "",
+            "length": {
+                "num": 7,
+                "den": 20
+            }
+        },
+        {
+            "beat": {
+                "num": 997,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 511,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 851,
+                "den": 110
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 97,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 478,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 23,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 543,
+                "den": 55
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 33,
+                "den": 20
+            }
+        },
+        {
+            "beat": {
+                "num": 2627,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 573,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 7841,
+                "den": 220
+            },
+            "line": 11,
+            "audioPath": "",
+            "length": {
+                "num": 23,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 8587,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 97,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 8689,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 67,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 8889,
+                "den": 220
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 61,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 9073,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 37,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 2322,
+                "den": 55
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 199,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 1923,
+                "den": 44
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 45,
+                "den": 44
+            }
+        },
+        {
+            "beat": {
+                "num": 451,
+                "den": 10
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 47,
+                "den": 22
+            }
+        },
+        {
+            "beat": {
+                "num": 5513,
+                "den": 110
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 97,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 11379,
+                "den": 220
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 163,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 11563,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 189,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 5891,
+                "den": 110
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 159,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 11997,
+                "den": 220
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 97,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 3026,
+                "den": 55
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 21,
+                "den": 22
+            }
+        },
+        {
+            "beat": {
+                "num": 6203,
+                "den": 110
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 61,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 12483,
+                "den": 220
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 163,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 1351,
+                "den": 22
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 13,
+                "den": 11
+            }
+        },
+        {
+            "beat": {
+                "num": 3449,
+                "den": 55
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 241,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 14277,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 161,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 14747,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 69,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 14947,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 199,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 15233,
+                "den": 220
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 3,
+                "den": 10
+            }
+        },
+        {
+            "beat": {
+                "num": 7657,
+                "den": 110
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 97,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 7757,
+                "den": 110
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 87,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 15989,
+                "den": 220
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 87,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 4056,
+                "den": 55
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 32,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 16377,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 353,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 8373,
+                "den": 110
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 163,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 8457,
+                "den": 110
+            },
+            "line": 1,
+            "audioPath": "",
+            "length": {
+                "num": 97,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 17073,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 243,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 18463,
+                "den": 220
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 31,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 9311,
+                "den": 110
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 173,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 18831,
+                "den": 220
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 23,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 18933,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 31,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 951,
+                "den": 11
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 64,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 1945,
+                "den": 22
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 42,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 9817,
+                "den": 110
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 777,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 20957,
+                "den": 220
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 57,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 21091,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 61,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 21157,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 107,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 4261,
+                "den": 44
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 51,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 977,
+                "den": 10
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 64,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 10929,
+                "den": 110
+            },
+            "line": 1,
+            "audioPath": "",
+            "length": {
+                "num": 71,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 997,
+                "den": 10
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 41,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 11013,
+                "den": 110
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 1,
+                "den": 1
+            }
+        },
+        {
+            "beat": {
+                "num": 5587,
+                "den": 55
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 7,
+                "den": 20
+            }
+        },
+        {
+            "beat": {
+                "num": 1023,
+                "den": 10
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 481,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 4627,
+                "den": 44
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 307,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 11877,
+                "den": 110
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 107,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 12043,
+                "den": 110
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 271,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 12191,
+                "den": 110
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 202,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 6309,
+                "den": 55
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 64,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 6401,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 7,
+                "den": 10
+            }
+        },
+        {
+            "beat": {
+                "num": 25931,
+                "den": 220
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 189,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 6571,
+                "den": 55
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 179,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 26683,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 107,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 26877,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 41,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 6948,
+                "den": 55
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 37,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 28119,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 13,
+                "den": 10
+            }
+        },
+        {
+            "beat": {
+                "num": 28421,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 47,
+                "den": 22
+            }
+        },
+        {
+            "beat": {
+                "num": 2639,
+                "den": 20
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 13,
+                "den": 20
+            }
+        },
+        {
+            "beat": {
+                "num": 14617,
+                "den": 110
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 107,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 7339,
+                "den": 55
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 133,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 29673,
+                "den": 220
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 179,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 30097,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 87,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 7647,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 189,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 15409,
+                "den": 110
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 823,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 1591,
+                "den": 11
+            },
+            "line": 9,
+            "audioPath": "",
+            "length": {
+                "num": 61,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 7973,
+                "den": 55
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 189,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 1614,
+                "den": 11
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 169,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 32531,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 3,
+                "den": 10
+            }
+        },
+        {
+            "beat": {
+                "num": 6551,
+                "den": 44
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 133,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 16457,
+                "den": 110
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 23,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 16531,
+                "den": 110
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 197,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 16871,
+                "den": 110
+            },
+            "line": 8,
+            "audioPath": "",
+            "length": {
+                "num": 23,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 33921,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 37,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 34079,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 31,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 17073,
+                "den": 110
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 91,
+                "den": 22
+            }
+        },
+        {
+            "beat": {
+                "num": 1762,
+                "den": 11
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 133,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 35403,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 21,
+                "den": 22
+            }
+        },
+        {
+            "beat": {
+                "num": 1619,
+                "den": 10
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 1,
+                "den": 1
+            }
+        },
+        {
+            "beat": {
+                "num": 8962,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 501,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 18241,
+                "den": 110
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 307,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 36819,
+                "den": 220
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 87,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 9256,
+                "den": 55
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 301,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 37417,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 299,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 9509,
+                "den": 55
+            },
+            "line": 8,
+            "audioPath": "",
+            "length": {
+                "num": 3,
+                "den": 10
+            }
+        },
+        {
+            "beat": {
+                "num": 38179,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 327,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 38573,
+                "den": 220
+            },
+            "line": 8,
+            "audioPath": "",
+            "length": {
+                "num": 9,
+                "den": 4
+            }
+        },
+        {
+            "beat": {
+                "num": 19667,
+                "den": 110
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 389,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 19869,
+                "den": 110
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 46,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 39927,
+                "den": 220
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 3,
+                "den": 10
+            }
+        },
+        {
+            "beat": {
+                "num": 4005,
+                "den": 22
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 216,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 41139,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 19,
+                "den": 20
+            }
+        },
+        {
+            "beat": {
+                "num": 41379,
+                "den": 220
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 97,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 20761,
+                "den": 110
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 833,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 2129,
+                "den": 11
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 87,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 44303,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 19,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 2276,
+                "den": 11
+            },
+            "line": 8,
+            "audioPath": "",
+            "length": {
+                "num": 81,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 46153,
+                "den": 220
+            },
+            "line": 8,
+            "audioPath": "",
+            "length": {
+                "num": 107,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 2414,
+                "den": 11
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 42,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 48663,
+                "den": 220
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 133,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 48837,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 353,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 24633,
+                "den": 110
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 41,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 1122,
+                "den": 5
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 829,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 10165,
+                "den": 44
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 27,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 51137,
+                "den": 220
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 79,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 2333,
+                "den": 10
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 179,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 51541,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 169,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 51751,
+                "den": 220
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 69,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 51929,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 307,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 52241,
+                "den": 220
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 133,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 26233,
+                "den": 110
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 271,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 26629,
+                "den": 110
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 37,
+                "den": 44
+            }
+        },
+        {
+            "beat": {
+                "num": 2678,
+                "den": 11
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 47,
+                "den": 44
+            }
+        },
+        {
+            "beat": {
+                "num": 13454,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 56,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 54173,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 9,
+                "den": 11
+            }
+        },
+        {
+            "beat": {
+                "num": 54501,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 69,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 2735,
+                "den": 11
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 301,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 55073,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 159,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 5067,
+                "den": 20
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 87,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 56091,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 19,
+                "den": 10
+            }
+        },
+        {
+            "beat": {
+                "num": 14172,
+                "den": 55
+            },
+            "line": 1,
+            "audioPath": "",
+            "length": {
+                "num": 7,
+                "den": 20
+            }
+        },
+        {
+            "beat": {
+                "num": 56827,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 557,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 2649,
+                "den": 10
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 97,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 2930,
+                "den": 11
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 159,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 14691,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 1,
+                "den": 1
+            }
+        },
+        {
+            "beat": {
+                "num": 59157,
+                "den": 220
+            },
+            "line": 1,
+            "audioPath": "",
+            "length": {
+                "num": 31,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 5931,
+                "den": 22
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 156,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 60757,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 59,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 30537,
+                "den": 110
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 28,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 61243,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 23,
+                "den": 22
+            }
+        },
+        {
+            "beat": {
+                "num": 61621,
+                "den": 220
+            },
+            "line": 1,
+            "audioPath": "",
+            "length": {
+                "num": 67,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 12357,
+                "den": 44
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 49,
+                "den": 44
+            }
+        },
+        {
+            "beat": {
+                "num": 62107,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 7,
+                "den": 20
+            }
+        },
+        {
+            "beat": {
+                "num": 283,
+                "den": 1
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 101,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 15799,
+                "den": 55
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 42,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 3169,
+                "den": 11
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 69,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 5779,
+                "den": 20
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 173,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 63963,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 163,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 16043,
+                "den": 55
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 87,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 64371,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 107,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 16131,
+                "den": 55
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 113,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 12953,
+                "den": 44
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 189,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 3284,
+                "den": 11
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 189,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 65981,
+                "den": 220
+            },
+            "line": 6,
+            "audioPath": "",
+            "length": {
+                "num": 31,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 16512,
+                "den": 55
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 87,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 16563,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 107,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 1207,
+                "den": 4
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 241,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 66697,
+                "den": 220
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 557,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 67541,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 69,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 67699,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 43,
+                "den": 44
+            }
+        },
+        {
+            "beat": {
+                "num": 33977,
+                "den": 110
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 45,
+                "den": 44
+            }
+        },
+        {
+            "beat": {
+                "num": 17114,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 189,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 6253,
+                "den": 20
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 89,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 1568,
+                "den": 5
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 103,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 13823,
+                "den": 44
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 153,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 13867,
+                "den": 44
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 311,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 34831,
+                "den": 110
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 189,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 70337,
+                "den": 220
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 58,
+                "den": 11
+            }
+        },
+        {
+            "beat": {
+                "num": 3583,
+                "den": 11
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 91,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 72029,
+                "den": 220
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 163,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 72289,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 67,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 36183,
+                "den": 110
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 92,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 6621,
+                "den": 20
+            },
+            "line": 8,
+            "audioPath": "",
+            "length": {
+                "num": 383,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 73219,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 177,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 14737,
+                "den": 44
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 61,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 18457,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 7,
+                "den": 20
+            }
+        },
+        {
+            "beat": {
+                "num": 7391,
+                "den": 22
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 46,
+                "den": 11
+            }
+        },
+        {
+            "beat": {
+                "num": 3409,
+                "den": 10
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 13,
+                "den": 20
+            }
+        },
+        {
+            "beat": {
+                "num": 1708,
+                "den": 5
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 43,
+                "den": 44
+            }
+        },
+        {
+            "beat": {
+                "num": 1713,
+                "den": 5
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 179,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 75627,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 481,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 15245,
+                "den": 44
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 13,
+                "den": 20
+            }
+        },
+        {
+            "beat": {
+                "num": 3822,
+                "den": 11
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 107,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 76563,
+                "den": 220
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 199,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 76787,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 159,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 15427,
+                "den": 44
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 23,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 38657,
+                "den": 110
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 171,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 77789,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 57,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 38969,
+                "den": 110
+            },
+            "line": 8,
+            "audioPath": "",
+            "length": {
+                "num": 317,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 7121,
+                "den": 20
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 69,
+                "den": 22
+            }
+        },
+        {
+            "beat": {
+                "num": 79093,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 33,
+                "den": 20
+            }
+        },
+        {
+            "beat": {
+                "num": 79507,
+                "den": 220
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 159,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 39871,
+                "den": 110
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 7,
+                "den": 20
+            }
+        },
+        {
+            "beat": {
+                "num": 39981,
+                "den": 110
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 133,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 4006,
+                "den": 11
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 41,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 7299,
+                "den": 20
+            },
+            "line": 8,
+            "audioPath": "",
+            "length": {
+                "num": 43,
+                "den": 22
+            }
+        },
+        {
+            "beat": {
+                "num": 80877,
+                "den": 220
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 61,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 80943,
+                "den": 220
+            },
+            "line": 8,
+            "audioPath": "",
+            "length": {
+                "num": 51,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 40561,
+                "den": 110
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 711,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 40957,
+                "den": 110
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 189,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 41231,
+                "den": 110
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 3,
+                "den": 5
+            }
+        },
+        {
+            "beat": {
+                "num": 751,
+                "den": 2
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 45,
+                "den": 44
+            }
+        },
+        {
+            "beat": {
+                "num": 8285,
+                "den": 22
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 61,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 20747,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 419,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 83857,
+                "den": 220
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 57,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 83929,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 3,
+                "den": 10
+            }
+        },
+        {
+            "beat": {
+                "num": 4212,
+                "den": 11
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 78,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 21161,
+                "den": 55
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 67,
+                "den": 22
+            }
+        },
+        {
+            "beat": {
+                "num": 85319,
+                "den": 220
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 1043,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 21621,
+                "den": 55
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 619,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 17437,
+                "den": 44
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 19,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 87277,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 207,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 87737,
+                "den": 220
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 107,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 8813,
+                "den": 22
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 41,
+                "den": 44
+            }
+        },
+        {
+            "beat": {
+                "num": 22108,
+                "den": 55
+            },
+            "line": 8,
+            "audioPath": "",
+            "length": {
+                "num": 23,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 88529,
+                "den": 220
+            },
+            "line": 7,
+            "audioPath": "",
+            "length": {
+                "num": 69,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 88683,
+                "den": 220
+            },
+            "line": 8,
+            "audioPath": "",
+            "length": {
+                "num": 107,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 17991,
+                "den": 44
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 18,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 90083,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 123,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 8201,
+                "den": 20
+            },
+            "line": 4,
+            "audioPath": "",
+            "length": {
+                "num": 23,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 22577,
+                "den": 55
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 23,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 411,
+                "den": 1
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 619,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 22784,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 27,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 22839,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 107,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 22867,
+                "den": 55
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 113,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 45811,
+                "den": 110
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 347,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 18397,
+                "den": 44
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 19,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 92087,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 263,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 92701,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 97,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 23234,
+                "den": 55
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 853,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 23497,
+                "den": 55
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 399,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 2149,
+                "den": 5
+            },
+            "line": 6,
+            "audioPath": "",
+            "length": {
+                "num": 7,
+                "den": 20
+            }
+        },
+        {
+            "beat": {
+                "num": 94719,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 389,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 23796,
+                "den": 55
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 41,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 8661,
+                "den": 20
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 307,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 4357,
+                "den": 10
+            },
+            "line": 8,
+            "audioPath": "",
+            "length": {
+                "num": 51,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 48019,
+                "den": 110
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 133,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 24048,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 19,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 97367,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 69,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 1773,
+                "den": 4
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 69,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 8879,
+                "den": 20
+            },
+            "line": 4,
+            "audioPath": "",
+            "length": {
+                "num": 81,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 48893,
+                "den": 110
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 107,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 97899,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 639,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 24646,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 19,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 49389,
+                "den": 110
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 23,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 98891,
+                "den": 220
+            },
+            "line": 2,
+            "audioPath": "",
+            "length": {
+                "num": 133,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 49527,
+                "den": 110
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 97,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 99529,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 124,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 25042,
+                "den": 55
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 223,
+                "den": 44
+            }
+        },
+        {
+            "beat": {
+                "num": 101457,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 45,
+                "den": 44
+            }
+        },
+        {
+            "beat": {
+                "num": 25423,
+                "den": 55
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 53,
+                "den": 44
+            }
+        },
+        {
+            "beat": {
+                "num": 4637,
+                "den": 10
+            },
+            "line": 6,
+            "audioPath": "",
+            "length": {
+                "num": 61,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 51053,
+                "den": 110
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 43,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 25658,
+                "den": 55
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 103,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 2338,
+                "den": 5
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 149,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 2348,
+                "den": 5
+            },
+            "line": 8,
+            "audioPath": "",
+            "length": {
+                "num": 97,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 103517,
+                "den": 220
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 51,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 25911,
+                "den": 55
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 261,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 2368,
+                "den": 5
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 281,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 104503,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 119,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 105117,
+                "den": 220
+            },
+            "line": 0,
+            "audioPath": "",
+            "length": {
+                "num": 23,
+                "den": 55
+            }
+        },
+        {
+            "beat": {
+                "num": 9577,
+                "den": 20
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 47,
+                "den": 44
+            }
+        },
+        {
+            "beat": {
+                "num": 52893,
+                "den": 110
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 7,
+                "den": 20
+            }
+        },
+        {
+            "beat": {
+                "num": 105889,
+                "den": 220
+            },
+            "line": 3,
+            "audioPath": "",
+            "length": {
+                "num": 69,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 26513,
+                "den": 55
+            },
+            "line": 5,
+            "audioPath": "",
+            "length": {
+                "num": 107,
+                "den": 220
+            }
+        },
+        {
+            "beat": {
+                "num": 106267,
+                "den": 220
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 447,
+                "den": 110
+            }
+        },
+        {
+            "beat": {
+                "num": 26881,
+                "den": 55
+            },
+            "line": 10,
+            "audioPath": "",
+            "length": {
+                "num": 36,
+                "den": 55
+            }
+        }
+    ]
+}
