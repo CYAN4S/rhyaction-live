@@ -38,8 +38,8 @@ namespace CYAN4S
                 level = result.level,
                 bpm = result.bpm,
                 audio = result.audio,
-                notes = result.notes,
-                longNotes = result.longNotes
+                notes = result.notes ?? new List<NoteData>(),
+                longNotes = result.longNotes ?? new List<LongNoteData>()
             };
         }
 

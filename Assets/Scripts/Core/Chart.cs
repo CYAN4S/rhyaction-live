@@ -19,15 +19,29 @@ namespace CYAN4S
         // TODO
         [NonSerialized] public string audio;
         [NonSerialized] public string rootPath;
-        
+
+
+        public int NoteCount => notes.Count + longNotes.Count;
 
         public static double GetEndBeat(Chart chart)
         {
-            var a = chart.notes?.Max(note => (double)note.beat) ?? 0;
+            double result = 0;
 
-            var b = chart.longNotes.Count == 0 ? 0 : chart.longNotes.Max(note => note.beat + (double) note.length);
+            if (chart.notes.Count != 0)
+            {
+                result = chart.notes.Max(note => (double)note.beat);
+            }
 
-            return a > b ? a : b;
+            if (chart.longNotes.Count != 0)
+            {
+                double max = chart.longNotes.Max(note => note.beat + (double) note.length);
+                if (result < max)
+                {
+                    result = max;
+                }
+            }
+
+            return result;
         }
 
         public double GetEndBeat()
