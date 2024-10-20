@@ -5,23 +5,11 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-using Debug = UnityEngine.Debug;
 
 namespace CYAN4S
 {
     public class Player : MonoBehaviour
     {
-        [Header("Judgement")] 
-        public float ignorable;
-        public float tooEarly;
-        public float fairEarly;
-        public float greatEarly;
-        public float preciseEarly;
-        public float preciseLate;
-        public float greatLate;
-        public float fairLate;
-        public float tooLate;
-
         [Header("Visual")]
         public GearScriptableObject gearset;
         public RectTransform gearTransform;
@@ -62,8 +50,9 @@ namespace CYAN4S
         [SerializeField] private FMODUnity.EventReference resumingEvent;
         [SerializeField] private FMODUnity.EventReference clapEvent;
 
-        [Header("Score Weight")] 
+        [Header("Balance")] 
         [SerializeField] private int[] scoreWeight;
+        [SerializeField] private JudgeSystem judgeSystem = new();
         
         // Getter
         public static Func<double> getBeat;
@@ -192,9 +181,11 @@ namespace CYAN4S
                 // Check unreleased long notes.
                 if (target is LongNoteSystem { Current: ActiveLongNoteState } system)
                 {
-                    if (system.EndTime - timer.CurrentTime >= tooLate) continue;
+                    var delta = system.EndTime - timer.CurrentTime;
+                    
+                    if (!judgeSystem.IsTooLate(delta)) continue;
                         
-                    Judge(Judgement.Poor, false, JudgeTarget.LongNoteEnd, i);
+                    Judge(Judgement.Poor, false, NoteState.LongNoteEnd, i);
                     Release(target);
                     cachedNotes[i] = Get(i);
                         
@@ -204,13 +195,13 @@ namespace CYAN4S
                 // Check missed notes.
                 if (target is LongNoteSystem { Current: CutLongNoteState } note)
                 {
-                    if (note.cutTime - timer.CurrentTime >= tooLate)
+                    if (!judgeSystem.IsTooLate(note.cutTime - timer.CurrentTime))
                         continue;
                 }
-                else if (target.Time - timer.CurrentTime >= tooLate) 
+                else if (!judgeSystem.IsTooLate(target.Time - timer.CurrentTime)) 
                     continue;
 
-                Judge(Judgement.Break, false, JudgeTarget.Note, i);
+                Judge(Judgement.Break, false, NoteState.Note, i);
                 Release(target);
                 cachedNotes[i] = Get(i);
             }
@@ -227,9 +218,9 @@ namespace CYAN4S
             JudgeButtonReleased(btn, timer.GetGameTime(rawTime));
         }
 
-        private void Judge(Judgement judgement, bool isEarly, JudgeTarget target, int line)
+        private void Judge(Judgement judgement, bool isEarly, NoteState target, int line)
         {
-            if (target is JudgeTarget.Note or JudgeTarget.LongNoteEnd && judgement != Judgement.Break)
+            if (target is NoteState.Note or NoteState.LongNoteEnd && judgement != Judgement.Break)
             {
                 AddScore(scoreWeight[(int) judgement]);
                 judgeCount[(int)judgement, isEarly ? 0 : 1]++;
@@ -240,25 +231,12 @@ namespace CYAN4S
                 ResetCombo();
                 judgeCount[(int)judgement, isEarly ? 0 : 1]++;
             }
-            else if (target != JudgeTarget.LongNoteCut)
+            else if (target != NoteState.LongNoteCut)
             {
                 AddCombo(1);
             }
 
             judged.Invoke(judgement, isEarly, line);
-        }
-
-        private Judgement GetJudgement(double delta)
-        {
-            if (delta >      tooEarly) return Judgement.Break;
-            if (delta >     fairEarly) return Judgement.Poor;
-            if (delta >    greatEarly) return Judgement.Fair;
-            if (delta >  preciseEarly) return Judgement.Great;
-            if (delta >= preciseLate)  return Judgement.Precise;
-            if (delta >=   greatLate)  return Judgement.Great;
-            if (delta >=    fairLate)  return Judgement.Fair;
-            if (delta >=     tooLate)  return Judgement.Poor;
-                                       return Judgement.Break;
         }
 
         private void JudgeButtonPressed(int btn, double time)
@@ -277,21 +255,21 @@ namespace CYAN4S
             if (target is LongNoteSystem { Current: CutLongNoteState } note)
             {
                 var cDelta = cachedCutTime[btn] - timer.CurrentTime;
-                if (cDelta >= ignorable || cDelta < tooLate)
+                if (judgeSystem.IsIgnorableOrTooLate(cDelta))
                     return;
 
-                var r = GetJudgement(cachedDelta[btn]);
+                var r = judgeSystem.GetJudgement(cachedDelta[btn]);
                 var x = cachedDelta[btn] >= 0;
                 
                 if (r == Judgement.Break)
                 {
-                    Judge(r, x, JudgeTarget.LongNoteCut, btn);
+                    Judge(r, x, NoteState.LongNoteCut, btn);
                     Release(target);
                     cachedNotes[btn] = Get(btn);
                     return;
                 }
                 
-                Judge(r, x, JudgeTarget.LongNoteCut, btn);
+                Judge(r, x, NoteState.LongNoteCut, btn);
                 note.SetActive(0, () => OnTick(r, x, btn));
                 return;
             }
@@ -304,15 +282,15 @@ namespace CYAN4S
                 delta = math.abs(delta) >= math.abs(pDelta) ? delta : pDelta;
             }
             
-            if (delta >= ignorable || delta < tooLate)
+            if (judgeSystem.IsIgnorableOrTooLate(delta))
                 return;
 
-            var result = GetJudgement(delta);
+            var result = judgeSystem.GetJudgement(delta);
             var isEarly = delta >= 0;
 
             if (target is LongNoteSystem system)
             {
-                Judge(result, isEarly, JudgeTarget.LongNoteStart, btn);
+                Judge(result, isEarly, NoteState.LongNoteStart, btn);
                 
                 if (result == Judgement.Break)
                 {
@@ -326,7 +304,7 @@ namespace CYAN4S
             }
             else // target is NoteSystem
             {
-                Judge(result, isEarly, JudgeTarget.Note, btn);
+                Judge(result, isEarly, NoteState.Note, btn);
                 Release(target);
                 cachedNotes[btn] = Get(btn);
             }
@@ -348,21 +326,21 @@ namespace CYAN4S
             cachedNotes[btn] = Get(btn);
 
             // Released so early.
-            if (delta > tooEarly)
+            if (judgeSystem.IsTooEarly(delta))
             {
-                Judge(Judgement.Break, true, JudgeTarget.LongNoteEnd, btn);
+                Judge(Judgement.Break, true, NoteState.LongNoteEnd, btn);
             }
             else
             {
-                var r = GetJudgement(cachedDelta[btn]);
+                var r = judgeSystem.GetJudgement(cachedDelta[btn]);
                 var x = cachedDelta[btn] >= 0;
-                Judge(r, x, JudgeTarget.LongNoteEnd, btn);
+                Judge(r, x, NoteState.LongNoteEnd, btn);
             }
         }
 
         private void OnTick(Judgement result, bool isEarly, int line)
         {
-            Judge(result, isEarly, JudgeTarget.LongNoteTick, line);
+            Judge(result, isEarly, NoteState.LongNoteTick, line);
         }
 
         private NoteSystem Get(int value)
@@ -458,9 +436,7 @@ namespace CYAN4S
         }
     }
     
-    public enum Judgement { Precise, Great, Fair, Poor, Break }
-
-    public enum JudgeTarget { Note, LongNoteStart, LongNoteTick, LongNoteEnd,
+    public enum NoteState { Note, LongNoteStart, LongNoteTick, LongNoteEnd,
         LongNoteCut
     }
 }
