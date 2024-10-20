@@ -15,7 +15,7 @@ namespace CYAN4S
         private void Awake()
         {
             player ??= GameObject.FindWithTag("Player").GetComponent<Player>();
-            player.comboIncreased.AddListener(ComboChanged);
+            player.Status.ComboIncreased += ComboChanged;
         }
 
         public void ComboChanged(int combo)
@@ -30,7 +30,7 @@ namespace CYAN4S
 
         private void OnDestroy()
         {
-            player.comboIncreased.RemoveListener(ComboChanged);
+            player.Status.ComboIncreased -= ComboChanged;
         }
     }
 }

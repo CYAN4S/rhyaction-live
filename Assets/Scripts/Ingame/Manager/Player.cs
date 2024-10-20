@@ -27,15 +27,11 @@ namespace CYAN4S
         private List<Queue<NoteSystem>> noteQueue;
 
         [Header("In-game Data")]
-        [SerializeField] private int score;
-        [SerializeField] private int combo;
+        [SerializeField] private Status status = new();
         [SerializeField] private int scrollSpeed = 40;
         [SerializeField] private Timer timer;
-        [SerializeField] private int[,] judgeCount = new int[Enum.GetNames(typeof(Judgement)).Length, 2];
 
         [Header("Observer Setup")]
-        [SerializeField] public UnityEvent<int> scoreChanged;
-        [SerializeField] public UnityEvent<int> comboIncreased;
         [SerializeField] public UnityEvent<Judgement, bool, int> judged;
         [SerializeField] public UnityEvent<int> speedChanged;
         [SerializeField] public UnityEvent paused;
@@ -56,6 +52,7 @@ namespace CYAN4S
         // Getter
         public static Func<double> getBeat;
         public static Func<int> getScrollSpeed;
+        public Status Status => status;
 
         // MonoBehaviour components.
         private InputHandler inputHandler;
@@ -219,18 +216,18 @@ namespace CYAN4S
         {
             if (target is NoteState.Note or NoteState.LongNoteEnd && judgement != Judgement.Break)
             {
-                AddScore(scoreWeight[(int)judgement]);
-                judgeCount[(int)judgement, isEarly ? 0 : 1]++;
+                status.AddScore(scoreWeight[(int)judgement]);
+                status.AddJudge(judgement, isEarly);
             }
 
             if (judgement == Judgement.Break)
             {
-                ResetCombo();
-                judgeCount[(int)judgement, isEarly ? 0 : 1]++;
+                status.ResetCombo();
+                status.AddJudge(judgement, isEarly);
             }
             else if (target != NoteState.LongNoteCut)
             {
-                AddCombo(1);
+                status.AddCombo(1);
             }
 
             judged.Invoke(judgement, isEarly, line);
@@ -355,23 +352,6 @@ namespace CYAN4S
             timer.PauseOrResume();
         }
 
-        private void AddScore(int add)
-        {
-            score += add;
-            scoreChanged?.Invoke(score);
-        }
-
-        private void AddCombo(int add)
-        {
-            combo += add;
-            comboIncreased?.Invoke(combo);
-        }
-
-        private void ResetCombo()
-        {
-            combo = 0;
-        }
-
         private void OnPaused()
         {
             pausedTime = timer.CurrentTime;
@@ -393,9 +373,10 @@ namespace CYAN4S
 
         private void OnFinished()
         {
-            Result.Instance.score = score;
-            Result.Instance.judgeCount = judgeCount;
-            Result.Instance.accuracy = (double)score / (chart.NoteCount * scoreWeight[0]) * 100d;
+            Result.Instance.score = status.Score;
+            // TODO
+            Result.Instance.judgeCount = status.JudgeCount;
+            Result.Instance.accuracy = (double)status.Score / (chart.NoteCount * scoreWeight[0]) * 100d;
             channel.stop();
             SceneManager.LoadScene("Result");
         }
