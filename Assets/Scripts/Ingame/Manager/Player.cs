@@ -11,9 +11,8 @@ namespace CYAN4S
     public class Player : MonoBehaviour
     {
         [Header("Visual")]
-        public GearScriptableObject gearset;
-        public RectTransform gearTransform;
-        private Gear gear;
+        [SerializeField] private GearScriptableObject gearset;
+        [SerializeField] private RectTransform gearTransform;
 
         [Header("Cached Data")]
         [Tooltip("Current target note of its line")]
@@ -22,9 +21,6 @@ namespace CYAN4S
         [SerializeField] private List<double> cachedDelta;
         [Tooltip("Cached long note cut time")]
         [SerializeField] private List<double> cachedCutTime;
-
-        // Not Serializable
-        private List<Queue<NoteSystem>> noteQueue;
 
         [Header("In-game Data")]
         [SerializeField] private Status status = new();
@@ -62,6 +58,9 @@ namespace CYAN4S
         private Channel channel;
         private double pausedTime;
         private double pausedBeat;
+        
+        private Gear gear;
+        private List<Queue<NoteSystem>> noteQueue;
 
         // TODO
         private Dictionary<string, Sound> sounds = new();
@@ -179,7 +178,7 @@ namespace CYAN4S
 
                     if (!judgeSystem.IsTooLate(delta)) continue;
 
-                    Judge(Judgement.Poor, false, NoteState.LongNoteEnd, i);
+                    ApplyJudge(Judgement.Poor, false, NoteState.LongNoteEnd, i);
                     Release(target);
                     cachedNotes[i] = Get(i);
 
@@ -195,7 +194,7 @@ namespace CYAN4S
                 else if (!judgeSystem.IsTooLate(target.Time - timer.CurrentTime))
                     continue;
 
-                Judge(Judgement.Break, false, NoteState.Note, i);
+                ApplyJudge(Judgement.Break, false, NoteState.Note, i);
                 Release(target);
                 cachedNotes[i] = Get(i);
             }
@@ -203,16 +202,16 @@ namespace CYAN4S
 
         private void ButtonPressListener(int btn, double rawTime)
         {
-            JudgeButtonPressed(btn, timer.GetGameTime(rawTime));
+            LineButtonPressed(btn, timer.GetGameTime(rawTime));
             // FMODUnity.RuntimeManager.PlayOneShot(clapEvent);
         }
 
         private void ButtonReleaseListener(int btn, double rawTime)
         {
-            JudgeButtonReleased(btn, timer.GetGameTime(rawTime));
+            LineButtonReleased(btn, timer.GetGameTime(rawTime));
         }
 
-        private void Judge(Judgement judgement, bool isEarly, NoteState target, int line)
+        private void ApplyJudge(Judgement judgement, bool isEarly, NoteState target, int line)
         {
             if (target is NoteState.Note or NoteState.LongNoteEnd && judgement != Judgement.Break)
             {
@@ -233,7 +232,7 @@ namespace CYAN4S
             judged.Invoke(judgement, isEarly, line);
         }
 
-        private void JudgeButtonPressed(int btn, double time)
+        private void LineButtonPressed(int btn, double time)
         {
             if (timer.Current is not (Running or Resuming))
                 return;
@@ -257,13 +256,13 @@ namespace CYAN4S
 
                 if (r == Judgement.Break)
                 {
-                    Judge(r, x, NoteState.LongNoteCut, btn);
+                    ApplyJudge(r, x, NoteState.LongNoteCut, btn);
                     Release(target);
                     cachedNotes[btn] = Get(btn);
                     return;
                 }
 
-                Judge(r, x, NoteState.LongNoteCut, btn);
+                ApplyJudge(r, x, NoteState.LongNoteCut, btn);
                 note.SetActive(0, () => OnTick(r, x, btn));
                 return;
             }
@@ -284,7 +283,7 @@ namespace CYAN4S
 
             if (target is LongNoteSystem system)
             {
-                Judge(result, isEarly, NoteState.LongNoteStart, btn);
+                ApplyJudge(result, isEarly, NoteState.LongNoteStart, btn);
 
                 if (result == Judgement.Break)
                 {
@@ -298,13 +297,13 @@ namespace CYAN4S
             }
             else // target is NoteSystem
             {
-                Judge(result, isEarly, NoteState.Note, btn);
+                ApplyJudge(result, isEarly, NoteState.Note, btn);
                 Release(target);
                 cachedNotes[btn] = Get(btn);
             }
         }
 
-        private void JudgeButtonReleased(int btn, double time)
+        private void LineButtonReleased(int btn, double time)
         {
             if (timer.Current is not (Running or Resuming))
                 return;
@@ -322,19 +321,19 @@ namespace CYAN4S
             // Released so early.
             if (judgeSystem.IsTooEarly(delta))
             {
-                Judge(Judgement.Break, true, NoteState.LongNoteEnd, btn);
+                ApplyJudge(Judgement.Break, true, NoteState.LongNoteEnd, btn);
             }
             else
             {
                 var r = judgeSystem.GetJudgement(cachedDelta[btn]);
                 var x = cachedDelta[btn] >= 0;
-                Judge(r, x, NoteState.LongNoteEnd, btn);
+                ApplyJudge(r, x, NoteState.LongNoteEnd, btn);
             }
         }
 
         private void OnTick(Judgement result, bool isEarly, int line)
         {
-            Judge(result, isEarly, NoteState.LongNoteTick, line);
+            ApplyJudge(result, isEarly, NoteState.LongNoteTick, line);
         }
 
         private NoteSystem Get(int value)
