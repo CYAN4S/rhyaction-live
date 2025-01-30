@@ -28,8 +28,8 @@ namespace CYAN4S
         private Schema schema;
 
         [Header("Inspector Setup")]
-        public UnityEvent<int, double> onButtonPressed;
-        public UnityEvent<int, double> onButtonReleased;
+        // public UnityEvent<int, double> onButtonPressed;
+        // public UnityEvent<int, double> onButtonReleased;
 
         public UnityEvent<int, double> onButtonPressedEx;
         public UnityEvent<int, double> onButtonReleasedEx;
@@ -71,16 +71,16 @@ namespace CYAN4S
 
                 if (Keyboard.current[key].wasPressedThisFrame)
                 {
-                    if (i1 == 0 | i1 == 1)
+                    if (i1 == 0 | i1 == 1) 
                     {
                         onButtonPressedEx?.Invoke(i, Time.fixedTimeAsDouble);
-                        _tasks.Enqueue(() => onButtonPressed?.Invoke(i1, time));
+                        // _tasks.Enqueue(() => onButtonPressed?.Invoke(i1, time));
                     }
 
                     if (i1 == 4 | i1 == 5)
                     {
                         onButtonPressedEx?.Invoke(i - 1, Time.fixedTimeAsDouble);
-                        _tasks.Enqueue(() => onButtonPressed?.Invoke(i1 - 1, time));
+                        // _tasks.Enqueue(() => onButtonPressed?.Invoke(i1 - 1, time));
                     }
 
                     if (i1 == 2 | i1 == 3)
@@ -88,10 +88,10 @@ namespace CYAN4S
                         if (Keyboard.current[i1 == 2 ? schema.play[3] : schema.play[2]].isPressed)
                         {
                             onButtonReleasedEx?.Invoke(2, Time.fixedTimeAsDouble);
-                            _tasks.Enqueue(() => onButtonReleased?.Invoke(2, time));
+                            // _tasks.Enqueue(() => onButtonReleased?.Invoke(2, time));
                         }
                         onButtonPressedEx?.Invoke(2, Time.fixedTimeAsDouble);
-                        _tasks.Enqueue(() => onButtonPressed?.Invoke(2, time));
+                        // _tasks.Enqueue(() => onButtonPressed?.Invoke(2, time));
 
                         currentMiddle = i1;
                     }
@@ -102,19 +102,19 @@ namespace CYAN4S
                     if (i1 == 0 | i1 == 1)
                     {
                         onButtonReleasedEx?.Invoke(i, Time.fixedTimeAsDouble);
-                        _tasks.Enqueue(() => onButtonReleased?.Invoke(i1, time));
+                        // _tasks.Enqueue(() => onButtonReleased?.Invoke(i1, time));
                     }
 
                     if (i1 == 4 | i1 == 5)
                     {
                         onButtonReleasedEx?.Invoke(i - 1, Time.fixedTimeAsDouble);
-                        _tasks.Enqueue(() => onButtonReleased?.Invoke(i1 - 1, time));
+                        // _tasks.Enqueue(() => onButtonReleased?.Invoke(i1 - 1, time));
                     }
 
                     if (i1 == currentMiddle)
                     {
                         onButtonReleasedEx?.Invoke(2, Time.fixedTimeAsDouble);
-                        _tasks.Enqueue(() => onButtonReleased?.Invoke(2, time));
+                        // _tasks.Enqueue(() => onButtonReleased?.Invoke(2, time));
                     }
                 }
             }
@@ -142,7 +142,6 @@ namespace CYAN4S
                 }
             }
         }
-
 
 
         // TODO FixedUpdate

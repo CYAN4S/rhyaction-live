@@ -791,7 +791,7 @@ MonoBehaviour:
   EnableErrorCallback: 0
   SharedLibraryUpdateStage: 0
   SharedLibraryTimeSinceStart: 0
-  CurrentVersion: 131619
+  CurrentVersion: 131622
   HideSetupWizard: 1
   LastEventReferenceScanVersion: 131601
   Platforms:

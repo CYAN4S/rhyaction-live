@@ -151,7 +151,7 @@ namespace CYAN4S
         private void OnDestroy()
         {
             inputHandler.onButtonPressedEx.RemoveListener(ButtonPressListener);
-            inputHandler.onButtonPressedEx.RemoveListener(ButtonReleaseListener);
+            inputHandler.onButtonReleasedEx.RemoveListener(ButtonReleaseListener);
         }
 
         private void Update()
