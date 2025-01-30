@@ -12,7 +12,7 @@ namespace CYAN4S
         private void Awake()
         {
             _text = GetComponent<TextMeshProUGUI>();
-            player = FindObjectOfType<Player>();
+            player = FindAnyObjectByType<Player>();
             player.Status.ScoreChanged += ScoreChanged;
         }
 
