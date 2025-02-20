@@ -16,16 +16,10 @@ namespace CYAN4S
 
     public class InputHandler : MonoBehaviour
     {
-        private PlayerInput _input;
-
         [SerializeField] private Schema schema4B;
         [SerializeField] private Schema schema5B;
         [SerializeField] private Schema schema6B;
         [SerializeField] private Schema schema8B;
-
-        public int currentMiddle = -1;
-
-        private Schema schema;
 
         [Header("Inspector Setup")]
         public UnityEvent<int, double> onButtonPressedEx;
@@ -33,12 +27,16 @@ namespace CYAN4S
 
         public UnityEvent onSpeedUpPressed;
         public UnityEvent onSpeedDownPressed;
+        public int currentMiddle = -1;
 
         public UnityEvent onPausePressed;
 
+        private PlayerInput _input;
+        private Schema schema;
         private Action Loop;
 
         private readonly Queue<Action> _tasks = new();
+
 
         private void Awake()
         {
@@ -56,53 +54,64 @@ namespace CYAN4S
 
             Loop = chart.button == 5 ? Loop5B : LoopNormal;
         }
+        
+        private void Update()
+        {
+            Loop();
+            
+            if (Keyboard.current[schema.speedUp].wasPressedThisFrame)
+                onSpeedUpPressed?.Invoke();
+            
+            if (Keyboard.current[schema.speedDown].wasPressedThisFrame)
+                onSpeedDownPressed?.Invoke();
+            
+            if (Keyboard.current[Key.Escape].wasPressedThisFrame)
+                onPausePressed?.Invoke();
+        }
 
         private void Loop5B()
         {
-            var time = Time.fixedTimeAsDouble;
-
             for (var i = 0; i < schema.play.Length; i++)
             {
                 var key = schema.play[i];
-                var i1 = i;
 
                 if (Keyboard.current[key].wasPressedThisFrame)
                 {
-                    if (i1 == 0 | i1 == 1) 
+                    if (i == 0 | i == 1) 
                     {
                         onButtonPressedEx?.Invoke(i, Time.fixedTimeAsDouble);
                     }
 
-                    if (i1 == 4 | i1 == 5)
+                    if (i == 4 | i == 5)
                     {
                         onButtonPressedEx?.Invoke(i - 1, Time.fixedTimeAsDouble);
                     }
 
-                    if (i1 == 2 | i1 == 3)
+                    if (i == 2 | i == 3)
                     {
-                        if (Keyboard.current[i1 == 2 ? schema.play[3] : schema.play[2]].isPressed)
+                        if (Keyboard.current[i == 2 ? schema.play[3] : schema.play[2]].isPressed)
                         {
                             onButtonReleasedEx?.Invoke(2, Time.fixedTimeAsDouble);
                         }
                         onButtonPressedEx?.Invoke(2, Time.fixedTimeAsDouble);
 
-                        currentMiddle = i1;
+                        currentMiddle = i;
                     }
                 }
 
                 if (Keyboard.current[key].wasReleasedThisFrame)
                 {
-                    if (i1 == 0 | i1 == 1)
+                    if (i == 0 | i == 1)
                     {
                         onButtonReleasedEx?.Invoke(i, Time.fixedTimeAsDouble);
                     }
 
-                    if (i1 == 4 | i1 == 5)
+                    if (i == 4 | i == 5)
                     {
                         onButtonReleasedEx?.Invoke(i - 1, Time.fixedTimeAsDouble);
                     }
 
-                    if (i1 == currentMiddle)
+                    if (i == currentMiddle)
                     {
                         onButtonReleasedEx?.Invoke(2, Time.fixedTimeAsDouble);
                     }
@@ -112,12 +121,9 @@ namespace CYAN4S
 
         private void LoopNormal()
         {
-            var time = Time.fixedTimeAsDouble;
-
             for (var i = 0; i < schema.play.Length; i++)
             {
                 var key = schema.play[i];
-                var i1 = i;
 
                 if (Keyboard.current[key].wasPressedThisFrame)
                 {
@@ -129,25 +135,6 @@ namespace CYAN4S
                     onButtonReleasedEx?.Invoke(i, Time.fixedTimeAsDouble);
                 }
             }
-        }
-
-
-        // TODO FixedUpdate
-        private void Update()
-        {
-            Loop();
-
-            if (Keyboard.current[schema.speedUp].wasPressedThisFrame)
-                _tasks.Enqueue(() => onSpeedUpPressed?.Invoke());
-
-            if (Keyboard.current[schema.speedDown].wasPressedThisFrame)
-                _tasks.Enqueue(() => onSpeedDownPressed?.Invoke());
-
-            if (Keyboard.current[Key.Escape].wasPressedThisFrame)
-                _tasks.Enqueue(() => onPausePressed?.Invoke());
-
-            while (_tasks.Count != 0)
-                _tasks.Dequeue().Invoke();
         }
     }
 }
