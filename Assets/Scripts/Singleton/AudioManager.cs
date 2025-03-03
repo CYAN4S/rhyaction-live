@@ -36,23 +36,33 @@ namespace CYAN4S
 
         private void SearchDrivers()
         {
-            var types = new[]
-                { OUTPUTTYPE.WASAPI, OUTPUTTYPE.ASIO, OUTPUTTYPE.COREAUDIO, OUTPUTTYPE.PULSEAUDIO, OUTPUTTYPE.AAUDIO };
-
-            foreach (var type in types)
+            var outputTypes = new[]
             {
-                if (system.setOutput(type) != RESULT.OK)
-                    continue;
+                #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+                OUTPUTTYPE.WASAPI, OUTPUTTYPE.ASIO
+                #elif UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX || UNITY_IOS
+                OUTPUTTYPE.COREAUDIO
+                #elif UNITY_EDITOR_LINUX || UNITY_STANDALONE_LINUX
+                OUTPUTTYPE.PULSEAUDIO
+                #elif UNITY_ANDROID
+                OUTPUTTYPE.AAUDIO
+                #elif UNITY_WEBGL
+                FMOD_OUTPUTTYPE_AUDIOWORKLET
+                #endif
+            };
 
-                system.getOutput(out var output);
-                if (type != output)
+            foreach (var outputType in outputTypes)
+            {
+                if (system.setOutput(outputType) != RESULT.OK)
+                {
                     continue;
+                }
 
                 system.getNumDrivers(out var driver);
                 for (var i = 0; i < driver; i++)
                 {
                     system.getDriverInfo(i, out var dec, 100, out _, out _, out _, out _);
-                    drivers.Add(new AudioDriver { id = i, name = dec, type = type });
+                    drivers.Add(new AudioDriver { id = i, name = dec, type = outputType });
                 }
             }
         }

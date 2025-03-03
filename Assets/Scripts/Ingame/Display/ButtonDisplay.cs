@@ -13,16 +13,16 @@ namespace CYAN4S
         {
             if (input is null)
             {
-                input = FindObjectOfType<InputHandler>();
+                input = FindAnyObjectByType<InputHandler>();
             }
-            input.onButtonPressed.AddListener(ButtonPressed);
-            input.onButtonReleased.AddListener(ButtonReleased);
+            input.onButtonPressedEx.AddListener(ButtonPressed);
+            input.onButtonReleasedEx.AddListener(ButtonReleased);
         }
 
         private void OnDestroy()
         {
-            input.onButtonPressed.RemoveListener(ButtonPressed);
-            input.onButtonReleased.RemoveListener(ButtonReleased);
+            input.onButtonPressedEx.RemoveListener(ButtonPressed);
+            input.onButtonReleasedEx.RemoveListener(ButtonReleased);
         }
 
         public void ButtonPressed(int btn, double _)

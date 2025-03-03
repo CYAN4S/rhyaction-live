@@ -9,6 +9,9 @@ using UnityEditor.Experimental.SceneManagement;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+#if UNITY_INPUTSYSTEM_EXIST
+using UnityEngine.InputSystem;
+#endif
 
 namespace FMODUnity
 {
@@ -682,7 +685,7 @@ namespace FMODUnity
                 {
                     object value = subObjectField.GetValue(target);
                     if (value == null || (value is UnityEngine.Object && !(value as UnityEngine.Object)))
-                    { 
+                    {
                         continue;
                     }
 
@@ -691,7 +694,18 @@ namespace FMODUnity
                         if (value is System.Collections.IEnumerable && !(value is string))
                         {
                             int index = 0;
-                            var valueEnumerator = (value as System.Collections.IEnumerable).GetEnumerator();
+                            System.Collections.IEnumerator valueEnumerator = null;
+
+                            try
+                            {
+                                valueEnumerator = (value as System.Collections.IEnumerable).GetEnumerator();
+                            }
+                            catch (Exception ex)
+                            {
+                                RuntimeUtils.DebugLogWarningFormat("[FMOD] Failed to get enumerator for value in field '{0}': {1}", subObjectField.Name, ex.Message);
+                                continue;
+                            }
+
                             for (;;)
                             {
                                 object item = null;
@@ -707,7 +721,8 @@ namespace FMODUnity
                                 {
                                     break;
                                 }
-                                if (item != null && !item.GetType().IsPrimitive)
+                                if (item != null && !item.GetType().IsPrimitive && !parents.Contains(item)
+                                    && item.GetType().Namespace != "UnityEngine.InputSystem")
                                 {
                                     foreach (Task t in GetGenericUpdateTasks(item, FieldPath(subObjectPath, subObjectField.Name, index), parents))
                                     {

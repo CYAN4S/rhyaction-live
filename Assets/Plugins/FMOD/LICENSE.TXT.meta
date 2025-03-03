@@ -1,7 +1,14 @@
 fileFormatVersion: 2
-guid: 6882823a28b4eae45aaf10f58db4407f
+guid: 963bece3d9056764090da0d70e5ca0eb
 TextScriptImporter:
   externalObjects: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 161631
+  packageName: FMOD for Unity (2.02)
+  packageVersion: 2.02.26
+  assetPath: Assets/Plugins/FMOD/LICENSE.txt
+  uploadId: 733879

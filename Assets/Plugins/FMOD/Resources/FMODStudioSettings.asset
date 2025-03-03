@@ -768,7 +768,7 @@ MonoBehaviour:
   TargetAssetPath: FMODBanks
   TargetBankFolder: 
   EventLinkage: 0
-  LoggingLevel: 2
+  LoggingLevel: 4
   SpeakerModeSettings: []
   SampleRateSettings: []
   LiveUpdateSettings: []
@@ -788,10 +788,10 @@ MonoBehaviour:
   MeterChannelOrdering: 0
   StopEventsOutsideMaxDistance: 0
   BoltUnitOptionsBuildPending: 0
-  EnableErrorCallback: 0
+  EnableErrorCallback: 1
   SharedLibraryUpdateStage: 0
   SharedLibraryTimeSinceStart: 0
-  CurrentVersion: 131619
+  CurrentVersion: 131623
   HideSetupWizard: 1
   LastEventReferenceScanVersion: 131601
   Platforms:

@@ -24,7 +24,7 @@ namespace CYAN4S
 
         private void Awake()
         {
-            player = FindObjectOfType<Player>();
+            player = FindAnyObjectByType<Player>();
             player.judged.AddListener(OnJudge);
 
             _image = GetComponent<Image>();

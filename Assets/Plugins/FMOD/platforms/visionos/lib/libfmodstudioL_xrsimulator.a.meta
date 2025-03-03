@@ -71,3 +71,10 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 161631
+  packageName: FMOD for Unity (2.02)
+  packageVersion: 2.02.26
+  assetPath: Assets/Plugins/FMOD/platforms/visionos/lib/libfmodstudioL_xrsimulator.a
+  uploadId: 733879
