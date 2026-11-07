@@ -13,7 +13,7 @@ namespace CYAN4S
         {
             if (input is null)
             {
-                input = FindObjectOfType<InputHandler>();
+                input = FindAnyObjectByType<InputHandler>();
             }
             input.onButtonPressed.AddListener(ButtonPressed);
             input.onButtonReleased.AddListener(ButtonReleased);
